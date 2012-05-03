@@ -3,7 +3,6 @@ public class Game {
 
 	public Game(Gui g) {
 		generateFieldGrid(g);
-
 	}
 
 	/**
