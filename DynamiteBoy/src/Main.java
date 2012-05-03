@@ -6,6 +6,6 @@ public class Main {
 	public static void main(String[] args) {
 		System.out.println("Hello, my name is DynamiteBoy!");
 		Gui gui = new Gui(640, 480);
-		Game g = new Game(gui);
+		Game g = new Game();
 	}
 }
