@@ -1,6 +1,14 @@
+
 public class Map {
 	private Field[][] FieldGrid;
 
+	/**
+	 * 
+	 * @param width
+	 *            Map-width in px
+	 * @param height
+	 *            Map-height in px
+	 */
 	public Map(int width, int height) {
 		generateFieldGrid(width, height);
 	}

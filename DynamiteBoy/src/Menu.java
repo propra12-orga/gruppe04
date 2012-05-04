@@ -1,4 +1,5 @@
+import javax.swing.JFrame;
 
-public class Menu {
+public class Menu extends JFrame {
 
 }

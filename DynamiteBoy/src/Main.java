@@ -1,11 +1,18 @@
-public class Main {
+import javax.swing.JFrame;
 
-	/**
-	 * @param args
-	 */
+public class Main extends JFrame {
+
+	public Main() {
+		add(new Game());
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(640, 480);
+		setLocationRelativeTo(null);
+		setTitle("DynamiteBoy");
+		setResizable(false);
+		setVisible(true);
+	}
+
 	public static void main(String[] args) {
-		System.out.println("Hello, my name is DynamiteBoy!");
-		Gui gui = new Gui(640, 480);
-		Game g = new Game();
+		new Main();
 	}
 }
