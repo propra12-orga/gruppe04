@@ -1,8 +1,11 @@
+package de.propra12.gruppe04.dynamiteboy.Test;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import de.propra12.gruppe04.dynamiteboy.Map.Map;
 
 public class GameTest {
 	private Map g;

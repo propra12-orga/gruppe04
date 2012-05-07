@@ -1,3 +1,5 @@
+package de.propra12.gruppe04.dynamiteboy.Game;
+
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 
@@ -9,10 +11,11 @@ public class Player {
 	private int x;
 	private int y;
 	private Image image;
+	private String playerPicture = "../../../../../images/db_char_placeholder.png";
 
 	Player() {
-		ImageIcon img = new ImageIcon(this.getClass().getResource(
-				"images/db_char_placeholder.png"));
+		ImageIcon img = new ImageIcon(this.getClass()
+				.getResource(playerPicture));
 		image = img.getImage();
 		x = 32;
 		y = 32;

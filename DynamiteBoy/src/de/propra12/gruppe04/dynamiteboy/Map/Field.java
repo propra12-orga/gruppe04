@@ -1,6 +1,8 @@
+package de.propra12.gruppe04.dynamiteboy.Map;
+
 public abstract class Field {
 
-	Field(boolean blocked, boolean destroyable, int item, Picture pic) {
+	Field(boolean blocked, boolean destroyable, int item, String pic) {
 		this.blocked = blocked;
 		this.destroyable = destroyable;
 		this.item = item;
@@ -10,7 +12,7 @@ public abstract class Field {
 	private boolean blocked;
 	private boolean destroyable;
 	private int item;
-	Picture pic;
+	String pic;
 
 	/**
 	 * 

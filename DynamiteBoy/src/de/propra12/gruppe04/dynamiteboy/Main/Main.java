@@ -1,4 +1,7 @@
+package de.propra12.gruppe04.dynamiteboy.Main;
 import javax.swing.JFrame;
+
+import de.propra12.gruppe04.dynamiteboy.Game.Game;
 
 public class Main extends JFrame {
 
