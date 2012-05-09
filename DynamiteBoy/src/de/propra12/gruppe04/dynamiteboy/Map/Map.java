@@ -28,24 +28,30 @@ public class Map {
 		int gridHeight = height / 32;
 		FieldGrid = new Field[gridWidth][gridHeight];
 
-		WallField block = new WallField(true, false, 0);
-
-		// Sets 0 for unblocked and 1 for blocked
+		WallField blocked = new WallField(true, false, 0);
+		FloorField unblocked = new FloorField();
+		// Set unblocked-references
+		for (int i = 0; i < gridWidth; i++) {
+			for (int j = 0; j < gridHeight; j++) {
+				FieldGrid[i][j] = unblocked;
+			}
+		}
+		// Set blocked-references
 		for (int i = 0; i < gridHeight; i++) {
-			FieldGrid[0][i] = block;
-			FieldGrid[gridWidth - 1][i] = block;
+			FieldGrid[0][i] = blocked;
+			FieldGrid[gridWidth - 1][i] = blocked;
 		}
 		for (int i = 0; i < gridWidth; i++) {
-			FieldGrid[i][0] = block;
-			FieldGrid[i][gridHeight - 1] = block;
+			FieldGrid[i][0] = blocked;
+			FieldGrid[i][gridHeight - 1] = blocked;
 		}
 		for (int i = 2; i < (gridWidth / 2) - 2; i += 2) {
 			for (int j = 2; j < gridHeight - 2; j += 2)
-				FieldGrid[i][j] = block;
+				FieldGrid[i][j] = blocked;
 		}
 		for (int i = ((gridWidth / 2) - 1); i < gridWidth - 2; i += 2) {
 			for (int j = 2; j < gridHeight - 2; j += 2)
-				FieldGrid[i][j] = block;
+				FieldGrid[i][j] = blocked;
 		}
 
 	}

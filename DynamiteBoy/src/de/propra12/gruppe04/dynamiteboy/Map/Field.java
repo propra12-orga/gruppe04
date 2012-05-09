@@ -23,7 +23,8 @@ public abstract class Field {
 	}
 
 	/**
-	 * Sets blocked state of field
+	 * Sets blocked state of fieldNikolaij von Matterhorn
+	 * 
 	 * 
 	 * @param blocked
 	 *            set true for the field to be blocked

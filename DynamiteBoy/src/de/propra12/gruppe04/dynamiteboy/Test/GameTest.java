@@ -1,4 +1,5 @@
 package de.propra12.gruppe04.dynamiteboy.Test;
+
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
@@ -32,6 +33,13 @@ public class GameTest {
 		assertEquals(true, g.getFieldGrid(2, 12).isBlocked());
 		assertEquals(true, g.getFieldGrid(17, 2).isBlocked());
 		assertEquals(true, g.getFieldGrid(17, 2).isBlocked());
+
+	}
+
+	@Test
+	public void unblockedTest() {
+		assertEquals(false, g.getFieldGrid(1, 1).isBlocked());
+		assertEquals(false, g.getFieldGrid(18, 13).isBlocked());
 
 	}
 }
