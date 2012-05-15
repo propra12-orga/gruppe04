@@ -11,7 +11,7 @@ public class Player {
 	private int x;
 	private int y;
 	private Image image;
-	private String playerPicture = "../../../../../images/db_char_placeholder.png";
+	private String playerPicture = "../images/db_char_placeholder.png";
 
 	Player() {
 		ImageIcon img = new ImageIcon(this.getClass()
