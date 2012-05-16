@@ -1,4 +1,4 @@
-package de.propra12.gruppe04.dynamiteboy.Test;
+/*package de.propra12.gruppe04.dynamiteboy.Test;
 
 import static org.junit.Assert.assertEquals;
 
@@ -42,4 +42,4 @@ public class GameTest {
 		assertEquals(false, g.getFieldGrid(18, 13).isBlocked());
 
 	}
-}
+}*/

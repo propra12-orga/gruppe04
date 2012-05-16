@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import de.propra12.gruppe04.dynamiteboy.Game.Game;
+
 public class MainMenu extends Menu {
 
 	private int frameWidth;
@@ -22,11 +24,21 @@ public class MainMenu extends Menu {
 		this.frameWidth = width;
 		this.frameHeight = height;
 		JFrame frame = new JFrame();
+		
 		buttonStart = new JButton("Spiel starten");
 		buttonStart.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				buttonStart.setText("Spiel wird gestartet...");
+				
+				add(new Game());
+				setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				setSize(640, 480);
+				setLocationRelativeTo(null);
+				setTitle("DynamiteBoy");
+				setResizable(false);
+				setVisible(true);
+				
 				// Start Game here
 			}
 
