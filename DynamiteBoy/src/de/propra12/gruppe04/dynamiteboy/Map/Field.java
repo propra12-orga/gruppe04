@@ -1,5 +1,7 @@
 package de.propra12.gruppe04.dynamiteboy.Map;
 
+import javax.swing.ImageIcon;
+
 public abstract class Field {
 
 	Field(boolean blocked, boolean destroyable, int item, String pic) {
@@ -7,11 +9,14 @@ public abstract class Field {
 		this.destroyable = destroyable;
 		this.item = item;
 		this.pic = pic;
+		setImage(pic);
 	}
 
 	private boolean blocked;
 	private boolean destroyable;
 	private int item;
+
+	private ImageIcon image;
 	String pic;
 
 	/**
@@ -68,4 +73,11 @@ public abstract class Field {
 		this.item = item;
 	}
 
+	public void setImage(String pic) {
+		this.image = new ImageIcon(this.getClass().getResource(pic));
+	}
+
+	public ImageIcon getImage() {
+		return this.image;
+	}
 }
