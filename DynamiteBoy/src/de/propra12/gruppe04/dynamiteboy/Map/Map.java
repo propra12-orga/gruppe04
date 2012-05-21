@@ -4,8 +4,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -14,10 +12,10 @@ import javax.swing.JPanel;
 
 import de.propra12.gruppe04.dynamiteboy.Game.Player;
 
-public class Map extends JPanel implements ActionListener {
-	private Field[][] FieldGrid;
-	private GridLayout MapLayout = new GridLayout(0, 20);
+public class Map extends JPanel {
+	private static Field[][] FieldGrid;
 	private Player player;
+	private GridLayout MapLayout = new GridLayout(0, 20);
 
 	/**
 	 * 
@@ -29,10 +27,10 @@ public class Map extends JPanel implements ActionListener {
 	public Map(int width, int height, Player player) {
 		generateFieldGrid(width, height);
 		setFocusable(true);
-		setLayout(MapLayout);
-		this.loadFields();
 		this.player = player;
 		this.addKeyListener(new KAdapter());
+		setLayout(MapLayout);
+		paintFields();
 	}
 
 	/**
@@ -88,12 +86,12 @@ public class Map extends JPanel implements ActionListener {
 		return f;
 	}
 
-	public Field getFieldGridByPixel(int x, int y) {
-		Field f = this.FieldGrid[(x / 32)][(y / 32)];
+	public static Field getFieldGridByPixel(int x, int y) {
+		Field f = FieldGrid[(x / 32)][(y / 32)];
 		return f;
 	}
 
-	public void loadFields() {
+	public void paintFields() {
 		for (int y = 0; y < 480 / 32; y++) {
 			for (int x = 0; x < 640 / 32; x++) {
 				JLabel pField = new JLabel(this.getFieldGrid(x, y)
@@ -101,10 +99,7 @@ public class Map extends JPanel implements ActionListener {
 				add(pField);
 			}
 		}
-	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
 	}
 
 	public void paint(Graphics g) {

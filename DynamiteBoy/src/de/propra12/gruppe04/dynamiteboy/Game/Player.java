@@ -5,6 +5,8 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 
+import de.propra12.gruppe04.dynamiteboy.Map.Map;
+
 public class Player implements Runnable {
 	private int dx;
 	private int dy;
@@ -66,35 +68,27 @@ public class Player implements Runnable {
 		int key = e.getKeyCode();
 
 		if (key == KeyEvent.VK_LEFT) {
-			// if (map.getFieldGridByPixel(x - 1, y).isBlocked() == true) {
-			// } else if (map.getFieldGridByPixel(x - 1, y).isBlocked() ==
-			// false) {
-			dx = -1;
-			// }
+			if (Map.getFieldGridByPixel(x - 1, y).isBlocked() == false) {
+				dx = -4;
+			}
 		}
 
 		if (key == KeyEvent.VK_RIGHT) {
-			// if (map.getFieldGridByPixel(x + 1, y).isBlocked() == true) {
-			// } else if (map.getFieldGridByPixel(x + 1, y).isBlocked() ==
-			// false) {
-			dx = 1;
-			// }
+			if (Map.getFieldGridByPixel(x + 1, y).isBlocked() == false) {
+				dx = 4;
+			}
 		}
 
 		if (key == KeyEvent.VK_UP) {
-			// if (map.getFieldGridByPixel(x, y - 1).isBlocked() == true) {
-			// } else if (map.getFieldGridByPixel(x, y - 1).isBlocked() ==
-			// false) {
-			dy = -1;
-			// }
+			if (Map.getFieldGridByPixel(x, y - 1).isBlocked() == false) {
+				dy = -4;
+			}
 		}
 
 		if (key == KeyEvent.VK_DOWN) {
-			// if (map.getFieldGridByPixel(x, y + 1).isBlocked() == true) {
-			// } else if (map.getFieldGridByPixel(x, y + 1).isBlocked() ==
-			// false) {
-			dy = 1;
-			// }
+			if (Map.getFieldGridByPixel(x, y + 1).isBlocked() == false) {
+				dy = 4;
+			}
 		}
 	}
 
