@@ -1,5 +1,5 @@
 package de.propra12.gruppe04.dynamiteboy.Menu;
 
-public class ScoreMenu extends Menu {
+public class ScoreMenu {
 
 }

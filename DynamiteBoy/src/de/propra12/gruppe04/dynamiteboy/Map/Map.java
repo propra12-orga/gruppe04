@@ -1,8 +1,23 @@
 package de.propra12.gruppe04.dynamiteboy.Map;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
-public class Map {
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import de.propra12.gruppe04.dynamiteboy.Game.Player;
+
+public class Map extends JPanel implements ActionListener {
 	private Field[][] FieldGrid;
+	private GridLayout MapLayout = new GridLayout(0, 20);
+	private Player player;
 
 	/**
 	 * 
@@ -11,8 +26,13 @@ public class Map {
 	 * @param height
 	 *            Map-height in px
 	 */
-	public Map(int width, int height) {
+	public Map(int width, int height, Player player) {
 		generateFieldGrid(width, height);
+		setFocusable(true);
+		setLayout(MapLayout);
+		this.loadFields();
+		this.player = player;
+		this.addKeyListener(new KAdapter());
 	}
 
 	/**
@@ -27,7 +47,6 @@ public class Map {
 		int gridWidth = width / 32;
 		int gridHeight = height / 32;
 		FieldGrid = new Field[gridWidth][gridHeight];
-
 		WallField blocked = new WallField(true, false, 0);
 		FloorField unblocked = new FloorField();
 		// Set unblocked-references
@@ -67,6 +86,47 @@ public class Map {
 	public Field getFieldGrid(int x, int y) {
 		Field f = FieldGrid[x][y];
 		return f;
+	}
+
+	public Field getFieldGridByPixel(int x, int y) {
+		Field f = this.FieldGrid[(x / 32)][(y / 32)];
+		return f;
+	}
+
+	public void loadFields() {
+		for (int y = 0; y < 480 / 32; y++) {
+			for (int x = 0; x < 640 / 32; x++) {
+				JLabel pField = new JLabel(this.getFieldGrid(x, y)
+						.getImageIcon());
+				add(pField);
+			}
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	}
+
+	public void paint(Graphics g) {
+		super.paint(g);
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.drawImage(player.getImage(), player.getX(), player.getY(), this);
+		Toolkit.getDefaultToolkit().sync();
+		g.dispose();
+	}
+
+	private class KAdapter extends KeyAdapter {
+		public void keyReleased(KeyEvent e) {
+			player.keyReleased(e);
+			player.move();
+			repaint();
+		}
+
+		public void keyPressed(KeyEvent e) {
+			player.keyPressed(e);
+			player.move();
+			repaint();
+		}
 	}
 
 }

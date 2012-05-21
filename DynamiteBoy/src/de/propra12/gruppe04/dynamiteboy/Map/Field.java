@@ -1,23 +1,24 @@
 package de.propra12.gruppe04.dynamiteboy.Map;
 
+import java.awt.Image;
+
 import javax.swing.ImageIcon;
 
 public abstract class Field {
 
-	Field(boolean blocked, boolean destroyable, int item, String pic) {
+	Field(boolean blocked, boolean destroyable, int item, String fieldpic) {
 		this.blocked = blocked;
 		this.destroyable = destroyable;
 		this.item = item;
-		this.pic = pic;
-		setImage(pic);
+		this.fieldpic = fieldpic;
+		setImage(fieldpic);
 	}
 
 	private boolean blocked;
 	private boolean destroyable;
 	private int item;
-
 	private ImageIcon image;
-	String pic;
+	String fieldpic;
 
 	/**
 	 * 
@@ -28,7 +29,7 @@ public abstract class Field {
 	}
 
 	/**
-	 * Sets blocked state of fieldNikolaij von Matterhorn
+	 * Sets blocked state of field
 	 * 
 	 * 
 	 * @param blocked
@@ -77,7 +78,12 @@ public abstract class Field {
 		this.image = new ImageIcon(this.getClass().getResource(pic));
 	}
 
-	public ImageIcon getImage() {
+	public Image getImage() {
+		return this.image.getImage();
+	}
+
+	public ImageIcon getImageIcon() {
 		return this.image;
 	}
+
 }

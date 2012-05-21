@@ -1,4 +1,4 @@
-/*package de.propra12.gruppe04.dynamiteboy.Test;
+package de.propra12.gruppe04.dynamiteboy.Test;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,14 +6,16 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import de.propra12.gruppe04.dynamiteboy.Game.Player;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
 
 public class GameTest {
 	private Map g;
+	private Player p;
 
 	@Before
 	public void setUp() {
-		g = new Map(640, 480);
+		g = new Map(640, 480, p);
 	}
 
 	@Ignore
@@ -42,4 +44,12 @@ public class GameTest {
 		assertEquals(false, g.getFieldGrid(18, 13).isBlocked());
 
 	}
-}*/
+
+	@Test
+	public void pixelBlockTest() {
+		assertEquals(true, g.getFieldGridByPixel(630, 9).isBlocked());
+		assertEquals(true, g.getFieldGridByPixel(608, 32).isBlocked());
+		assertEquals(false, g.getFieldGridByPixel(607, 32).isBlocked());
+
+	}
+}

@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 
-public class Player {
+public class Player implements Runnable {
 	private int dx;
 	private int dy;
 	private int x;
@@ -66,19 +66,35 @@ public class Player {
 		int key = e.getKeyCode();
 
 		if (key == KeyEvent.VK_LEFT) {
+			// if (map.getFieldGridByPixel(x - 1, y).isBlocked() == true) {
+			// } else if (map.getFieldGridByPixel(x - 1, y).isBlocked() ==
+			// false) {
 			dx = -1;
+			// }
 		}
 
 		if (key == KeyEvent.VK_RIGHT) {
+			// if (map.getFieldGridByPixel(x + 1, y).isBlocked() == true) {
+			// } else if (map.getFieldGridByPixel(x + 1, y).isBlocked() ==
+			// false) {
 			dx = 1;
+			// }
 		}
 
 		if (key == KeyEvent.VK_UP) {
+			// if (map.getFieldGridByPixel(x, y - 1).isBlocked() == true) {
+			// } else if (map.getFieldGridByPixel(x, y - 1).isBlocked() ==
+			// false) {
 			dy = -1;
+			// }
 		}
 
 		if (key == KeyEvent.VK_DOWN) {
+			// if (map.getFieldGridByPixel(x, y + 1).isBlocked() == true) {
+			// } else if (map.getFieldGridByPixel(x, y + 1).isBlocked() ==
+			// false) {
 			dy = 1;
+			// }
 		}
 	}
 
@@ -106,4 +122,11 @@ public class Player {
 			dy = 0;
 		}
 	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+
+	}
+
 }
