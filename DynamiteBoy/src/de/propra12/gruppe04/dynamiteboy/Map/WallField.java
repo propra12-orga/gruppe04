@@ -12,7 +12,6 @@ public class WallField extends Field {
 
 	WallField(boolean blocked, boolean destroyable, int item) {
 		super(blocked, destroyable, item, WALLFIELD_DEFAULT_PIC);
-		// TODO Auto-generated constructor stub
 	}
 
 	WallField() {

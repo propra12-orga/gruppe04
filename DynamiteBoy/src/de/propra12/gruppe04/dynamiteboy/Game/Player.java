@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 
+import de.propra12.gruppe04.dynamiteboy.Map.Bomb;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
 
 public class Player implements Runnable {
@@ -53,6 +54,22 @@ public class Player implements Runnable {
 	 */
 	public Image getImage() {
 		return image;
+	}
+
+	/**
+	 * @return x-position in current map
+	 */
+	public int getGridX(int x) {
+		x = x / 32;
+		return x;
+	}
+
+	/**
+	 * @return x-position in current map
+	 */
+	public int getGridY(int y) {
+		y = y / 32;
+		return y;
 	}
 
 	/**
@@ -115,6 +132,16 @@ public class Player implements Runnable {
 		if (key == KeyEvent.VK_DOWN) {
 			dy = 0;
 		}
+		if (key == KeyEvent.VK_BACK_SPACE) {
+			// plantBomb();
+		}
+	}
+
+	private void plantBomb() {
+		Bomb bomb = new Bomb(getGridX(this.x), getGridY(this.y), false);
+		Thread bombThread = new Thread(bomb);
+		bombThread.start();
+
 	}
 
 	@Override

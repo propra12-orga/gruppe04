@@ -7,8 +7,12 @@ public class Game {
 	private Map map;
 
 	public Game() {
+		// SET UP
 		setPlayer(new Player());
 		this.map = new Map(640, 480, player);
+		// THREADS
+		Thread playerThread = new Thread(player);
+		playerThread.start();
 
 	}
 
