@@ -65,7 +65,6 @@ public abstract class Field {
 	}
 
 	/**
-	 * 0 for no item 1 2 3
 	 * 
 	 * @param item
 	 *            set item type for field

@@ -1,21 +1,9 @@
 package de.propra12.gruppe04.dynamiteboy.Map;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import de.propra12.gruppe04.dynamiteboy.Game.Player;
-
-public class Map extends JPanel {
+public class Map {
 	private static Field[][] FieldGrid;
-	private Player player;
-	private GridLayout MapLayout = new GridLayout(0, 20);
+	private int gridWidth;
+	private int gridHeight;
 
 	/**
 	 * 
@@ -24,13 +12,27 @@ public class Map extends JPanel {
 	 * @param height
 	 *            Map-height in px
 	 */
-	public Map(int width, int height, Player player) {
-		generateFieldGrid(width, height);
-		setFocusable(true);
-		this.player = player;
-		this.addKeyListener(new KAdapter());
-		setLayout(MapLayout);
-		paintFields();
+	public Map(int width, int height) {
+		this.gridWidth = width / 32;
+		this.gridHeight = height / 32;
+		generateFieldGrid();
+
+	}
+
+	public int getGridWidth() {
+		return gridWidth;
+	}
+
+	public void setGridWidth(int gridWidth) {
+		this.gridWidth = gridWidth;
+	}
+
+	public int getGridHeight() {
+		return gridHeight;
+	}
+
+	public void setGridHeight(int gridHeight) {
+		this.gridHeight = gridHeight;
 	}
 
 	/**
@@ -41,9 +43,7 @@ public class Map extends JPanel {
 	 * @param height
 	 *            Map-height in px
 	 */
-	private void generateFieldGrid(int width, int height) {
-		int gridWidth = width / 32;
-		int gridHeight = height / 32;
+	private void generateFieldGrid() {
 		FieldGrid = new Field[gridWidth][gridHeight];
 		WallField blocked = new WallField(true, false, 0);
 		FloorField unblocked = new FloorField();
@@ -81,47 +81,19 @@ public class Map extends JPanel {
 	 *            y-coordinate of fieldposition
 	 * @return Field object
 	 */
-	public Field getFieldGrid(int x, int y) {
+	public Field getField(int x, int y) {
 		Field f = FieldGrid[x][y];
 		return f;
 	}
 
-	public static Field getFieldGridByPixel(int x, int y) {
+	public Field getFieldByPixel(int x, int y) {
 		Field f = FieldGrid[(x / 32)][(y / 32)];
 		return f;
 	}
 
-	public void paintFields() {
-		for (int y = 0; y < 480 / 32; y++) {
-			for (int x = 0; x < 640 / 32; x++) {
-				JLabel pField = new JLabel(this.getFieldGrid(x, y)
-						.getImageIcon());
-				add(pField);
-			}
-		}
+	public void setFloorField(int x, int y) {
+		FieldGrid[x][y] = new FloorField();
 
-	}
-
-	public void paint(Graphics g) {
-		super.paint(g);
-		Graphics2D g2d = (Graphics2D) g;
-		g2d.drawImage(player.getImage(), player.getX(), player.getY(), this);
-		Toolkit.getDefaultToolkit().sync();
-		g.dispose();
-	}
-
-	private class KAdapter extends KeyAdapter {
-		public void keyReleased(KeyEvent e) {
-			player.keyReleased(e);
-			player.move();
-			repaint();
-		}
-
-		public void keyPressed(KeyEvent e) {
-			player.keyPressed(e);
-			player.move();
-			repaint();
-		}
 	}
 
 }

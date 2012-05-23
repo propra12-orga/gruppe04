@@ -31,10 +31,9 @@ public class MainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				buttonStart.setText("Spiel wird gestartet...");
 				Game game = new Game();
-				frame.getContentPane().add(game.getMap());
+				frame.getContentPane().add(game);
 				buttonStart.setVisible(false);
-				game.getMap().setVisible(true);
-				// Start Game here
+				game.setVisible(true);
 			}
 
 		});

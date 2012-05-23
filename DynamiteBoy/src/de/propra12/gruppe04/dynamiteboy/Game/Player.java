@@ -8,20 +8,22 @@ import javax.swing.ImageIcon;
 import de.propra12.gruppe04.dynamiteboy.Map.Bomb;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
 
-public class Player implements Runnable {
+public class Player {
 	private int dx;
 	private int dy;
 	private int x;
 	private int y;
 	private Image image;
 	private String playerPicture = "../images/db_char_placeholder.png";
+	private Map map;
 
-	Player() {
+	Player(Map map) {
 		ImageIcon img = new ImageIcon(this.getClass()
 				.getResource(playerPicture));
 		image = img.getImage();
 		x = 32;
 		y = 32;
+		this.map = map;
 	}
 
 	/**
@@ -85,26 +87,31 @@ public class Player implements Runnable {
 		int key = e.getKeyCode();
 
 		if (key == KeyEvent.VK_LEFT) {
-			if (Map.getFieldGridByPixel(x - 1, y).isBlocked() == false) {
+			if (map.getFieldByPixel(x - 1, y).isBlocked() == false) {
 				dx = -4;
 			}
 		}
 
 		if (key == KeyEvent.VK_RIGHT) {
-			if (Map.getFieldGridByPixel(x + 1, y).isBlocked() == false) {
+			if (map.getFieldByPixel(x + 1 + 32, y).isBlocked() == false) {
 				dx = 4;
 			}
 		}
 
 		if (key == KeyEvent.VK_UP) {
-			if (Map.getFieldGridByPixel(x, y - 1).isBlocked() == false) {
+			if (map.getFieldByPixel(x, y - 1).isBlocked() == false) {
 				dy = -4;
 			}
 		}
 
 		if (key == KeyEvent.VK_DOWN) {
-			if (Map.getFieldGridByPixel(x, y + 1).isBlocked() == false) {
+			if (map.getFieldByPixel(x, y + 1 + 32).isBlocked() == false) {
 				dy = 4;
+			}
+		}
+		if (key == KeyEvent.VK_SPACE) {
+			if (map.getFieldByPixel(x, y).isBlocked() == false) {
+				plantBomb();
 			}
 		}
 	}
@@ -132,21 +139,15 @@ public class Player implements Runnable {
 		if (key == KeyEvent.VK_DOWN) {
 			dy = 0;
 		}
-		if (key == KeyEvent.VK_BACK_SPACE) {
-			// plantBomb();
-		}
 	}
 
+	/**
+	 * Plants a bomb on current grid-position
+	 */
 	private void plantBomb() {
-		Bomb bomb = new Bomb(getGridX(this.x), getGridY(this.y), false);
+		Bomb bomb = new Bomb(getGridX(x), getGridY(y), false, map);
 		Thread bombThread = new Thread(bomb);
 		bombThread.start();
-
-	}
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
 
 	}
 
