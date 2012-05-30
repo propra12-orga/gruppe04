@@ -45,31 +45,34 @@ public class Map {
 	 */
 	private void generateFieldGrid() {
 		FieldGrid = new Field[gridWidth][gridHeight];
-		WallField blocked = new WallField(true, false, 0);
-		FloorField unblocked = new FloorField();
 		// Set unblocked-references
 		for (int i = 0; i < gridWidth; i++) {
 			for (int j = 0; j < gridHeight; j++) {
-				FieldGrid[i][j] = unblocked;
+				FieldGrid[i][j] = new FloorField();
 			}
 		}
 		// Set blocked-references
 		for (int i = 0; i < gridHeight; i++) {
-			FieldGrid[0][i] = blocked;
-			FieldGrid[gridWidth - 1][i] = blocked;
+			FieldGrid[0][i] = new WallField(true, false, 0);
+			FieldGrid[gridWidth - 1][i] = new WallField(true, false, 0);
 		}
 		for (int i = 0; i < gridWidth; i++) {
-			FieldGrid[i][0] = blocked;
-			FieldGrid[i][gridHeight - 1] = blocked;
+			FieldGrid[i][0] = new WallField(true, false, 0);
+			FieldGrid[i][gridHeight - 1] = new WallField(true, false, 0);
 		}
-		for (int i = 2; i < (gridWidth / 2) - 2; i += 2) {
+		for (int i = 2; i < (gridWidth / 2) - 1; i += 2) {
 			for (int j = 2; j < gridHeight - 2; j += 2)
-				FieldGrid[i][j] = blocked;
+				FieldGrid[i][j] = new WallField(true, false, 0);
 		}
-		for (int i = ((gridWidth / 2) - 1); i < gridWidth - 2; i += 2) {
+		for (int i = ((gridWidth / 2) + 1); i < gridWidth - 2; i += 2) {
 			for (int j = 2; j < gridHeight - 2; j += 2)
-				FieldGrid[i][j] = blocked;
+				FieldGrid[i][j] = new WallField(true, false, 0);
 		}
+		// TODO Remove debug
+		FieldGrid[1][5] = new DestroyableField();
+
+		// Set Exit-field
+		FieldGrid[18][13] = new ExitField();
 
 	}
 

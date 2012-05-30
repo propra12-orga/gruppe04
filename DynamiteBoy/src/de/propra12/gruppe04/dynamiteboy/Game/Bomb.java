@@ -1,23 +1,35 @@
-package de.propra12.gruppe04.dynamiteboy.Map;
+package de.propra12.gruppe04.dynamiteboy.Game;
+
+import java.util.concurrent.TimeUnit;
+
+import de.propra12.gruppe04.dynamiteboy.Map.Item;
+import de.propra12.gruppe04.dynamiteboy.Map.Map;
 
 public class Bomb extends Item implements Runnable {
-	private static final String BOMB_PIC = "";
-	private static final int BOMB_DELAY = 3000;
+	private static final String BOMB_PIC = "../images/db_item_bomb.png";
+	private static final int BOMB_DELAY = 3;
 	private static final int BOMB_TYPE = 1;
 	private static final int BOMB_RADIUS = 3;
 	private Map map;
 
 	public Bomb(int x, int y, boolean collectable, Map map) {
-		// Type '1' for BOMB
 		super(x, y, BOMB_TYPE, BOMB_PIC, collectable);
+		// TODO Remove debug
+		System.out.println("Bomb planted at " + x + "/" + y);
+		this.map = map;
 	}
 
 	@Override
 	public void run() {
 		try {
-			Thread.sleep(BOMB_DELAY);
-		} catch (InterruptedException e) {
+			map.getField(this.getXpos(), this.getYpos()).setItem(1);
+			TimeUnit.SECONDS.sleep(BOMB_DELAY);
 			detonate(this.getXpos(), this.getYpos());
+			// TODO Remove debug
+			System.out.println("BOOM!");
+			map.getField(this.getXpos(), this.getYpos()).setItem(0);
+		} catch (InterruptedException e) {
+
 		}
 	}
 

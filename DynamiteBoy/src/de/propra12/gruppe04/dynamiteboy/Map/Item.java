@@ -8,7 +8,7 @@ public abstract class Item {
 	private int ypos;
 
 	/*
-	 * ITEM TYPES REFERRED BY TYPE: 0 = NO ITEM / 1 = BOMB
+	 * ITEMS REFERRED BY TYPE: 0 = NO ITEM / 1 = BOMB
 	 */
 
 	public Item(int x, int y, int type, String picture, boolean collectable) {

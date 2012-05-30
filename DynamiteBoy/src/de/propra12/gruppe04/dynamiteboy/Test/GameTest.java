@@ -52,4 +52,9 @@ public class GameTest {
 		assertEquals(false, g.getFieldByPixel(607, 32).isBlocked());
 
 	}
+
+	@Test
+	public void destroyableTest() {
+		assertEquals(false, g.getField(1, 1).isDestroyable());
+	}
 }

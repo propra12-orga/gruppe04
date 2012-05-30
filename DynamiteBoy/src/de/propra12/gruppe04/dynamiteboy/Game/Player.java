@@ -1,11 +1,9 @@
 package de.propra12.gruppe04.dynamiteboy.Game;
 
 import java.awt.Image;
-import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 
-import de.propra12.gruppe04.dynamiteboy.Map.Bomb;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
 
 public class Player {
@@ -74,81 +72,20 @@ public class Player {
 		return y;
 	}
 
-	/**
-	 * 
-	 * @param e
-	 *            takes key event (pressed) and changes player-position
-	 *            accordingly
-	 */
-
-	// TODO don't let the player move into two directions at once
-	public void keyPressed(KeyEvent e) {
-
-		int key = e.getKeyCode();
-
-		if (key == KeyEvent.VK_LEFT) {
-			if (map.getFieldByPixel(x - 1, y).isBlocked() == false) {
-				dx = -4;
-			}
-		}
-
-		if (key == KeyEvent.VK_RIGHT) {
-			if (map.getFieldByPixel(x + 1 + 32, y).isBlocked() == false) {
-				dx = 4;
-			}
-		}
-
-		if (key == KeyEvent.VK_UP) {
-			if (map.getFieldByPixel(x, y - 1).isBlocked() == false) {
-				dy = -4;
-			}
-		}
-
-		if (key == KeyEvent.VK_DOWN) {
-			if (map.getFieldByPixel(x, y + 1 + 32).isBlocked() == false) {
-				dy = 4;
-			}
-		}
-		if (key == KeyEvent.VK_SPACE) {
-			if (map.getFieldByPixel(x, y).isBlocked() == false) {
-				plantBomb();
-			}
-		}
+	public int getDx() {
+		return dx;
 	}
 
-	/**
-	 * 
-	 * @param e
-	 *            takes key event (released) and stops changing player position
-	 */
-	public void keyReleased(KeyEvent e) {
-		int key = e.getKeyCode();
-
-		if (key == KeyEvent.VK_LEFT) {
-			dx = 0;
-		}
-
-		if (key == KeyEvent.VK_RIGHT) {
-			dx = 0;
-		}
-
-		if (key == KeyEvent.VK_UP) {
-			dy = 0;
-		}
-
-		if (key == KeyEvent.VK_DOWN) {
-			dy = 0;
-		}
+	public void setDx(int dx) {
+		this.dx = dx;
 	}
 
-	/**
-	 * Plants a bomb on current grid-position
-	 */
-	private void plantBomb() {
-		Bomb bomb = new Bomb(getGridX(x), getGridY(y), false, map);
-		Thread bombThread = new Thread(bomb);
-		bombThread.start();
+	public int getDy() {
+		return dy;
+	}
 
+	public void setDy(int dy) {
+		this.dy = dy;
 	}
 
 }

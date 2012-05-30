@@ -1,22 +1,31 @@
 package de.propra12.gruppe04.dynamiteboy.Map;
 
 public class FloorField extends Field {
-	private static final String WALLFIELD_DEFAULT_PIC = "../images/field.png";
-	private static final boolean WALLFIELD_DEFAULT_BLOCKED = false;
-	private static final boolean WALLFIELD_DEAFULT_DESTROYABLE = false;
-	private static final int WALLFIELD_DEFAULT_ITEM = 0;
+	private static final String FLOORFIELD_DEFAULT_PIC = "../images/db_field_floor.png";
+	private static final boolean FLOORFIELD_DEFAULT_BLOCKED = false;
+	private static final boolean FLOORFIELD_DEAFULT_DESTROYABLE = false;
+	private static final int FLOORFIELD_DEFAULT_ITEM = 0;
 
 	FloorField(boolean blocked, boolean destroyable, int item, String pic) {
 		super(blocked, destroyable, item, pic);
 	}
 
 	FloorField(boolean blocked, boolean destroyable, int item) {
-		super(blocked, destroyable, item, WALLFIELD_DEFAULT_PIC);
-		// TODO Auto-generated constructor stub
+		super(blocked, destroyable, item, FLOORFIELD_DEFAULT_PIC);
 	}
 
 	FloorField() {
-		super(WALLFIELD_DEFAULT_BLOCKED, WALLFIELD_DEAFULT_DESTROYABLE,
-				WALLFIELD_DEFAULT_ITEM, WALLFIELD_DEFAULT_PIC);
+		super(FLOORFIELD_DEFAULT_BLOCKED, FLOORFIELD_DEAFULT_DESTROYABLE,
+				FLOORFIELD_DEFAULT_ITEM, FLOORFIELD_DEFAULT_PIC);
+	}
+
+	public void setItem(int item) {
+		super.setItem(item);
+		if (item == 0) {
+			super.setImage(FLOORFIELD_DEFAULT_PIC);
+		}
+		if (item == 1) {
+			super.setImage("../images/db_field_floorbomb.png");
+		}
 	}
 }
