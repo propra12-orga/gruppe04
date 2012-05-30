@@ -1,33 +1,34 @@
-package de.propra12.gruppe04.dynamiteboy.Game;
+package de.propra12.gruppe04.dynamiteboy.Item;
 
 import java.util.concurrent.TimeUnit;
 
-import de.propra12.gruppe04.dynamiteboy.Map.Item;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
 
 public class Bomb extends Item implements Runnable {
-	private static final String BOMB_PIC = "../images/db_item_bomb.png";
 	private static final int BOMB_DELAY = 3;
-	private static final int BOMB_TYPE = 1;
 	private static final int BOMB_RADIUS = 3;
 	private Map map;
+	private int xPos;
+	private int yPos;
 
 	public Bomb(int x, int y, boolean collectable, Map map) {
-		super(x, y, BOMB_TYPE, BOMB_PIC, collectable);
+		super(collectable);
 		// TODO Remove debug
 		System.out.println("Bomb planted at " + x + "/" + y);
 		this.map = map;
+		this.xPos = x;
+		this.yPos = y;
 	}
 
 	@Override
 	public void run() {
 		try {
-			map.getField(this.getXpos(), this.getYpos()).setItem(1);
+			map.getField(this.getxPos(), this.getyPos()).setItem(this);
 			TimeUnit.SECONDS.sleep(BOMB_DELAY);
-			detonate(this.getXpos(), this.getYpos());
+			detonate(this.getxPos(), this.getyPos());
 			// TODO Remove debug
 			System.out.println("BOOM!");
-			map.getField(this.getXpos(), this.getYpos()).setItem(0);
+			map.getField(this.getxPos(), this.getyPos()).setItem(null);
 		} catch (InterruptedException e) {
 
 		}
@@ -43,22 +44,22 @@ public class Bomb extends Item implements Runnable {
 	 */
 	private void detonate(int x, int y) {
 		for (int i = 1; i <= BOMB_RADIUS; i++) {
-			if (destroyable(x + (1 * i), y)) {
+			if (isDestroyable(x + (1 * i), y)) {
 				destroy(x + (1 * i), y);
 			}
-			if (destroyable(x - (1 * i), y)) {
+			if (isDestroyable(x - (1 * i), y)) {
 				destroy(x + (1 * i), y);
 			}
-			if (destroyable(x, y + (1 * i))) {
+			if (isDestroyable(x, y + (1 * i))) {
 				destroy(x, y + (1 * i));
 			}
-			if (destroyable(x, y - (1 * i))) {
+			if (isDestroyable(x, y - (1 * i))) {
 				destroy(x, y - (1 * i));
 			}
 		}
 	}
 
-	private boolean destroyable(int x, int y) {
+	private boolean isDestroyable(int x, int y) {
 		if (x >= 0 && x < map.getGridWidth() && y >= 0
 				&& y < map.getGridHeight()) {
 			if (map.getField(x, y).isDestroyable()) {
@@ -73,5 +74,21 @@ public class Bomb extends Item implements Runnable {
 
 	private void destroy(int x, int y) {
 		map.setFloorField(x, y);
+	}
+
+	public int getxPos() {
+		return xPos;
+	}
+
+	public void setxPos(int xPos) {
+		this.xPos = xPos;
+	}
+
+	public int getyPos() {
+		return yPos;
+	}
+
+	public void setyPos(int yPos) {
+		this.yPos = yPos;
 	}
 }

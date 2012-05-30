@@ -5,19 +5,27 @@ import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.concurrent.TimeUnit;
 
-import javax.swing.JLabel;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import de.propra12.gruppe04.dynamiteboy.Item.Bomb;
+import de.propra12.gruppe04.dynamiteboy.Item.Exit;
+import de.propra12.gruppe04.dynamiteboy.Item.Item;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
+import de.propra12.gruppe04.dynamiteboy.Menu.ScoreMenu;
 
 public class Game extends JPanel {
 	private Player player1;
 	private Map map;
+	private int counter;
+	private JFrame frame;
 
-	public Game() {
+	public Game(JFrame frame) {
 		// SET UP
 		this.map = new Map(640, 480);
+		this.frame = frame;
 		setPlayer(new Player(map));
 		setFocusable(true);
 		this.addKeyListener(new KAdapter());
@@ -33,16 +41,6 @@ public class Game extends JPanel {
 
 	public void setPlayer(Player player) {
 		this.player1 = player;
-	}
-
-	public void paintFields() {
-		for (int y = 0; y < 480 / 32; y++) {
-			for (int x = 0; x < 640 / 32; x++) {
-				JLabel pField = new JLabel(map.getField(x, y).getImageIcon());
-				add(pField);
-			}
-		}
-
 	}
 
 	/**
@@ -93,7 +91,13 @@ public class Game extends JPanel {
 		paintPlayer(g2d);
 		Toolkit.getDefaultToolkit().sync();
 		g.dispose();
-
+		// Redraw with 30fps
+		try {
+			TimeUnit.SECONDS.sleep(1 / 30);
+			repaint();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -111,6 +115,7 @@ public class Game extends JPanel {
 			if (map.getFieldByPixel(player1.getX(), player1.getY()).isBlocked() == false
 					&& map.getFieldByPixel(player1.getX(), player1.getY() + 30)
 							.isBlocked() == false) {
+				this.itemHandling(player1.getX(), player1.getY());
 				player1.setDx(-4);
 				player1.setDy(0);
 			}
@@ -121,6 +126,7 @@ public class Game extends JPanel {
 					.isBlocked() == false
 					&& map.getFieldByPixel(player1.getX() + 28,
 							player1.getY() + 28).isBlocked() == false) {
+				this.itemHandling(player1.getX(), player1.getY());
 				player1.setDx(4);
 				player1.setDy(0);
 			}
@@ -130,6 +136,7 @@ public class Game extends JPanel {
 			if (map.getFieldByPixel(player1.getX(), player1.getY()).isBlocked() == false
 					&& map.getFieldByPixel(player1.getX() + 22, player1.getY())
 							.isBlocked() == false) {
+				this.itemHandling(player1.getX(), player1.getY());
 				player1.setDy(-4);
 				player1.setDx(0);
 			}
@@ -140,6 +147,7 @@ public class Game extends JPanel {
 					.isBlocked() == false
 					&& map.getFieldByPixel(player1.getX() + 22,
 							player1.getY() + 32).isBlocked() == false) {
+				this.itemHandling(player1.getX(), player1.getY());
 				player1.setDy(4);
 				player1.setDx(0);
 			}
@@ -171,6 +179,20 @@ public class Game extends JPanel {
 
 		if (key == KeyEvent.VK_DOWN) {
 			player1.setDy(0);
+		}
+	}
+
+	/**
+	 * Checks if item is at field with pixel-coordinates x and y and handles it.
+	 * 
+	 * @param x
+	 * @param y
+	 */
+	public void itemHandling(int x, int y) {
+		Item item = map.getFieldByPixel(x, y).getItem();
+		if (item instanceof Exit) {
+			this.setVisible(false);
+			ScoreMenu m = new ScoreMenu(frame);
 		}
 	}
 

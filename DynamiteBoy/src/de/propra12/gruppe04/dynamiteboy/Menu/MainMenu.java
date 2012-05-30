@@ -14,10 +14,8 @@ import javax.swing.JPanel;
 import de.propra12.gruppe04.dynamiteboy.Game.Game;
 
 public class MainMenu extends JPanel {
-
-	private int frameWidth;
-	private int frameHeight;
 	private JButton buttonStart;
+	private JFrame frame;
 	private TitlePanel title = new TitlePanel();
 
 	/**
@@ -28,16 +26,15 @@ public class MainMenu extends JPanel {
 	 * @param height
 	 *            Window-height
 	 */
-	public MainMenu(int width, int height) {
-		this.frameWidth = width;
-		this.frameHeight = height;
-		final JFrame frame = new JFrame();
+	public MainMenu(final JFrame frame) {
+		this.frame = frame;
+		// final JFrame frame = new JFrame();
 		buttonStart = new JButton("Spiel starten");
 		buttonStart.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				buttonStart.setText("Spiel wird gestartet...");
-				Game game = new Game();
+				Game game = new Game(frame);
 				frame.getContentPane().add(game);
 				buttonStart.setVisible(false);
 				title.setVisible(false);
@@ -48,10 +45,6 @@ public class MainMenu extends JPanel {
 		frame.getContentPane().add(BorderLayout.CENTER, this.title);
 		buttonStart.setPreferredSize(new Dimension(100, 80));
 		frame.getContentPane().add(BorderLayout.SOUTH, buttonStart);
-		frame.setSize(this.frameWidth, this.frameHeight);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-
 	}
 
 	static class TitlePanel extends JPanel {
@@ -66,15 +59,4 @@ public class MainMenu extends JPanel {
 
 	}
 
-	public int getWidth() {
-		return this.frameWidth;
-	}
-
-	public int getHeigt() {
-		return this.frameHeight;
-	}
-
-	public void setUpGui() {
-
-	}
 }

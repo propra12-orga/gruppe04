@@ -4,9 +4,11 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
+import de.propra12.gruppe04.dynamiteboy.Item.Item;
+
 public abstract class Field {
 
-	Field(boolean blocked, boolean destroyable, int item, String fieldpic) {
+	Field(boolean blocked, boolean destroyable, Item item, String fieldpic) {
 		this.blocked = blocked;
 		this.destroyable = destroyable;
 		this.item = item;
@@ -16,7 +18,7 @@ public abstract class Field {
 
 	private boolean blocked;
 	private boolean destroyable;
-	private int item;
+	private Item item;
 	private ImageIcon image;
 	String fieldpic;
 
@@ -60,7 +62,7 @@ public abstract class Field {
 	 * 
 	 * @return item type of field
 	 */
-	public int getItem() {
+	public Item getItem() {
 		return item;
 	}
 
@@ -69,7 +71,7 @@ public abstract class Field {
 	 * @param item
 	 *            set item type for field
 	 */
-	public void setItem(int item) {
+	public void setItem(Item item) {
 		this.item = item;
 	}
 

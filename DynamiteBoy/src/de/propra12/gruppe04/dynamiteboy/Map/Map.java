@@ -53,26 +53,26 @@ public class Map {
 		}
 		// Set blocked-references
 		for (int i = 0; i < gridHeight; i++) {
-			FieldGrid[0][i] = new WallField(true, false, 0);
-			FieldGrid[gridWidth - 1][i] = new WallField(true, false, 0);
+			FieldGrid[0][i] = new WallField(true, false, null);
+			FieldGrid[gridWidth - 1][i] = new WallField(true, false, null);
 		}
 		for (int i = 0; i < gridWidth; i++) {
-			FieldGrid[i][0] = new WallField(true, false, 0);
-			FieldGrid[i][gridHeight - 1] = new WallField(true, false, 0);
+			FieldGrid[i][0] = new WallField(true, false, null);
+			FieldGrid[i][gridHeight - 1] = new WallField(true, false, null);
 		}
 		for (int i = 2; i < (gridWidth / 2) - 1; i += 2) {
 			for (int j = 2; j < gridHeight - 2; j += 2)
-				FieldGrid[i][j] = new WallField(true, false, 0);
+				FieldGrid[i][j] = new WallField(true, false, null);
 		}
 		for (int i = ((gridWidth / 2) + 1); i < gridWidth - 2; i += 2) {
 			for (int j = 2; j < gridHeight - 2; j += 2)
-				FieldGrid[i][j] = new WallField(true, false, 0);
+				FieldGrid[i][j] = new WallField(true, false, null);
 		}
 		// TODO Remove debug
 		FieldGrid[1][5] = new DestroyableField();
 
 		// Set Exit-field
-		FieldGrid[18][13] = new ExitField();
+		FieldGrid[1][10] = new ExitField();
 
 	}
 
