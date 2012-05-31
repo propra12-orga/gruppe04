@@ -4,8 +4,6 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
-import de.propra12.gruppe04.dynamiteboy.Map.Map;
-
 public class Player {
 	private int dx;
 	private int dy;
@@ -13,15 +11,13 @@ public class Player {
 	private int yPos;
 	private Image image;
 	private String playerPicture = "../images/db_char_placeholder.png";
-	private Map map;
 
-	Player(Map map) {
+	Player() {
 		ImageIcon img = new ImageIcon(this.getClass()
 				.getResource(playerPicture));
 		image = img.getImage();
 		xPos = 32;
 		yPos = 32;
-		this.map = map;
 	}
 
 	/**

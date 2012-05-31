@@ -26,7 +26,7 @@ public class Game extends JPanel {
 		// SET UP
 		this.map = new Map(640, 480);
 		this.frame = frame;
-		setPlayer(new Player(map));
+		setPlayer(new Player());
 		setFocusable(true);
 		this.addKeyListener(new KAdapter());
 	}
