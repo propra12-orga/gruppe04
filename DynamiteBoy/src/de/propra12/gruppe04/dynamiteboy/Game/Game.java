@@ -18,15 +18,18 @@ import de.propra12.gruppe04.dynamiteboy.Menu.ScoreMenu;
 
 public class Game extends JPanel {
 	private Player player1;
+	private Player player2;
 	private Map map;
 	private int counter;
 	private JFrame frame;
+	private int numberOfPlayers;
 
 	public Game(JFrame frame) {
 		// SET UP
 		this.map = new Map(640, 480);
 		this.frame = frame;
-		setPlayer(new Player());
+		numberOfPlayers = 1;
+		createPlayers(numberOfPlayers);
 		setFocusable(true);
 		this.addKeyListener(new KAdapter());
 	}
@@ -39,8 +42,14 @@ public class Game extends JPanel {
 		return player1;
 	}
 
-	public void setPlayer(Player player) {
-		this.player1 = player;
+	public void createPlayers(int numberOfPĺayers) {
+		if (numberOfPlayers == 1) {
+			this.player1 = new Player(32, 32);
+		} else if (numberOfPlayers == 2) {
+			this.player1 = new Player(32, 32);
+			this.player2 = new Player(128, 128);
+		}
+
 	}
 
 	/**
@@ -60,13 +69,11 @@ public class Game extends JPanel {
 		public void keyReleased(KeyEvent e) {
 			player1KeyReleased(e);
 			player1.move();
-			repaint();
 		}
 
 		public void keyPressed(KeyEvent e) {
 			player1KeyPressed(e);
 			player1.move();
-			repaint();
 		}
 	}
 

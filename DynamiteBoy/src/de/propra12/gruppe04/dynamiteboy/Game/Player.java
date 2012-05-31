@@ -12,12 +12,12 @@ public class Player {
 	private Image image;
 	private String playerPicture = "../images/db_char_placeholder.png";
 
-	Player() {
+	Player(int startxPos, int startyPos) {
 		ImageIcon img = new ImageIcon(this.getClass()
 				.getResource(playerPicture));
 		image = img.getImage();
-		xPos = 32;
-		yPos = 32;
+		xPos = startxPos;
+		yPos = startxPos;
 	}
 
 	/**
