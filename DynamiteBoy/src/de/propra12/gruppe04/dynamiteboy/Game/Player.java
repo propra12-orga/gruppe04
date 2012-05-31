@@ -10,14 +10,17 @@ public class Player {
 	private int xPos;
 	private int yPos;
 	private Image image;
-	private String playerPicture = "../images/db_char_placeholder.png";
+	private String playerPicture[] = { "../images/player1.png",
+			"../images/player2.png" };
 
-	Player(int startxPos, int startyPos) {
-		ImageIcon img = new ImageIcon(this.getClass()
-				.getResource(playerPicture));
+	// playerPicture[0] = "../images/db_char_placeholder.png";
+
+	Player(int playerPictureIndex, int startxPos, int startyPos) {
+		ImageIcon img = new ImageIcon(this.getClass().getResource(
+				playerPicture[playerPictureIndex]));
 		image = img.getImage();
 		xPos = startxPos;
-		yPos = startxPos;
+		yPos = startyPos;
 	}
 
 	/**
