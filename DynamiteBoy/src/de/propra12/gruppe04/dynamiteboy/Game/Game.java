@@ -47,8 +47,8 @@ public class Game extends JPanel {
 	 * Plants a bomb on current grid-position
 	 */
 	public void plantBomb() {
-		Bomb bomb = new Bomb(player1.getGridX(player1.getX() + 16),
-				player1.getGridY(player1.getY() + 16), false, map);
+		Bomb bomb = new Bomb(player1.getGridX(player1.getxPos() + 16),
+				player1.getGridY(player1.getyPos() + 16), false, map);
 		Thread bombThread = new Thread(bomb);
 		bombThread.start();
 
@@ -81,7 +81,8 @@ public class Game extends JPanel {
 	}
 
 	public void paintPlayer(Graphics g2d) {
-		g2d.drawImage(player1.getImage(), player1.getX(), player1.getY(), this);
+		g2d.drawImage(player1.getImage(), player1.getxPos(), player1.getyPos(),
+				this);
 	}
 
 	public void paint(Graphics g) {
@@ -112,42 +113,44 @@ public class Game extends JPanel {
 		int key = e.getKeyCode();
 
 		if (key == KeyEvent.VK_LEFT) {
-			if (map.getFieldByPixel(player1.getX(), player1.getY()).isBlocked() == false
-					&& map.getFieldByPixel(player1.getX(), player1.getY() + 30)
-							.isBlocked() == false) {
-				this.itemHandling(player1.getX(), player1.getY());
+			if (map.getFieldByPixel(player1.getxPos(), player1.getyPos())
+					.isBlocked() == false
+					&& map.getFieldByPixel(player1.getxPos(),
+							player1.getyPos() + 30).isBlocked() == false) {
+				this.itemHandling(player1.getxPos(), player1.getyPos());
 				player1.setDx(-4);
 				player1.setDy(0);
 			}
 		}
 
 		if (key == KeyEvent.VK_RIGHT) {
-			if (map.getFieldByPixel(player1.getX() + 28, player1.getY())
+			if (map.getFieldByPixel(player1.getxPos() + 28, player1.getyPos())
 					.isBlocked() == false
-					&& map.getFieldByPixel(player1.getX() + 28,
-							player1.getY() + 28).isBlocked() == false) {
-				this.itemHandling(player1.getX(), player1.getY());
+					&& map.getFieldByPixel(player1.getxPos() + 28,
+							player1.getyPos() + 28).isBlocked() == false) {
+				this.itemHandling(player1.getxPos(), player1.getyPos());
 				player1.setDx(4);
 				player1.setDy(0);
 			}
 		}
 
 		if (key == KeyEvent.VK_UP) {
-			if (map.getFieldByPixel(player1.getX(), player1.getY()).isBlocked() == false
-					&& map.getFieldByPixel(player1.getX() + 22, player1.getY())
-							.isBlocked() == false) {
-				this.itemHandling(player1.getX(), player1.getY());
+			if (map.getFieldByPixel(player1.getxPos(), player1.getyPos())
+					.isBlocked() == false
+					&& map.getFieldByPixel(player1.getxPos() + 22,
+							player1.getyPos()).isBlocked() == false) {
+				this.itemHandling(player1.getxPos(), player1.getyPos());
 				player1.setDy(-4);
 				player1.setDx(0);
 			}
 		}
 
 		if (key == KeyEvent.VK_DOWN) {
-			if (map.getFieldByPixel(player1.getX(), player1.getY() + 30)
+			if (map.getFieldByPixel(player1.getxPos(), player1.getyPos() + 30)
 					.isBlocked() == false
-					&& map.getFieldByPixel(player1.getX() + 22,
-							player1.getY() + 32).isBlocked() == false) {
-				this.itemHandling(player1.getX(), player1.getY());
+					&& map.getFieldByPixel(player1.getxPos() + 22,
+							player1.getyPos() + 32).isBlocked() == false) {
+				this.itemHandling(player1.getxPos(), player1.getyPos());
 				player1.setDy(4);
 				player1.setDx(0);
 			}

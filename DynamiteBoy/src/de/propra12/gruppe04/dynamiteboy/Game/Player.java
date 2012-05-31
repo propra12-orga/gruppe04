@@ -9,8 +9,8 @@ import de.propra12.gruppe04.dynamiteboy.Map.Map;
 public class Player {
 	private int dx;
 	private int dy;
-	private int x;
-	private int y;
+	private int xPos;
+	private int yPos;
 	private Image image;
 	private String playerPicture = "../images/db_char_placeholder.png";
 	private Map map;
@@ -19,8 +19,8 @@ public class Player {
 		ImageIcon img = new ImageIcon(this.getClass()
 				.getResource(playerPicture));
 		image = img.getImage();
-		x = 32;
-		y = 32;
+		xPos = 32;
+		yPos = 32;
 		this.map = map;
 	}
 
@@ -28,24 +28,24 @@ public class Player {
 	 * Updates player coordinates
 	 */
 	public void move() {
-		x += dx;
-		y += dy;
+		xPos += dx;
+		yPos += dy;
 	}
 
 	/**
 	 * 
 	 * @return current x-coordinate of player
 	 */
-	public int getX() {
-		return x;
+	public int getxPos() {
+		return xPos;
 	}
 
 	/**
 	 * 
 	 * @return current y-coordinate of player
 	 */
-	public int getY() {
-		return y;
+	public int getyPos() {
+		return yPos;
 	}
 
 	/**
