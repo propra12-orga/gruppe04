@@ -20,13 +20,14 @@ public class Game extends JPanel {
 	private Player player1;
 	private Player player2;
 	private Map map;
-	private int counter;
 	private JFrame frame;
 	private int numberOfPlayers;
 
 	public Game(JFrame frame) {
 		// SET UP
-		this.map = new Map(640, 480);
+		this.map = new Map(640, 480,
+				"src/de/propra12/gruppe04/dynamiteboy/Map/Map1.xml");
+		// this.map = new Map(640, 480);
 		this.frame = frame;
 		numberOfPlayers = 1;
 		createPlayers(numberOfPlayers);

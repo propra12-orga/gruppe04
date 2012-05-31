@@ -1,11 +1,24 @@
 package de.propra12.gruppe04.dynamiteboy.Map;
 
+import java.io.File;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import de.propra12.gruppe04.dynamiteboy.Item.Exit;
+
 public class Map {
 	private static Field[][] FieldGrid;
 	private int gridWidth;
 	private int gridHeight;
 
 	/**
+	 * Creates the default Map (no XML file needed)
 	 * 
 	 * @param width
 	 *            Map-width in px
@@ -16,7 +29,22 @@ public class Map {
 		this.gridWidth = width / 32;
 		this.gridHeight = height / 32;
 		generateFieldGrid();
+	}
 
+	/**
+	 * Creates a Map from
+	 * 
+	 * @param width
+	 *            Map-width in px
+	 * @param height
+	 *            Map-height in px
+	 * @param fileLocation
+	 *            path of the XML file containing the map data
+	 */
+	public Map(int width, int height, String fileLocation) {
+		this.gridWidth = width / 32;
+		this.gridHeight = height / 32;
+		generateFieldGrid(fileLocation);
 	}
 
 	public int getGridWidth() {
@@ -99,4 +127,62 @@ public class Map {
 
 	}
 
+	private void generateFieldGrid(String fileLocation) {
+		FieldGrid = new Field[gridWidth][gridHeight];
+		try {
+			File mapData = new File(fileLocation);
+
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+					.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(mapData);
+			NodeList mapRows = doc.getElementsByTagName("row");
+			// FieldGrid gets created here
+			// TODO Currently only FloorFields are created
+			for (int i = 0; i < mapRows.getLength(); i++) {
+				Node node = mapRows.item(i);
+				Element element = (Element) node;
+				NodeList mapFields = element.getElementsByTagName("Field");
+				for (int j = 0; j < mapFields.getLength(); j++) {
+					Node fnode = mapFields.item(j);
+					Element felement = (Element) fnode;
+					FieldGrid[xmlFieldxPos(felement)][xmlFieldyPos(felement)] = xmlCreateField(felement);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private int xmlFieldxPos(Element element) {
+		String stringPos = element.getAttribute("xPos");
+		int xPos = Integer.parseInt(stringPos);
+		return xPos;
+	}
+
+	private int xmlFieldyPos(Element element) {
+		String stringPos = element.getAttribute("yPos");
+		int yPos = Integer.parseInt(stringPos);
+		return yPos;
+	}
+
+	private Field xmlCreateField(Element element) {
+		Field f = null;
+		Exit exit = new Exit(false);
+		String type = element.getTextContent();
+		if (type.equals("")) {
+			f = new FloorField();
+			if (element.hasAttribute("exit")) {
+				f.setItem(exit);
+			}
+		} else if (type.equals("wall")) {
+			f = new WallField();
+		} else if (type.equals("destroyable")) {
+			f = new DestroyableField();
+			if (element.hasAttribute("exit")) {
+				f.setItem(exit);
+			}
+		}
+		return f;
+	}
 }

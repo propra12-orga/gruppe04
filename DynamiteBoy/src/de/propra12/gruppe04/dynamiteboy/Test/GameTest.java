@@ -6,12 +6,10 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.propra12.gruppe04.dynamiteboy.Game.Player;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
 
 public class GameTest {
 	private Map g;
-	private Player p;
 
 	@Before
 	public void setUp() {
