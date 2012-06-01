@@ -11,8 +11,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import de.propra12.gruppe04.dynamiteboy.Item.Bomb;
-import de.propra12.gruppe04.dynamiteboy.Item.Exit;
 import de.propra12.gruppe04.dynamiteboy.Item.Item;
+import de.propra12.gruppe04.dynamiteboy.Map.ExitField;
+import de.propra12.gruppe04.dynamiteboy.Map.Field;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
 import de.propra12.gruppe04.dynamiteboy.Menu.ScoreMenu;
 
@@ -89,7 +90,12 @@ public class Game extends JPanel {
 	}
 
 	/**
-	 * Checks if item is at field with pixel-coordinates x and y and handles it.
+	 * Checks if item is at field with pixel-coordinates x and y and handles it
+	 * 
+	 * First: Checks if Field is ExitField (has nothing to do with items but is
+	 * easier to implement here atm than elsewhere) and exits if it is
+	 * 
+	 * Then: Other items are handled
 	 * 
 	 * @param x
 	 *            x-coordinate of player (in px)
@@ -97,8 +103,9 @@ public class Game extends JPanel {
 	 *            y-coordinate of player (in px)
 	 */
 	public void itemHandling(int x, int y) {
+		Field f = map.getFieldByPixel(x, y);
 		Item item = map.getFieldByPixel(x, y).getItem();
-		if (item instanceof Exit) {
+		if (f instanceof ExitField) {
 			this.setVisible(false);
 			ScoreMenu m = new ScoreMenu(frame);
 		}

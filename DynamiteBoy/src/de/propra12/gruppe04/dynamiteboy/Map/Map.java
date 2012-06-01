@@ -233,7 +233,7 @@ public class Map {
 		if (type.equals("")) {
 			f = new FloorField();
 			if (element.hasAttribute("exit")) {
-				f.setItem(exit);
+				f = new ExitField();
 			}
 		} else if (type.equals("wall")) {
 			f = new WallField();
