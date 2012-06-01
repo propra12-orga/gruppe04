@@ -36,14 +36,30 @@ public class Game extends JPanel {
 		this.addKeyListener(new KAdapter());
 	}
 
+	/**
+	 * 
+	 * @return current map-object
+	 */
 	public Map getMap() {
 		return map;
 	}
 
+	/**
+	 * 
+	 * @param playerIndex
+	 *            index of player to return
+	 * @return player object
+	 */
 	public Player getPlayer(int playerIndex) {
-		return this.player[playerIndex];
+		return player[playerIndex];
 	}
 
+	/**
+	 * creates players and sets starting positions
+	 * 
+	 * @param numberOfPlayers
+	 *            to create
+	 */
 	public void createPlayers(int numberOfPlayers) {
 		playerStartPos[0][0] = 32;
 		playerStartPos[0][1] = 32;
@@ -57,6 +73,9 @@ public class Game extends JPanel {
 
 	/**
 	 * Plants a bomb on current grid-position
+	 * 
+	 * @param playerIndex
+	 *            player to plant the bomb
 	 */
 
 	public void plantBomb(int playerIndex) {
@@ -74,7 +93,9 @@ public class Game extends JPanel {
 	 * Checks if item is at field with pixel-coordinates x and y and handles it.
 	 * 
 	 * @param x
+	 *            x-coordinate of player (in px)
 	 * @param y
+	 *            y-coordinate of player (in px)
 	 */
 	public void itemHandling(int x, int y) {
 		Item item = map.getFieldByPixel(x, y).getItem();
@@ -86,6 +107,7 @@ public class Game extends JPanel {
 
 	// KEY HANDLING AND PAINT METHODS DOWN FROM HERE
 
+	// Adapter to handle KeyEvents
 	private class KAdapter extends KeyAdapter {
 		public void keyReleased(KeyEvent e) {
 			player1KeyReleased(e);
@@ -106,6 +128,12 @@ public class Game extends JPanel {
 		}
 	}
 
+	/**
+	 * draws the map
+	 * 
+	 * @param g2d
+	 *            Graphics object (painter)
+	 */
 	public void paintField(Graphics g2d) {
 		for (int y = 0; y < 480; y += 32) {
 			for (int x = 0; x < 640; x += 32) {
@@ -116,21 +144,30 @@ public class Game extends JPanel {
 		}
 	}
 
+	/**
+	 * draws the player
+	 * 
+	 * @param g2d
+	 *            g2d Graphics object (painter)
+	 * @param playerIndex
+	 *            index of player to be drawn
+	 */
 	public void paintPlayer(Graphics g2d, int playerIndex) {
 		g2d.drawImage(player[playerIndex].getImage(),
 				player[playerIndex].getxPos(), player[playerIndex].getyPos(),
 				this);
 	}
 
+	/**
+	 * paints everything and repaints at 30fps
+	 */
 	public void paint(Graphics g) {
 		super.paint(g);
 		Graphics g2d = (Graphics2D) g;
 		paintField(g2d);
-
 		for (int i = 0; i < numberOfPlayers; i++) {
 			paintPlayer(g2d, i);
 		}
-
 		Toolkit.getDefaultToolkit().sync();
 		g.dispose();
 		// Redraw with 30fps

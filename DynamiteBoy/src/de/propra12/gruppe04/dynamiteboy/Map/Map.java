@@ -21,9 +21,9 @@ public class Map {
 	 * Creates the default Map (no XML file needed)
 	 * 
 	 * @param width
-	 *            Map-width in px
+	 *            map width in px
 	 * @param height
-	 *            Map-height in px
+	 *            map height in px
 	 */
 	public Map(int width, int height) {
 		this.gridWidth = width / 32;
@@ -35,9 +35,9 @@ public class Map {
 	 * Creates a Map from
 	 * 
 	 * @param width
-	 *            Map-width in px
+	 *            map width in px
 	 * @param height
-	 *            Map-height in px
+	 *            map height in px
 	 * @param fileLocation
 	 *            path of the XML file containing the map data
 	 */
@@ -47,24 +47,43 @@ public class Map {
 		generateFieldGrid(fileLocation);
 	}
 
+	/**
+	 * 
+	 * @return gridWidth horizontal number of fields
+	 */
 	public int getGridWidth() {
 		return gridWidth;
 	}
 
+	/**
+	 * 
+	 * @param gridWidth
+	 *            horizontal number of fields
+	 */
 	public void setGridWidth(int gridWidth) {
 		this.gridWidth = gridWidth;
 	}
 
+	/**
+	 * 
+	 * @return gridHeight vertical number of fields
+	 */
 	public int getGridHeight() {
 		return gridHeight;
 	}
 
+	/**
+	 * 
+	 * @return gridHeight vertical number of fields
+	 */
 	public void setGridHeight(int gridHeight) {
 		this.gridHeight = gridHeight;
 	}
 
 	/**
-	 * Generates the grid and sets up values for "blocked" and "unblocked".
+	 * [DEPRECATED] Generates the grid and creates Field objects in
+	 * FieldGrid[x][y] based on static values given within the method
+	 * 
 	 * 
 	 * @param width
 	 *            Map-width in px
@@ -107,9 +126,9 @@ public class Map {
 	/**
 	 * 
 	 * @param x
-	 *            x-coordinate of fieldposition
+	 *            x-coordinate of field
 	 * @param y
-	 *            y-coordinate of fieldposition
+	 *            y-coordinate of field
 	 * @return Field object
 	 */
 	public Field getField(int x, int y) {
@@ -117,15 +136,38 @@ public class Map {
 		return f;
 	}
 
+	/**
+	 * 
+	 * @param x
+	 *            pixel x-coordinate
+	 * @param y
+	 *            pixel y-coordinate
+	 * @return field object at pixel coordinates x and y
+	 */
 	public Field getFieldByPixel(int x, int y) {
 		Field f = FieldGrid[(x / 32)][(y / 32)];
 		return f;
 	}
 
+	/**
+	 * 
+	 * @param x
+	 *            pixel x-coordinate
+	 * @param y
+	 *            pixel y-coordinate
+	 */
 	public void setFloorField(int x, int y) {
 		FieldGrid[x][y] = new FloorField();
 
 	}
+
+	/**
+	 * Generates the grid and creates Field objects in FieldGrid[x][y] based on
+	 * data from given XML-file
+	 * 
+	 * @param fileLocation
+	 *            path to the XML-file containing the map data
+	 */
 
 	private void generateFieldGrid(String fileLocation) {
 		FieldGrid = new Field[gridWidth][gridHeight];
@@ -154,18 +196,36 @@ public class Map {
 		}
 	}
 
+	/**
+	 * 
+	 * @param element
+	 *            XML-representation of the Field object
+	 * @return x-coordinate of current field
+	 */
 	private int xmlFieldxPos(Element element) {
 		String stringPos = element.getAttribute("xPos");
 		int xPos = Integer.parseInt(stringPos);
 		return xPos;
 	}
 
+	/**
+	 * 
+	 * @param element
+	 *            XML-representation of the Field object
+	 * @return y-coordinate of current field
+	 */
 	private int xmlFieldyPos(Element element) {
 		String stringPos = element.getAttribute("yPos");
 		int yPos = Integer.parseInt(stringPos);
 		return yPos;
 	}
 
+	/**
+	 * 
+	 * @param element
+	 *            XML-representation of the Field object
+	 * @return field object
+	 */
 	private Field xmlCreateField(Element element) {
 		Field f = null;
 		Exit exit = new Exit(false);
