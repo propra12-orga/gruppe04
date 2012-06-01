@@ -11,8 +11,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import de.propra12.gruppe04.dynamiteboy.Game.Game;
-
 public class ScoreMenu extends JPanel {
 	private JButton buttonStart;
 	private JFrame frame;
@@ -28,17 +26,13 @@ public class ScoreMenu extends JPanel {
 	 */
 	public ScoreMenu(final JFrame frame) {
 		this.frame = frame;
-		buttonStart = new JButton("Erneut Spielen");
+		buttonStart = new JButton("Zurück zum Hauptmenü");
 		buttonStart.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// final JFrame frame = new JFrame();
-				buttonStart.setText("Spiel wird gestartet...");
-				Game game = new Game(frame, 1);
-				frame.getContentPane().add(game);
+				MainMenu m = new MainMenu(frame);
 				buttonStart.setVisible(false);
 				title.setVisible(false);
-				game.setVisible(true);
 			}
 		});
 		frame.getContentPane().add(BorderLayout.CENTER, this.title);

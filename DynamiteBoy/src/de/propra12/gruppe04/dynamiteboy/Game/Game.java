@@ -22,7 +22,7 @@ public class Game extends JPanel {
 	private Map map;
 	private JFrame frame;
 	private int numberOfPlayers;
-	// Playerconstants
+	// Player constants
 	private final int PLAYER1 = 0, PLAYER2 = 1;
 
 	public Game(JFrame frame, int numberOfPlayers, String mapName) {
