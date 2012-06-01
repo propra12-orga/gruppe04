@@ -17,7 +17,7 @@ import de.propra12.gruppe04.dynamiteboy.Map.Map;
 import de.propra12.gruppe04.dynamiteboy.Menu.ScoreMenu;
 
 public class Game extends JPanel {
-	private int playerStartPos[][];
+	private int playerStartPos[][] = new int[2][2];
 	private Player player[] = new Player[2];
 	private Map map;
 	private JFrame frame;
@@ -28,7 +28,6 @@ public class Game extends JPanel {
 	public Game(JFrame frame, int numberOfPlayers) {
 		// SET UP
 		this.numberOfPlayers = numberOfPlayers;
-		this.playerStartPos = new int[numberOfPlayers][numberOfPlayers];
 		this.map = new Map(640, 480,
 				"src/de/propra12/gruppe04/dynamiteboy/Map/Map1.xml");
 		this.frame = frame;
