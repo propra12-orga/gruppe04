@@ -68,6 +68,7 @@ public class Game extends JPanel {
 		for (int i = 0; i < numberOfPlayers; i++) {
 			player[i] = new Player(i, playerStartPos[i][0],
 					playerStartPos[i][1]);
+
 		}
 	}
 
@@ -86,7 +87,6 @@ public class Game extends JPanel {
 				false, map);
 		Thread bombThread = new Thread(bomb);
 		bombThread.start();
-
 	}
 
 	/**
@@ -145,7 +145,6 @@ public class Game extends JPanel {
 			for (int x = 0; x < 640; x += 32) {
 				g2d.drawImage(map.getFieldByPixel(x, y).getImageIcon()
 						.getImage(), x, y, this);
-
 			}
 		}
 	}
@@ -186,9 +185,9 @@ public class Game extends JPanel {
 	}
 
 	public void playerMoveLeft(int pIndex) {
-		if (map.getFieldByPixel(player[pIndex].getxPos(),
+		if (map.getFieldByPixel(player[pIndex].getxPos() - 1,
 				player[pIndex].getyPos()).isBlocked() == false
-				&& map.getFieldByPixel(player[pIndex].getxPos(),
+				&& map.getFieldByPixel(player[pIndex].getxPos() - 1,
 						player[pIndex].getyPos() + 30).isBlocked() == false) {
 			itemHandling(player[pIndex].getxPos(), player[pIndex].getyPos());
 			player[pIndex].setDx(-4);
@@ -210,9 +209,9 @@ public class Game extends JPanel {
 	public void playerMoveUp(int pIndex) {
 
 		if (map.getFieldByPixel(player[pIndex].getxPos(),
-				player[pIndex].getyPos()).isBlocked() == false
+				player[pIndex].getyPos() - 1).isBlocked() == false
 				&& map.getFieldByPixel(player[pIndex].getxPos() + 22,
-						player[pIndex].getyPos()).isBlocked() == false) {
+						player[pIndex].getyPos() - 1).isBlocked() == false) {
 			itemHandling(player[pIndex].getxPos(), player[pIndex].getyPos());
 			player[pIndex].setDy(-4);
 			player[pIndex].setDx(0);
