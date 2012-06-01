@@ -17,18 +17,20 @@ import de.propra12.gruppe04.dynamiteboy.Map.Map;
 import de.propra12.gruppe04.dynamiteboy.Menu.ScoreMenu;
 
 public class Game extends JPanel {
-	private int playerStartPos[][] = new int[2][2];
+	private int playerStartPos[][];
 	private Player player[] = new Player[2];
 	private Map map;
 	private JFrame frame;
 	private int numberOfPlayers;
+	// Playerconstants
+	private final int PLAYER1 = 0, PLAYER2 = 1;
 
 	public Game(JFrame frame, int numberOfPlayers) {
 		// SET UP
 		this.numberOfPlayers = numberOfPlayers;
+		this.playerStartPos = new int[numberOfPlayers][numberOfPlayers];
 		this.map = new Map(640, 480,
 				"src/de/propra12/gruppe04/dynamiteboy/Map/Map1.xml");
-		// this.map = new Map(640, 480);
 		this.frame = frame;
 		createPlayers(numberOfPlayers);
 		setFocusable(true);
@@ -60,13 +62,27 @@ public class Game extends JPanel {
 
 	public void plantBomb(int playerIndex) {
 		Bomb bomb = new Bomb(
-				this.player[playerIndex].getGridX(this.player[playerIndex]
-						.getxPos() + 16),
-				this.player[playerIndex].getGridY(this.player[playerIndex]
-						.getyPos() + 16), false, map);
+				player[playerIndex]
+						.getGridX(player[playerIndex].getxPos() + 16),
+				player[playerIndex].getGridY(player[playerIndex].getyPos() + 16),
+				false, map);
 		Thread bombThread = new Thread(bomb);
 		bombThread.start();
 
+	}
+
+	/**
+	 * Checks if item is at field with pixel-coordinates x and y and handles it.
+	 * 
+	 * @param x
+	 * @param y
+	 */
+	public void itemHandling(int x, int y) {
+		Item item = map.getFieldByPixel(x, y).getItem();
+		if (item instanceof Exit) {
+			this.setVisible(false);
+			ScoreMenu m = new ScoreMenu(frame);
+		}
 	}
 
 	// KEY HANDLING AND PAINT METHODS DOWN FROM HERE
@@ -102,9 +118,9 @@ public class Game extends JPanel {
 	}
 
 	public void paintPlayer(Graphics g2d, int playerIndex) {
-		g2d.drawImage(this.player[playerIndex].getImage(),
-				this.player[playerIndex].getxPos(),
-				this.player[playerIndex].getyPos(), this);
+		g2d.drawImage(player[playerIndex].getImage(),
+				player[playerIndex].getxPos(), player[playerIndex].getyPos(),
+				this);
 	}
 
 	public void paint(Graphics g) {
@@ -112,7 +128,7 @@ public class Game extends JPanel {
 		Graphics g2d = (Graphics2D) g;
 		paintField(g2d);
 
-		for (int i = 0; i < this.numberOfPlayers; i++) {
+		for (int i = 0; i < numberOfPlayers; i++) {
 			paintPlayer(g2d, i);
 		}
 
@@ -127,52 +143,48 @@ public class Game extends JPanel {
 		}
 	}
 
-	public void playerMoveLeft(int playerIndex) {
-		if (map.getFieldByPixel(this.player[playerIndex].getxPos(),
-				this.player[playerIndex].getyPos()).isBlocked() == false
-				&& map.getFieldByPixel(this.player[playerIndex].getxPos(),
-						this.player[playerIndex].getyPos() + 30).isBlocked() == false) {
-			this.itemHandling(this.player[playerIndex].getxPos(),
-					this.player[playerIndex].getyPos());
-			this.player[playerIndex].setDx(-4);
-			this.player[playerIndex].setDy(0);
+	public void playerMoveLeft(int pIndex) {
+		if (map.getFieldByPixel(player[pIndex].getxPos(),
+				player[pIndex].getyPos()).isBlocked() == false
+				&& map.getFieldByPixel(player[pIndex].getxPos(),
+						player[pIndex].getyPos() + 30).isBlocked() == false) {
+			itemHandling(player[pIndex].getxPos(), player[pIndex].getyPos());
+			player[pIndex].setDx(-4);
+			player[pIndex].setDy(0);
 		}
 	}
 
-	public void playerMoveRight(int playerIndex) {
-		if (map.getFieldByPixel(player[playerIndex].getxPos() + 28,
-				player[playerIndex].getyPos()).isBlocked() == false
-				&& map.getFieldByPixel(player[playerIndex].getxPos() + 28,
-						player[playerIndex].getyPos() + 28).isBlocked() == false) {
-			itemHandling(player[playerIndex].getxPos(),
-					player[playerIndex].getyPos());
-			player[playerIndex].setDx(4);
-			player[playerIndex].setDy(0);
+	public void playerMoveRight(int pIndex) {
+		if (map.getFieldByPixel(player[pIndex].getxPos() + 28,
+				player[pIndex].getyPos()).isBlocked() == false
+				&& map.getFieldByPixel(player[pIndex].getxPos() + 28,
+						player[pIndex].getyPos() + 28).isBlocked() == false) {
+			itemHandling(player[pIndex].getxPos(), player[pIndex].getyPos());
+			player[pIndex].setDx(4);
+			player[pIndex].setDy(0);
 		}
 	}
 
-	public void playerMoveUp(int playerIndex) {
+	public void playerMoveUp(int pIndex) {
 
-		if (map.getFieldByPixel(this.player[playerIndex].getxPos(),
-				this.player[playerIndex].getyPos()).isBlocked() == false
-				&& map.getFieldByPixel(this.player[playerIndex].getxPos() + 22,
-						this.player[playerIndex].getyPos()).isBlocked() == false) {
-			this.itemHandling(this.player[playerIndex].getxPos(),
-					this.player[playerIndex].getyPos());
-			this.player[playerIndex].setDy(-4);
-			this.player[playerIndex].setDx(0);
+		if (map.getFieldByPixel(player[pIndex].getxPos(),
+				player[pIndex].getyPos()).isBlocked() == false
+				&& map.getFieldByPixel(player[pIndex].getxPos() + 22,
+						player[pIndex].getyPos()).isBlocked() == false) {
+			itemHandling(player[pIndex].getxPos(), player[pIndex].getyPos());
+			player[pIndex].setDy(-4);
+			player[pIndex].setDx(0);
 		}
 	}
 
-	public void playerMoveDown(int playerIndex) {
-		if (map.getFieldByPixel(this.player[playerIndex].getxPos(),
-				this.player[playerIndex].getyPos() + 30).isBlocked() == false
-				&& map.getFieldByPixel(this.player[playerIndex].getxPos() + 22,
-						this.player[playerIndex].getyPos() + 32).isBlocked() == false) {
-			this.itemHandling(this.player[playerIndex].getxPos(),
-					this.player[playerIndex].getyPos());
-			this.player[playerIndex].setDy(4);
-			this.player[playerIndex].setDx(0);
+	public void playerMoveDown(int pIndex) {
+		if (map.getFieldByPixel(player[pIndex].getxPos(),
+				player[pIndex].getyPos() + 30).isBlocked() == false
+				&& map.getFieldByPixel(player[pIndex].getxPos() + 22,
+						player[pIndex].getyPos() + 32).isBlocked() == false) {
+			itemHandling(player[pIndex].getxPos(), player[pIndex].getyPos());
+			player[pIndex].setDy(4);
+			player[pIndex].setDx(0);
 		}
 	}
 
@@ -181,23 +193,23 @@ public class Game extends JPanel {
 		int key = e.getKeyCode();
 
 		if (key == KeyEvent.VK_LEFT) {
-			playerMoveLeft(0);
+			playerMoveLeft(PLAYER1);
 		}
 
 		if (key == KeyEvent.VK_RIGHT) {
-			playerMoveRight(0);
+			playerMoveRight(PLAYER1);
 		}
 
 		if (key == KeyEvent.VK_UP) {
-			playerMoveUp(0);
+			playerMoveUp(PLAYER1);
 		}
 
 		if (key == KeyEvent.VK_DOWN) {
-			playerMoveDown(0);
+			playerMoveDown(PLAYER1);
 		}
 
 		if (key == KeyEvent.VK_ENTER) {
-			plantBomb(0);
+			plantBomb(PLAYER1);
 		}
 
 	}
@@ -207,23 +219,23 @@ public class Game extends JPanel {
 		int key = e.getKeyCode();
 
 		if (key == KeyEvent.VK_A) {
-			playerMoveLeft(1);
+			playerMoveLeft(PLAYER2);
 		}
 
 		if (key == KeyEvent.VK_D) {
-			playerMoveRight(1);
+			playerMoveRight(PLAYER2);
 		}
 
 		if (key == KeyEvent.VK_W) {
-			playerMoveUp(1);
+			playerMoveUp(PLAYER2);
 		}
 
 		if (key == KeyEvent.VK_S) {
-			playerMoveDown(1);
+			playerMoveDown(PLAYER2);
 		}
 
 		if (key == KeyEvent.VK_SPACE) {
-			plantBomb(1);
+			plantBomb(PLAYER2);
 		}
 
 	}
@@ -237,19 +249,19 @@ public class Game extends JPanel {
 		int key = e.getKeyCode();
 
 		if (key == KeyEvent.VK_LEFT) {
-			this.player[0].setDx(0);
+			player[PLAYER1].setDx(0);
 		}
 
 		if (key == KeyEvent.VK_RIGHT) {
-			this.player[0].setDx(0);
+			player[PLAYER1].setDx(0);
 		}
 
 		if (key == KeyEvent.VK_UP) {
-			this.player[0].setDy(0);
+			player[PLAYER1].setDy(0);
 		}
 
 		if (key == KeyEvent.VK_DOWN) {
-			this.player[0].setDy(0);
+			player[PLAYER1].setDy(0);
 		}
 
 	}
@@ -258,35 +270,21 @@ public class Game extends JPanel {
 		int key = e.getKeyCode();
 
 		if (key == KeyEvent.VK_A) {
-			this.player[1].setDx(0);
+			player[PLAYER2].setDx(0);
 		}
 
 		if (key == KeyEvent.VK_D) {
-			this.player[1].setDx(0);
+			player[PLAYER2].setDx(0);
 		}
 
 		if (key == KeyEvent.VK_W) {
-			this.player[1].setDy(0);
+			player[PLAYER2].setDy(0);
 		}
 
 		if (key == KeyEvent.VK_S) {
-			this.player[1].setDy(0);
+			player[PLAYER2].setDy(0);
 		}
 
-	}
-
-	/**
-	 * Checks if item is at field with pixel-coordinates x and y and handles it.
-	 * 
-	 * @param x
-	 * @param y
-	 */
-	public void itemHandling(int x, int y) {
-		Item item = map.getFieldByPixel(x, y).getItem();
-		if (item instanceof Exit) {
-			this.setVisible(false);
-			ScoreMenu m = new ScoreMenu(frame);
-		}
 	}
 
 }
