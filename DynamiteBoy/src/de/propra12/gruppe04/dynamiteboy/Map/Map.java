@@ -166,14 +166,14 @@ public class Map {
 	 * data from given XML-file
 	 * 
 	 * @param fileLocation
-	 *            path to the XML-file containing the map data
+	 *            name of the XML-file containing the map data
 	 */
 
-	private void generateFieldGrid(String fileLocation) {
+	private void generateFieldGrid(String fileName) {
 		FieldGrid = new Field[gridWidth][gridHeight];
 		try {
-			File mapData = new File(fileLocation);
-
+			String path = "src/de/propra12/gruppe04/dynamiteboy/Map/";
+			File mapData = new File(path + fileName);
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
 					.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();

@@ -25,11 +25,10 @@ public class Game extends JPanel {
 	// Playerconstants
 	private final int PLAYER1 = 0, PLAYER2 = 1;
 
-	public Game(JFrame frame, int numberOfPlayers) {
+	public Game(JFrame frame, int numberOfPlayers, String mapName) {
 		// SET UP
 		this.numberOfPlayers = numberOfPlayers;
-		this.map = new Map(640, 480,
-				"src/de/propra12/gruppe04/dynamiteboy/Map/Map1.xml");
+		this.map = new Map(640, 480, mapName);
 		this.frame = frame;
 		createPlayers(numberOfPlayers);
 		setFocusable(true);

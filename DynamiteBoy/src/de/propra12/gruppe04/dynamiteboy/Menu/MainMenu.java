@@ -27,19 +27,7 @@ public class MainMenu extends JPanel {
 	/**
 	 * Constructor Sets up MainMenu with a Start Button to start the game
 	 * 
-	 * @param width
-	 *            Window-width
-	 * @param height
-	 *            Window-height
 	 */
-
-	public void loadGame(int numberOfPlayers) {
-		Game game = new Game(frame, numberOfPlayers);
-		frame.getContentPane().add(game);
-		title.setVisible(false);
-		panelButton.setVisible(false);
-		game.setVisible(true);
-	}
 
 	public MainMenu(final JFrame frame) {
 		this.frame = frame;
@@ -53,7 +41,7 @@ public class MainMenu extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ButtonStart1p.setText("Spiel wird gestartet...");
-				loadGame(1);
+				loadGame(1, "Map1.xml");
 			}
 
 		});
@@ -62,7 +50,7 @@ public class MainMenu extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ButtonStart2p.setText("Spiel wird gestartet...");
-				loadGame(2);
+				loadGame(2, "Maze.xml");
 			}
 
 		});
@@ -71,6 +59,14 @@ public class MainMenu extends JPanel {
 		ButtonStart1p.setPreferredSize(new Dimension(100, 80));
 		ButtonStart2p.setPreferredSize(new Dimension(100, 80));
 		frame.getContentPane().add(BorderLayout.SOUTH, panelButton);
+	}
+
+	public void loadGame(int numberOfPlayers, String mapName) {
+		Game game = new Game(frame, numberOfPlayers, mapName);
+		frame.getContentPane().add(game);
+		title.setVisible(false);
+		panelButton.setVisible(false);
+		game.setVisible(true);
 	}
 
 	static class TitlePanel extends JPanel {
