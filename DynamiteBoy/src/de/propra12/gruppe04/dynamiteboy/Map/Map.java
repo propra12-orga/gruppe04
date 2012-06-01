@@ -158,7 +158,6 @@ public class Map {
 	 */
 	public void setFloorField(int x, int y) {
 		FieldGrid[x][y] = new FloorField();
-
 	}
 
 	/**
@@ -244,5 +243,9 @@ public class Map {
 			}
 		}
 		return f;
+	}
+
+	public void setExitField(int x, int y) {
+		FieldGrid[x][y] = new ExitField();
 	}
 }

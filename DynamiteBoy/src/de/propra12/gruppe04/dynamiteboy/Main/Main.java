@@ -9,7 +9,7 @@ public class Main {
 		JFrame frame = new JFrame();
 		frame.setSize(643, 510);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
 		MainMenu m = new MainMenu(frame);
+		frame.setVisible(true);
 	}
 }

@@ -11,6 +11,14 @@ public class Bomb extends Item implements Runnable {
 	private int xPos;
 	private int yPos;
 
+	/**
+	 * Creats bomb instance
+	 * 
+	 * @param x
+	 * @param y
+	 * @param collectable
+	 * @param map
+	 */
 	public Bomb(int x, int y, boolean collectable, Map map) {
 		super(collectable);
 		// TODO Remove debug
@@ -20,6 +28,9 @@ public class Bomb extends Item implements Runnable {
 		this.yPos = y;
 	}
 
+	/**
+	 * Bombthread method
+	 */
 	@Override
 	public void run() {
 		try {
@@ -63,6 +74,13 @@ public class Bomb extends Item implements Runnable {
 		}
 	}
 
+	/**
+	 * Checks if field is within the map and if it is destroyable
+	 * 
+	 * @param x
+	 * @param y
+	 * @return true if field is destroyable
+	 */
 	private boolean isDestroyable(int x, int y) {
 		if (x >= 0 && x < map.getGridWidth() && y >= 0
 				&& y < map.getGridHeight()) {
@@ -76,9 +94,21 @@ public class Bomb extends Item implements Runnable {
 		}
 	}
 
+	/**
+	 * Handles field-change on destroy on passed fieldposition
+	 * 
+	 * @param x
+	 * @param y
+	 */
 	private void destroy(int x, int y) {
-		map.setFloorField(x, y);
+		if (map.getField(x, y).getItem() instanceof Exit) {
+			map.setExitField(x, y);
+		} else if (map.getField(x, y).getItem() == null) {
+			map.setFloorField(x, y);
+		}
 	}
+
+	// GETTERS AND SETTERS
 
 	public int getxPos() {
 		return xPos;

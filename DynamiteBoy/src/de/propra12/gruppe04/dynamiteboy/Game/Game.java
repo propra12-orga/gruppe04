@@ -25,6 +25,8 @@ public class Game extends JPanel {
 	private int numberOfPlayers;
 	// Player constants
 	private final int PLAYER1 = 0, PLAYER2 = 1;
+	// Movement constants
+	private final int LEFT = 0, DOWN = 1, RIGHT = 2, UP = 3;
 
 	public Game(JFrame frame, int numberOfPlayers, String mapName) {
 		// SET UP
@@ -67,7 +69,7 @@ public class Game extends JPanel {
 		playerStartPos[1][1] = 416;
 		for (int i = 0; i < numberOfPlayers; i++) {
 			player[i] = new Player(i, playerStartPos[i][0],
-					playerStartPos[i][1]);
+					playerStartPos[i][1], map);
 
 		}
 	}
@@ -103,8 +105,8 @@ public class Game extends JPanel {
 	 *            y-coordinate of player (in px)
 	 */
 	public void itemHandling(int x, int y) {
-		Field f = map.getFieldByPixel(x, y);
-		Item item = map.getFieldByPixel(x, y).getItem();
+		Field f = map.getFieldByPixel(x + 16, y + 16);
+		Item item = map.getFieldByPixel(x + 16, y + 16).getItem();
 		if (f instanceof ExitField) {
 			this.setVisible(false);
 			ScoreMenu m = new ScoreMenu(frame);
@@ -117,19 +119,15 @@ public class Game extends JPanel {
 	private class KAdapter extends KeyAdapter {
 		public void keyReleased(KeyEvent e) {
 			player1KeyReleased(e);
-			player[0].move();
 			if (numberOfPlayers > 1) {
 				player2KeyReleased(e);
-				player[1].move();
 			}
 		}
 
 		public void keyPressed(KeyEvent e) {
 			player1KeyPressed(e);
-			player[0].move();
 			if (numberOfPlayers > 1) {
 				player2KeyPressed(e);
-				player[1].move();
 			}
 		}
 	}
@@ -184,69 +182,28 @@ public class Game extends JPanel {
 		}
 	}
 
-	public void playerMoveLeft(int pIndex) {
-		if (map.getFieldByPixel(player[pIndex].getxPos() - 1,
-				player[pIndex].getyPos()).isBlocked() == false
-				&& map.getFieldByPixel(player[pIndex].getxPos() - 1,
-						player[pIndex].getyPos() + 30).isBlocked() == false) {
-			itemHandling(player[pIndex].getxPos(), player[pIndex].getyPos());
-			player[pIndex].setDx(-4);
-			player[pIndex].setDy(0);
-		}
-	}
-
-	public void playerMoveRight(int pIndex) {
-		if (map.getFieldByPixel(player[pIndex].getxPos() + 28,
-				player[pIndex].getyPos()).isBlocked() == false
-				&& map.getFieldByPixel(player[pIndex].getxPos() + 28,
-						player[pIndex].getyPos() + 28).isBlocked() == false) {
-			itemHandling(player[pIndex].getxPos(), player[pIndex].getyPos());
-			player[pIndex].setDx(4);
-			player[pIndex].setDy(0);
-		}
-	}
-
-	public void playerMoveUp(int pIndex) {
-
-		if (map.getFieldByPixel(player[pIndex].getxPos(),
-				player[pIndex].getyPos() - 1).isBlocked() == false
-				&& map.getFieldByPixel(player[pIndex].getxPos() + 22,
-						player[pIndex].getyPos() - 1).isBlocked() == false) {
-			itemHandling(player[pIndex].getxPos(), player[pIndex].getyPos());
-			player[pIndex].setDy(-4);
-			player[pIndex].setDx(0);
-		}
-	}
-
-	public void playerMoveDown(int pIndex) {
-		if (map.getFieldByPixel(player[pIndex].getxPos(),
-				player[pIndex].getyPos() + 30).isBlocked() == false
-				&& map.getFieldByPixel(player[pIndex].getxPos() + 22,
-						player[pIndex].getyPos() + 32).isBlocked() == false) {
-			itemHandling(player[pIndex].getxPos(), player[pIndex].getyPos());
-			player[pIndex].setDy(4);
-			player[pIndex].setDx(0);
-		}
-	}
-
 	public void player1KeyPressed(KeyEvent e) {
 
 		int key = e.getKeyCode();
 
 		if (key == KeyEvent.VK_LEFT) {
-			playerMoveLeft(PLAYER1);
+			player[PLAYER1].move(LEFT);
+			itemHandling(player[PLAYER1].getxPos(), player[PLAYER1].getyPos());
 		}
 
 		if (key == KeyEvent.VK_RIGHT) {
-			playerMoveRight(PLAYER1);
+			player[PLAYER1].move(RIGHT);
+			itemHandling(player[PLAYER1].getxPos(), player[PLAYER1].getyPos());
 		}
 
 		if (key == KeyEvent.VK_UP) {
-			playerMoveUp(PLAYER1);
+			player[PLAYER1].move(UP);
+			itemHandling(player[PLAYER1].getxPos(), player[PLAYER1].getyPos());
 		}
 
 		if (key == KeyEvent.VK_DOWN) {
-			playerMoveDown(PLAYER1);
+			player[PLAYER1].move(DOWN);
+			itemHandling(player[PLAYER1].getxPos(), player[PLAYER1].getyPos());
 		}
 
 		if (key == KeyEvent.VK_ENTER) {
@@ -260,19 +217,24 @@ public class Game extends JPanel {
 		int key = e.getKeyCode();
 
 		if (key == KeyEvent.VK_A) {
-			playerMoveLeft(PLAYER2);
+			player[PLAYER2].move(LEFT);
+			itemHandling(player[PLAYER2].getxPos(), player[PLAYER2].getyPos());
+			;
 		}
 
 		if (key == KeyEvent.VK_D) {
-			playerMoveRight(PLAYER2);
+			player[PLAYER2].move(RIGHT);
+			itemHandling(player[PLAYER2].getxPos(), player[PLAYER2].getyPos());
 		}
 
 		if (key == KeyEvent.VK_W) {
-			playerMoveUp(PLAYER2);
+			player[PLAYER2].move(UP);
+			itemHandling(player[PLAYER2].getxPos(), player[PLAYER2].getyPos());
 		}
 
 		if (key == KeyEvent.VK_S) {
-			playerMoveDown(PLAYER2);
+			player[PLAYER2].move(DOWN);
+			itemHandling(player[PLAYER2].getxPos(), player[PLAYER2].getyPos());
 		}
 
 		if (key == KeyEvent.VK_SPACE) {
