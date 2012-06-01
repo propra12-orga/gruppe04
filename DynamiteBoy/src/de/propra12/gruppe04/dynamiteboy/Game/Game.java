@@ -30,13 +30,7 @@ public class Game extends JPanel {
 				"src/de/propra12/gruppe04/dynamiteboy/Map/Map1.xml");
 		// this.map = new Map(640, 480);
 		this.frame = frame;
-		this.playerStartPos[0][0] = 32;
-		this.playerStartPos[0][1] = 32;
-		this.playerStartPos[1][0] = 581;
-		this.playerStartPos[1][1] = 416;
-
-		System.err.println(this.numberOfPlayers);
-		createPlayers(this.numberOfPlayers);
+		createPlayers(numberOfPlayers);
 		setFocusable(true);
 		this.addKeyListener(new KAdapter());
 	}
@@ -50,9 +44,13 @@ public class Game extends JPanel {
 	}
 
 	public void createPlayers(int numberOfPlayers) {
+		playerStartPos[0][0] = 32;
+		playerStartPos[0][1] = 32;
+		playerStartPos[1][0] = 581;
+		playerStartPos[1][1] = 416;
 		for (int i = 0; i < numberOfPlayers; i++) {
-			this.player[i] = new Player(i, this.playerStartPos[i][0],
-					this.playerStartPos[i][1]);
+			player[i] = new Player(i, playerStartPos[i][0],
+					playerStartPos[i][1]);
 		}
 	}
 
@@ -76,15 +74,20 @@ public class Game extends JPanel {
 	private class KAdapter extends KeyAdapter {
 		public void keyReleased(KeyEvent e) {
 			player1KeyReleased(e);
-			if (numberOfPlayers > 1)
+			player[0].move();
+			if (numberOfPlayers > 1) {
 				player2KeyReleased(e);
+				player[1].move();
+			}
 		}
 
 		public void keyPressed(KeyEvent e) {
-			int playerSum = player.length;
 			player1KeyPressed(e);
-			if (numberOfPlayers > 1)
+			player[0].move();
+			if (numberOfPlayers > 1) {
 				player2KeyPressed(e);
+				player[1].move();
+			}
 		}
 	}
 
@@ -124,12 +127,6 @@ public class Game extends JPanel {
 		}
 	}
 
-	/**
-	 * 
-	 * @param e
-	 *            takes key event (pressed) and changes player-position
-	 *            accordingly
-	 */
 	public void playerMoveLeft(int playerIndex) {
 		if (map.getFieldByPixel(this.player[playerIndex].getxPos(),
 				this.player[playerIndex].getyPos()).isBlocked() == false
@@ -143,14 +140,14 @@ public class Game extends JPanel {
 	}
 
 	public void playerMoveRight(int playerIndex) {
-		if (map.getFieldByPixel(this.player[playerIndex].getxPos() + 28,
-				this.player[playerIndex].getyPos()).isBlocked() == false
-				&& map.getFieldByPixel(this.player[playerIndex].getxPos() + 28,
-						this.player[playerIndex].getyPos() + 28).isBlocked() == false) {
-			this.itemHandling(this.player[playerIndex].getxPos(),
-					this.player[playerIndex].getyPos());
-			this.player[playerIndex].setDx(4);
-			this.player[playerIndex].setDy(0);
+		if (map.getFieldByPixel(player[playerIndex].getxPos() + 28,
+				player[playerIndex].getyPos()).isBlocked() == false
+				&& map.getFieldByPixel(player[playerIndex].getxPos() + 28,
+						player[playerIndex].getyPos() + 28).isBlocked() == false) {
+			itemHandling(player[playerIndex].getxPos(),
+					player[playerIndex].getyPos());
+			player[playerIndex].setDx(4);
+			player[playerIndex].setDy(0);
 		}
 	}
 
@@ -203,8 +200,6 @@ public class Game extends JPanel {
 			plantBomb(0);
 		}
 
-		this.player[0].move();
-
 	}
 
 	public void player2KeyPressed(KeyEvent e) {
@@ -230,8 +225,6 @@ public class Game extends JPanel {
 		if (key == KeyEvent.VK_SPACE) {
 			plantBomb(1);
 		}
-
-		this.player[1].move();
 
 	}
 

@@ -34,7 +34,7 @@ public class ScoreMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// final JFrame frame = new JFrame();
 				buttonStart.setText("Spiel wird gestartet...");
-				Game game = new Game(frame);
+				Game game = new Game(frame, 1);
 				frame.getContentPane().add(game);
 				buttonStart.setVisible(false);
 				title.setVisible(false);

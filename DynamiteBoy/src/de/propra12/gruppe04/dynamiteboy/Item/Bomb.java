@@ -44,15 +44,19 @@ public class Bomb extends Item implements Runnable {
 	 */
 	private void detonate(int x, int y) {
 		for (int i = 1; i <= BOMB_RADIUS; i++) {
+			// right
 			if (isDestroyable(x + (1 * i), y)) {
 				destroy(x + (1 * i), y);
 			}
+			// left
 			if (isDestroyable(x - (1 * i), y)) {
-				destroy(x + (1 * i), y);
+				destroy(x - (1 * i), y);
 			}
+			// bottom
 			if (isDestroyable(x, y + (1 * i))) {
 				destroy(x, y + (1 * i));
 			}
+			// top
 			if (isDestroyable(x, y - (1 * i))) {
 				destroy(x, y - (1 * i));
 			}
