@@ -3,9 +3,7 @@ package de.propra12.gruppe04.dynamiteboy.Game;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -23,10 +21,20 @@ public class Game extends JPanel {
 	private Map map;
 	private JFrame frame;
 	private int numberOfPlayers;
+	private int fps = 60;
+	private int frameCount = 0;
+	private InputHandler input;
 	// Player constants
 	private final int PLAYER1 = 0, PLAYER2 = 1;
 	// Movement constants
 	private final int LEFT = 0, DOWN = 1, RIGHT = 2, UP = 3;
+	private boolean running = true;
+	// Game constants
+	final double GAME_FREQUENCY = 30.0;
+	final double MAX_FPS = 60;
+	final double TIME_BETWEEN_UPDATES = 1000000000 / GAME_FREQUENCY;
+	final int MAX_UPDATES_BEFORE_RENDER = 5;
+	final double TARGET_TIME_BETWEEN_RENDERS = 1000000000 / MAX_FPS;
 
 	public Game(JFrame frame, int numberOfPlayers, String mapName) {
 		// SET UP
@@ -35,7 +43,84 @@ public class Game extends JPanel {
 		this.frame = frame;
 		createPlayers(numberOfPlayers);
 		setFocusable(true);
-		this.addKeyListener(new KAdapter());
+		// this.addKeyListener(new KAdapter());
+		this.input = new InputHandler();
+		this.addKeyListener(input);
+		if (running) {
+			runGameLoop();
+		}
+	}
+
+	public void runGameLoop() {
+		Thread loop = new Thread() {
+			public void run() {
+				gameLoop();
+			}
+		};
+		loop.start();
+	}
+
+	private void gameLoop() {
+		double lastUpdateTime = System.nanoTime();
+		double lastRenderTime = System.nanoTime();
+		int lastSecondTime = (int) (lastUpdateTime / 1000000000);
+		while (running) {
+			double now = System.nanoTime();
+			int updateCount = 0;
+			while (now - lastUpdateTime > TIME_BETWEEN_UPDATES
+					&& updateCount < MAX_UPDATES_BEFORE_RENDER) {
+				updateGame();
+				lastUpdateTime += TIME_BETWEEN_UPDATES;
+				updateCount++;
+			}
+			if (now - lastUpdateTime > TIME_BETWEEN_UPDATES) {
+				lastUpdateTime = now - TIME_BETWEEN_UPDATES;
+			}
+			// TODO implement interpolation in animations
+			float interpolation = Math.min(1.0f,
+					(float) ((now - lastUpdateTime) / TIME_BETWEEN_UPDATES));
+			drawGame(interpolation);
+			lastRenderTime = now;
+
+			int thisSecond = (int) (lastUpdateTime / 1000000000);
+			if (thisSecond > lastSecondTime) {
+				System.out.println("NEW SECOND " + thisSecond + " "
+						+ frameCount);
+				fps = frameCount;
+				frameCount = 0;
+				lastSecondTime = thisSecond;
+			}
+			while (now - lastRenderTime < TARGET_TIME_BETWEEN_RENDERS
+					&& now - lastUpdateTime < TIME_BETWEEN_UPDATES) {
+				Thread.yield();
+				try {
+					Thread.sleep(1);
+				} catch (Exception e) {
+				}
+				now = System.nanoTime();
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * @param interpolation
+	 *            not yet implemented
+	 */
+	private void drawGame(float interpolation) {
+		repaint();
+	}
+
+	/**
+	 * makes changes to the game objects (gets called within each gameLoop-step)
+	 */
+	private void updateGame() {
+		if (numberOfPlayers == 1) {
+			movePlayer1();
+		} else if (numberOfPlayers == 2) {
+			movePlayer1();
+			movePlayer2();
+		}
 	}
 
 	/**
@@ -108,29 +193,13 @@ public class Game extends JPanel {
 		Field f = map.getFieldByPixel(x + 16, y + 16);
 		Item item = map.getFieldByPixel(x + 16, y + 16).getItem();
 		if (f instanceof ExitField) {
-			this.setVisible(false);
 			ScoreMenu m = new ScoreMenu(frame);
+			this.setVisible(false);
+			running = false;
 		}
 	}
 
 	// KEY HANDLING AND PAINT METHODS DOWN FROM HERE
-
-	// Adapter to handle KeyEvents
-	private class KAdapter extends KeyAdapter {
-		public void keyReleased(KeyEvent e) {
-			player1KeyReleased(e);
-			if (numberOfPlayers > 1) {
-				player2KeyReleased(e);
-			}
-		}
-
-		public void keyPressed(KeyEvent e) {
-			player1KeyPressed(e);
-			if (numberOfPlayers > 1) {
-				player2KeyPressed(e);
-			}
-		}
-	}
 
 	/**
 	 * draws the map
@@ -162,7 +231,7 @@ public class Game extends JPanel {
 	}
 
 	/**
-	 * paints everything and repaints at 30fps
+	 * paints everything
 	 */
 	public void paint(Graphics g) {
 		super.paint(g);
@@ -173,121 +242,85 @@ public class Game extends JPanel {
 		}
 		Toolkit.getDefaultToolkit().sync();
 		g.dispose();
-		// Redraw with 30fps
-		try {
-			TimeUnit.SECONDS.sleep(1 / 30);
-			repaint();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void player1KeyPressed(KeyEvent e) {
-
-		int key = e.getKeyCode();
-
-		if (key == KeyEvent.VK_LEFT) {
-			player[PLAYER1].move(LEFT);
-			itemHandling(player[PLAYER1].getxPos(), player[PLAYER1].getyPos());
-		}
-
-		if (key == KeyEvent.VK_RIGHT) {
-			player[PLAYER1].move(RIGHT);
-			itemHandling(player[PLAYER1].getxPos(), player[PLAYER1].getyPos());
-		}
-
-		if (key == KeyEvent.VK_UP) {
-			player[PLAYER1].move(UP);
-			itemHandling(player[PLAYER1].getxPos(), player[PLAYER1].getyPos());
-		}
-
-		if (key == KeyEvent.VK_DOWN) {
-			player[PLAYER1].move(DOWN);
-			itemHandling(player[PLAYER1].getxPos(), player[PLAYER1].getyPos());
-		}
-
-		if (key == KeyEvent.VK_ENTER) {
-			plantBomb(PLAYER1);
-		}
-
-	}
-
-	public void player2KeyPressed(KeyEvent e) {
-
-		int key = e.getKeyCode();
-
-		if (key == KeyEvent.VK_A) {
-			player[PLAYER2].move(LEFT);
-			itemHandling(player[PLAYER2].getxPos(), player[PLAYER2].getyPos());
-			;
-		}
-
-		if (key == KeyEvent.VK_D) {
-			player[PLAYER2].move(RIGHT);
-			itemHandling(player[PLAYER2].getxPos(), player[PLAYER2].getyPos());
-		}
-
-		if (key == KeyEvent.VK_W) {
-			player[PLAYER2].move(UP);
-			itemHandling(player[PLAYER2].getxPos(), player[PLAYER2].getyPos());
-		}
-
-		if (key == KeyEvent.VK_S) {
-			player[PLAYER2].move(DOWN);
-			itemHandling(player[PLAYER2].getxPos(), player[PLAYER2].getyPos());
-		}
-
-		if (key == KeyEvent.VK_SPACE) {
-			plantBomb(PLAYER2);
-		}
-
 	}
 
 	/**
-	 * 
-	 * @param e
-	 *            takes key event (released) and stops changing player position
+	 * Moves Player 1 when keys are pressed
 	 */
-	public void player1KeyReleased(KeyEvent e) {
-		int key = e.getKeyCode();
-
-		if (key == KeyEvent.VK_LEFT) {
+	public void movePlayer1() {
+		// Player 1 Movement
+		if (input.isKeyDown(KeyEvent.VK_LEFT)) {
+			player[PLAYER1].move(LEFT);
+			itemHandling(player[PLAYER1].getxPos(), player[PLAYER1].getyPos());
+		}
+		if (input.isKeyDown(KeyEvent.VK_RIGHT)) {
+			player[PLAYER1].move(RIGHT);
+			itemHandling(player[PLAYER1].getxPos(), player[PLAYER1].getyPos());
+		}
+		if (input.isKeyDown(KeyEvent.VK_UP)) {
+			player[PLAYER1].move(UP);
+			itemHandling(player[PLAYER1].getxPos(), player[PLAYER1].getyPos());
+		}
+		if (input.isKeyDown(KeyEvent.VK_DOWN)) {
+			player[PLAYER1].move(DOWN);
+			itemHandling(player[PLAYER1].getxPos(), player[PLAYER1].getyPos());
+		}
+		if (input.isKeyDown(KeyEvent.VK_ENTER)) {
+			plantBomb(PLAYER1);
+		}
+		if (input.isKeyUp(KeyEvent.VK_LEFT)) {
 			player[PLAYER1].setDx(0);
 		}
-
-		if (key == KeyEvent.VK_RIGHT) {
+		if (input.isKeyUp(KeyEvent.VK_RIGHT)) {
 			player[PLAYER1].setDx(0);
 		}
-
-		if (key == KeyEvent.VK_UP) {
+		if (input.isKeyUp(KeyEvent.VK_UP)) {
 			player[PLAYER1].setDy(0);
 		}
-
-		if (key == KeyEvent.VK_DOWN) {
+		if (input.isKeyUp(KeyEvent.VK_DOWN)) {
 			player[PLAYER1].setDy(0);
 		}
-
+		if (input.isKeyUp(KeyEvent.VK_ENTER)) {
+		}
 	}
 
-	public void player2KeyReleased(KeyEvent e) {
-		int key = e.getKeyCode();
+	/**
+	 * Moves Player 2 when keys are pressed
+	 */
 
-		if (key == KeyEvent.VK_A) {
+	public void movePlayer2() {
+		if (input.isKeyDown(KeyEvent.VK_A)) {
+			player[PLAYER2].move(LEFT);
+			itemHandling(player[PLAYER2].getxPos(), player[PLAYER2].getyPos());
+		}
+		if (input.isKeyDown(KeyEvent.VK_D)) {
+			player[PLAYER2].move(RIGHT);
+			itemHandling(player[PLAYER2].getxPos(), player[PLAYER2].getyPos());
+		}
+		if (input.isKeyDown(KeyEvent.VK_W)) {
+			player[PLAYER2].move(UP);
+			itemHandling(player[PLAYER2].getxPos(), player[PLAYER2].getyPos());
+		}
+		if (input.isKeyDown(KeyEvent.VK_S)) {
+			player[PLAYER2].move(DOWN);
+			itemHandling(player[PLAYER2].getxPos(), player[PLAYER2].getyPos());
+		}
+		if (input.isKeyDown(KeyEvent.VK_SPACE)) {
+			plantBomb(PLAYER2);
+		}
+		if (input.isKeyUp(KeyEvent.VK_A)) {
 			player[PLAYER2].setDx(0);
 		}
-
-		if (key == KeyEvent.VK_D) {
+		if (input.isKeyUp(KeyEvent.VK_D)) {
 			player[PLAYER2].setDx(0);
 		}
-
-		if (key == KeyEvent.VK_W) {
+		if (input.isKeyUp(KeyEvent.VK_W)) {
 			player[PLAYER2].setDy(0);
 		}
-
-		if (key == KeyEvent.VK_S) {
+		if (input.isKeyUp(KeyEvent.VK_S)) {
 			player[PLAYER2].setDy(0);
 		}
-
+		if (input.isKeyUp(KeyEvent.VK_SPACE)) {
+		}
 	}
-
 }
