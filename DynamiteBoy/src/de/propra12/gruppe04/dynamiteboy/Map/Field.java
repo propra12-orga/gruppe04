@@ -1,6 +1,7 @@
 package de.propra12.gruppe04.dynamiteboy.Map;
 
 import java.awt.Image;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.ImageIcon;
 
@@ -20,7 +21,31 @@ public abstract class Field {
 	private boolean destroyable;
 	private Item item;
 	private ImageIcon image;
+	private boolean deadly = false;
 	String fieldpic;
+
+	public void beDeadly(int x, int y) {
+		if (x >= 0 && x < Map.getGridWidth() && y >= 0
+				&& y < Map.getGridHeight()) {
+			this.deadly = true;
+			System.out.println("I am deadly! x=" + x + " y=" + y);
+			String oldpic = this.fieldpic;
+			this.setImage("../images/db_field_explosion.png");
+			try {
+				TimeUnit.SECONDS.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			this.deadly = false;
+			this.setImage(oldpic);
+			System.out.println("I am no more deadly! x=" + x + " y=" + y);
+		}
+	}
+
+	public boolean isDeadly() {
+		return deadly;
+
+	}
 
 	/**
 	 * 

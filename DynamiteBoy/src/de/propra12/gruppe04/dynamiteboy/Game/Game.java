@@ -28,6 +28,8 @@ public class Game extends JPanel {
 	private final int LEFT = 0, DOWN = 1, RIGHT = 2, UP = 3;
 	private boolean running = true;
 	private float interpolation;
+	// TODO find a nicer way to handle lastplayer positions (maybe store them in
+	// the player object)
 	private int lastp1x;
 	private int lastp2x;
 	private int lastp1y;
@@ -105,9 +107,12 @@ public class Game extends JPanel {
 	private void updateGame() {
 		if (numberOfPlayers == 1) {
 			movePlayer1();
+			itemHandling(player[PLAYER1].getxPos(), player[PLAYER1].getyPos());
 		} else if (numberOfPlayers == 2) {
 			movePlayer1();
+			itemHandling(player[PLAYER1].getxPos(), player[PLAYER1].getyPos());
 			movePlayer2();
+			itemHandling(player[PLAYER2].getxPos(), player[PLAYER2].getyPos());
 		}
 	}
 
@@ -170,6 +175,8 @@ public class Game extends JPanel {
 	 * First: Checks if Field is ExitField (has nothing to do with items but is
 	 * easier to implement here atm than elsewhere) and exits if it is
 	 * 
+	 * Second: Checks if Field is currently deadly
+	 * 
 	 * Then: Other items are handled
 	 * 
 	 * @param x
@@ -181,6 +188,11 @@ public class Game extends JPanel {
 		Field f = map.getFieldByPixel(x + 16, y + 16);
 		Item item = map.getFieldByPixel(x + 16, y + 16).getItem();
 		if (f instanceof ExitField) {
+			ScoreMenu m = new ScoreMenu(frame);
+			this.setVisible(false);
+			running = false;
+		}
+		if (f.isDeadly() == true) {
 			ScoreMenu m = new ScoreMenu(frame);
 			this.setVisible(false);
 			running = false;
@@ -256,19 +268,15 @@ public class Game extends JPanel {
 		// Player 1 Movement
 		if (input.isKeyDown(KeyEvent.VK_LEFT)) {
 			player[PLAYER1].move(LEFT);
-			itemHandling(player[PLAYER1].getxPos(), player[PLAYER1].getyPos());
 		}
 		if (input.isKeyDown(KeyEvent.VK_RIGHT)) {
 			player[PLAYER1].move(RIGHT);
-			itemHandling(player[PLAYER1].getxPos(), player[PLAYER1].getyPos());
 		}
 		if (input.isKeyDown(KeyEvent.VK_UP)) {
 			player[PLAYER1].move(UP);
-			itemHandling(player[PLAYER1].getxPos(), player[PLAYER1].getyPos());
 		}
 		if (input.isKeyDown(KeyEvent.VK_DOWN)) {
 			player[PLAYER1].move(DOWN);
-			itemHandling(player[PLAYER1].getxPos(), player[PLAYER1].getyPos());
 		}
 		if (input.isKeyDown(KeyEvent.VK_ENTER)) {
 			plantBomb(PLAYER1);
@@ -296,19 +304,15 @@ public class Game extends JPanel {
 	public void movePlayer2() {
 		if (input.isKeyDown(KeyEvent.VK_A)) {
 			player[PLAYER2].move(LEFT);
-			itemHandling(player[PLAYER2].getxPos(), player[PLAYER2].getyPos());
 		}
 		if (input.isKeyDown(KeyEvent.VK_D)) {
 			player[PLAYER2].move(RIGHT);
-			itemHandling(player[PLAYER2].getxPos(), player[PLAYER2].getyPos());
 		}
 		if (input.isKeyDown(KeyEvent.VK_W)) {
 			player[PLAYER2].move(UP);
-			itemHandling(player[PLAYER2].getxPos(), player[PLAYER2].getyPos());
 		}
 		if (input.isKeyDown(KeyEvent.VK_S)) {
 			player[PLAYER2].move(DOWN);
-			itemHandling(player[PLAYER2].getxPos(), player[PLAYER2].getyPos());
 		}
 		if (input.isKeyDown(KeyEvent.VK_SPACE)) {
 			plantBomb(PLAYER2);

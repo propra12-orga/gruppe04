@@ -7,6 +7,7 @@ public class WallField extends Field {
 	private static final boolean DEFAULT_BLOCKED = true;
 	private static final boolean DEAFULT_DESTROYABLE = false;
 	private static final Item DEFAULT_ITEM = null;
+	private static final boolean DEFAULT_DEADLY = false;
 
 	WallField(boolean blocked, boolean destroyable, Item item, String pic) {
 		super(blocked, destroyable, item, pic);
@@ -17,7 +18,6 @@ public class WallField extends Field {
 	}
 
 	WallField() {
-		super(DEFAULT_BLOCKED, DEAFULT_DESTROYABLE,
-				DEFAULT_ITEM, DEFAULT_PIC);
+		super(DEFAULT_BLOCKED, DEAFULT_DESTROYABLE, DEFAULT_ITEM, DEFAULT_PIC);
 	}
 }

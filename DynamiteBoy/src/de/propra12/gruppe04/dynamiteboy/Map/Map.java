@@ -14,8 +14,8 @@ import de.propra12.gruppe04.dynamiteboy.Item.Exit;
 
 public class Map {
 	private static Field[][] FieldGrid;
-	private int gridWidth;
-	private int gridHeight;
+	private static int gridWidth;
+	private static int gridHeight;
 
 	/**
 	 * Creates the default Map (no XML file needed)
@@ -51,7 +51,7 @@ public class Map {
 	 * 
 	 * @return gridWidth horizontal number of fields
 	 */
-	public int getGridWidth() {
+	public static int getGridWidth() {
 		return gridWidth;
 	}
 
@@ -68,7 +68,7 @@ public class Map {
 	 * 
 	 * @return gridHeight vertical number of fields
 	 */
-	public int getGridHeight() {
+	public static int getGridHeight() {
 		return gridHeight;
 	}
 
@@ -132,7 +132,10 @@ public class Map {
 	 * @return Field object
 	 */
 	public Field getField(int x, int y) {
-		Field f = FieldGrid[x][y];
+		Field f = null;
+		if (x >= 0 && x < getGridWidth() && y >= 0 && y < getGridHeight()) {
+			f = FieldGrid[x][y];
+		}
 		return f;
 	}
 
