@@ -21,14 +21,17 @@ public class Game extends JPanel {
 	private Map map;
 	private JFrame frame;
 	private int numberOfPlayers;
-	private int fps = 60;
-	private int frameCount = 0;
 	private InputHandler input;
 	// Player constants
 	private final int PLAYER1 = 0, PLAYER2 = 1;
 	// Movement constants
 	private final int LEFT = 0, DOWN = 1, RIGHT = 2, UP = 3;
 	private boolean running = true;
+	private float interpolation;
+	private int lastp1x;
+	private int lastp2x;
+	private int lastp1y;
+	private int lastp2y;
 	// Game constants
 	final double GAME_FREQUENCY = 30.0;
 	final double MAX_FPS = 60;
@@ -43,7 +46,6 @@ public class Game extends JPanel {
 		this.frame = frame;
 		createPlayers(numberOfPlayers);
 		setFocusable(true);
-		// this.addKeyListener(new KAdapter());
 		this.input = new InputHandler();
 		this.addKeyListener(input);
 		if (running) {
@@ -76,18 +78,13 @@ public class Game extends JPanel {
 			if (now - lastUpdateTime > TIME_BETWEEN_UPDATES) {
 				lastUpdateTime = now - TIME_BETWEEN_UPDATES;
 			}
-			// TODO implement interpolation in animations
-			float interpolation = Math.min(1.0f,
+			this.interpolation = Math.min(1.0f,
 					(float) ((now - lastUpdateTime) / TIME_BETWEEN_UPDATES));
-			drawGame(interpolation);
+			repaint();
 			lastRenderTime = now;
 
 			int thisSecond = (int) (lastUpdateTime / 1000000000);
 			if (thisSecond > lastSecondTime) {
-				System.out.println("NEW SECOND " + thisSecond + " "
-						+ frameCount);
-				fps = frameCount;
-				frameCount = 0;
 				lastSecondTime = thisSecond;
 			}
 			while (now - lastRenderTime < TARGET_TIME_BETWEEN_RENDERS
@@ -100,15 +97,6 @@ public class Game extends JPanel {
 				now = System.nanoTime();
 			}
 		}
-	}
-
-	/**
-	 * 
-	 * @param interpolation
-	 *            not yet implemented
-	 */
-	private void drawGame(float interpolation) {
-		repaint();
 	}
 
 	/**
@@ -223,11 +211,28 @@ public class Game extends JPanel {
 	 *            g2d Graphics object (painter)
 	 * @param playerIndex
 	 *            index of player to be drawn
+	 * @param interpolation
+	 *            number to generate smooth drawing (is calculated in GameLoop)
 	 */
 	public void paintPlayer(Graphics g2d, int playerIndex) {
-		g2d.drawImage(player[playerIndex].getImage(),
-				player[playerIndex].getxPos(), player[playerIndex].getyPos(),
-				this);
+		int x = player[playerIndex].getxPos();
+		int y = player[playerIndex].getyPos();
+		if (playerIndex == 0) {
+			x = (int) ((player[playerIndex].getxPos() - lastp1x)
+					* this.interpolation + lastp1x);
+			y = (int) ((player[playerIndex].getyPos() - lastp1y)
+					* this.interpolation + lastp1y);
+			lastp1x = player[playerIndex].getxPos();
+			lastp1y = player[playerIndex].getyPos();
+		} else if (playerIndex == 1) {
+			x = (int) ((player[playerIndex].getxPos() - lastp2x)
+					* this.interpolation + lastp2x);
+			y = (int) ((player[playerIndex].getyPos() - lastp2y)
+					* this.interpolation + lastp2y);
+			lastp2x = player[playerIndex].getxPos();
+			lastp2y = player[playerIndex].getyPos();
+		}
+		g2d.drawImage(player[playerIndex].getImage(), x, y, this);
 	}
 
 	/**
