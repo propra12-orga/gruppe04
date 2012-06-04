@@ -26,22 +26,6 @@ public abstract class Field {
 	private boolean deadly = false;
 	String fieldpic;
 
-	// public void beDeadly(int x, int y) {
-	// if (x >= 0 && x < Map.getGridWidth() && y >= 0
-	// && y < Map.getGridHeight()) {
-	// this.deadly = true;
-	// String oldpic = this.fieldpic;
-	// this.setImage("../images/db_field_explosion.png");
-	// try {
-	// TimeUnit.MILLISECONDS.sleep(100);
-	// } catch (InterruptedException e) {
-	// e.printStackTrace();
-	// }
-	// this.deadly = false;
-	// this.setImage(oldpic);
-	// }
-	// }
-
 	public void beDeadly(boolean deadly) {
 		if (deadly) {
 			this.deadly = true;

@@ -6,7 +6,7 @@ import de.propra12.gruppe04.dynamiteboy.Map.Map;
 
 public class Bomb extends Item implements Runnable {
 	private static final int BOMB_DELAY = 3000;
-	private static final int EXPLOSION_PERSISTANCE = 500;
+	private static final int EXPLOSION_PERSISTANCE = 400;
 	private static final int MAX_BOMB_RADIUS = 3;
 	private Map map;
 	private int xPos;
@@ -46,7 +46,7 @@ public class Bomb extends Item implements Runnable {
 			stopDetonating(getxPos(), getyPos());
 			map.getField(getxPos(), getyPos()).setItem(null);
 		} catch (InterruptedException e) {
-
+			e.printStackTrace();
 		}
 	}
 
@@ -193,8 +193,7 @@ public class Bomb extends Item implements Runnable {
 		switch (direction) {
 		case LEFT:
 			for (int i = 1; i <= MAX_BOMB_RADIUS; i++) {
-				if (map.getField(getxPos() - i, getyPos()).isExplodable()
-						&& gotonext) {
+				if (isExpoldable(getxPos() - i, getyPos()) && gotonext) {
 					range++;
 				} else {
 					gotonext = false;
@@ -203,8 +202,7 @@ public class Bomb extends Item implements Runnable {
 			break;
 		case DOWN:
 			for (int i = 1; i <= MAX_BOMB_RADIUS; i++) {
-				if (map.getField(getxPos(), getyPos() + i).isExplodable()
-						&& gotonext) {
+				if (isExpoldable(getxPos(), getyPos() + i) && gotonext) {
 					range++;
 				} else {
 					gotonext = false;
@@ -213,8 +211,7 @@ public class Bomb extends Item implements Runnable {
 			break;
 		case RIGHT:
 			for (int i = 1; i <= MAX_BOMB_RADIUS; i++) {
-				if (map.getField(getxPos() + i, getyPos()).isExplodable()
-						&& gotonext) {
+				if (isExpoldable(getxPos() + i, getyPos()) && gotonext) {
 					range++;
 				} else {
 					gotonext = false;
@@ -223,8 +220,7 @@ public class Bomb extends Item implements Runnable {
 			break;
 		case UP:
 			for (int i = 1; i <= MAX_BOMB_RADIUS; i++) {
-				if (map.getField(getxPos(), getyPos() - i).isExplodable()
-						&& gotonext) {
+				if (isExpoldable(getxPos(), getyPos() - i) && gotonext) {
 					range++;
 				} else {
 					gotonext = false;
@@ -243,9 +239,28 @@ public class Bomb extends Item implements Runnable {
 	 */
 	private void destroy(int x, int y) {
 		if (map.getField(x, y).getItem() instanceof Exit) {
-			map.setExitField(x, y);
+			try {
+				TimeUnit.MILLISECONDS.sleep(EXPLOSION_PERSISTANCE);
+				map.setExitField(x, y);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
 		} else if (map.getField(x, y).getItem() == null) {
 			map.setFloorField(x, y);
+		}
+	}
+
+	private boolean isExpoldable(int x, int y) {
+		if (x >= 0 && x < Map.getGridWidth() && y >= 0
+				&& y < Map.getGridHeight()) {
+			if (map.getField(x, y).isExplodable()) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
 		}
 	}
 
