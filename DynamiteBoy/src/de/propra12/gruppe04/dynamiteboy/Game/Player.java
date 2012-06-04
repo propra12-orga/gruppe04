@@ -16,7 +16,7 @@ public class Player {
 			"../images/player2.png" };
 	private Map map;
 	private final int LEFT = 0, DOWN = 1, RIGHT = 2, UP = 3;
-	private final int COLLISION_OFFSET = 4;
+	private final int COLLISION_OFFSET = 5;
 
 	// playerPicture[0] = "../images/db_char_placeholder.png";
 
@@ -156,6 +156,16 @@ public class Player {
 	 */
 	public void setDy(int dy) {
 		this.dy = dy;
+	}
+
+	public int getGridXByMiddle() {
+		return getGridX(getxPos() + 16);
+
+	}
+
+	public int getGridYByMiddle() {
+		return getGridY(getyPos() + 16);
+
 	}
 
 }

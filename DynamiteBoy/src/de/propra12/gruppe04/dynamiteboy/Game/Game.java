@@ -155,18 +155,22 @@ public class Game extends JPanel {
 	/**
 	 * Plants a bomb on current grid-position
 	 * 
-	 * @param playerIndex
+	 * @param pIndex
 	 *            player to plant the bomb
 	 */
 
-	public void plantBomb(int playerIndex) {
-		Bomb bomb = new Bomb(
-				player[playerIndex]
-						.getGridX(player[playerIndex].getxPos() + 16),
-				player[playerIndex].getGridY(player[playerIndex].getyPos() + 16),
-				false, map);
-		Thread bombThread = new Thread(bomb);
-		bombThread.start();
+	public void plantBomb(int pIndex) {
+		if (map.getField(player[pIndex].getGridXByMiddle(),
+				player[pIndex].getGridYByMiddle()).getItem() instanceof Bomb) {
+			// DO NOTHING
+		} else if (map.getField(player[pIndex].getGridXByMiddle(),
+				player[pIndex].getGridYByMiddle()).getItem() == null) {
+			Bomb bomb = new Bomb(player[pIndex].getGridX(player[pIndex]
+					.getxPos() + 16), player[pIndex].getGridY(player[pIndex]
+					.getyPos() + 16), false, map);
+			Thread bombThread = new Thread(bomb);
+			bombThread.start();
+		}
 	}
 
 	/**
@@ -221,30 +225,30 @@ public class Game extends JPanel {
 	 * 
 	 * @param g2d
 	 *            g2d Graphics object (painter)
-	 * @param playerIndex
+	 * @param pIndex
 	 *            index of player to be drawn
 	 * @param interpolation
 	 *            number to generate smooth drawing (is calculated in GameLoop)
 	 */
-	public void paintPlayer(Graphics g2d, int playerIndex) {
-		int x = player[playerIndex].getxPos();
-		int y = player[playerIndex].getyPos();
-		if (playerIndex == 0) {
-			x = (int) ((player[playerIndex].getxPos() - lastp1x)
+	public void paintPlayer(Graphics g2d, int pIndex) {
+		int x = player[pIndex].getxPos();
+		int y = player[pIndex].getyPos();
+		if (pIndex == 0) {
+			x = (int) ((player[pIndex].getxPos() - lastp1x)
 					* this.interpolation + lastp1x);
-			y = (int) ((player[playerIndex].getyPos() - lastp1y)
+			y = (int) ((player[pIndex].getyPos() - lastp1y)
 					* this.interpolation + lastp1y);
-			lastp1x = player[playerIndex].getxPos();
-			lastp1y = player[playerIndex].getyPos();
-		} else if (playerIndex == 1) {
-			x = (int) ((player[playerIndex].getxPos() - lastp2x)
+			lastp1x = player[pIndex].getxPos();
+			lastp1y = player[pIndex].getyPos();
+		} else if (pIndex == 1) {
+			x = (int) ((player[pIndex].getxPos() - lastp2x)
 					* this.interpolation + lastp2x);
-			y = (int) ((player[playerIndex].getyPos() - lastp2y)
+			y = (int) ((player[pIndex].getyPos() - lastp2y)
 					* this.interpolation + lastp2y);
-			lastp2x = player[playerIndex].getxPos();
-			lastp2y = player[playerIndex].getyPos();
+			lastp2x = player[pIndex].getxPos();
+			lastp2y = player[pIndex].getyPos();
 		}
-		g2d.drawImage(player[playerIndex].getImage(), x, y, this);
+		g2d.drawImage(player[pIndex].getImage(), x, y, this);
 	}
 
 	/**
@@ -294,6 +298,7 @@ public class Game extends JPanel {
 			player[PLAYER1].setDy(0);
 		}
 		if (input.isKeyUp(KeyEvent.VK_ENTER)) {
+			// DO NOTHING
 		}
 	}
 
@@ -330,6 +335,7 @@ public class Game extends JPanel {
 			player[PLAYER2].setDy(0);
 		}
 		if (input.isKeyUp(KeyEvent.VK_SPACE)) {
+			// DO NOTHING
 		}
 	}
 }
