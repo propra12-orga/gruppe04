@@ -5,11 +5,13 @@ import java.util.concurrent.TimeUnit;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
 
 public class Bomb extends Item implements Runnable {
-	private static final int BOMB_DELAY = 3;
-	private static final int BOMB_RADIUS = 3;
+	private static final int BOMB_DELAY = 3000;
+	private static final int EXPLOSION_PERSISTANCE = 500;
+	private static final int MAX_BOMB_RADIUS = 3;
 	private Map map;
 	private int xPos;
 	private int yPos;
+	private final int LEFT = 0, DOWN = 1, RIGHT = 2, UP = 3;
 
 	/**
 	 * Creats bomb instance
@@ -26,6 +28,7 @@ public class Bomb extends Item implements Runnable {
 		this.map = map;
 		this.xPos = x;
 		this.yPos = y;
+
 	}
 
 	/**
@@ -34,12 +37,14 @@ public class Bomb extends Item implements Runnable {
 	@Override
 	public void run() {
 		try {
-			map.getField(this.getxPos(), this.getyPos()).setItem(this);
-			TimeUnit.SECONDS.sleep(BOMB_DELAY);
-			detonate(this.getxPos(), this.getyPos());
+			map.getField(getxPos(), getyPos()).setItem(this);
+			TimeUnit.MILLISECONDS.sleep(BOMB_DELAY);
+			detonate(getxPos(), getyPos());
 			// TODO Remove debug
 			System.out.println("BOOM!");
-			map.getField(this.getxPos(), this.getyPos()).setItem(null);
+			TimeUnit.MILLISECONDS.sleep(EXPLOSION_PERSISTANCE);
+			stopDetonating(getxPos(), getyPos());
+			map.getField(getxPos(), getyPos()).setItem(null);
 		} catch (InterruptedException e) {
 
 		}
@@ -54,44 +59,104 @@ public class Bomb extends Item implements Runnable {
 	 *            y-position
 	 */
 	private void detonate(int x, int y) {
-		for (int i = 1; i <= BOMB_RADIUS; i++) {
-			int startx = x;
-			int starty = y;
-			// right
+		int startx = x;
+		int starty = y;
+		// middle
+		if (map.getField(x, y) != null) {
+			map.getField(x, y).beDeadly(true);
+		}
+		if (isDestroyable(x, y)) {
+			destroy(x, y);
+		}
+		// right
+		for (int i = 1; i <= exploRange(RIGHT); i++) {
 			x = startx + (1 * i);
 			y = starty;
 			if (map.getField(x, y) != null) {
-				map.getField(x, y).beDeadly(x, y);
+				map.getField(x, y).beDeadly(true);
 			}
-			if (isDestroyable(x, starty)) {
-				destroy(x, starty);
+			if (isDestroyable(x, y)) {
+				destroy(x, y);
 			}
-			// left
+		}
+		// left
+		for (int i = 1; i <= exploRange(LEFT); i++) {
 			x = startx - (1 * i);
 			y = starty;
 			if (map.getField(x, y) != null) {
-				map.getField(x, y).beDeadly(x, y);
+				map.getField(x, y).beDeadly(true);
 			}
 			if (isDestroyable(x, y)) {
 				destroy(x, y);
 			}
-			// bottom
+		}
+		// DOWN
+		for (int i = 1; i <= exploRange(DOWN); i++) {
 			x = startx;
 			y = starty + (1 * i);
 			if (map.getField(x, y) != null) {
-				map.getField(x, y).beDeadly(x, y);
+				map.getField(x, y).beDeadly(true);
 			}
 			if (isDestroyable(x, y)) {
 				destroy(x, y);
 			}
-			// top
+		}
+		// UP
+		for (int i = 1; i <= exploRange(UP); i++) {
 			x = startx;
-			y = y - (1 * i);
+			y = starty - (1 * i);
 			if (map.getField(x, y) != null) {
-				map.getField(x, y).beDeadly(x, y);
+				map.getField(x, y).beDeadly(true);
 			}
 			if (isDestroyable(x, y)) {
 				destroy(x, y);
+			}
+		}
+	}
+
+	/**
+	 * Sets all fields back to undeadly
+	 * 
+	 * @param x
+	 * @param y
+	 */
+	private void stopDetonating(int x, int y) {
+		int startx = x;
+		int starty = y;
+		// middle
+		if (map.getField(x, y) != null) {
+			map.getField(x, y).beDeadly(false);
+		}
+		// right
+		for (int i = 1; i <= exploRange(RIGHT); i++) {
+			x = startx + (1 * i);
+			y = starty;
+			if (map.getField(x, y) != null) {
+				map.getField(x, y).beDeadly(false);
+			}
+		}
+		// left
+		for (int i = 1; i <= exploRange(LEFT); i++) {
+			x = startx - (1 * i);
+			y = starty;
+			if (map.getField(x, y) != null) {
+				map.getField(x, y).beDeadly(false);
+			}
+		}
+		// DOWN
+		for (int i = 1; i <= exploRange(DOWN); i++) {
+			x = startx;
+			y = starty + (1 * i);
+			if (map.getField(x, y) != null) {
+				map.getField(x, y).beDeadly(false);
+			}
+		}
+		// UP
+		for (int i = 1; i <= exploRange(UP); i++) {
+			x = startx;
+			y = starty - (1 * i);
+			if (map.getField(x, y) != null) {
+				map.getField(x, y).beDeadly(false);
 			}
 		}
 	}
@@ -114,6 +179,60 @@ public class Bomb extends Item implements Runnable {
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * Calculates range depending on passed direction
+	 * 
+	 * @param direction
+	 * @return
+	 */
+	public int exploRange(int direction) {
+		boolean gotonext = true;
+		int range = 0;
+		switch (direction) {
+		case LEFT:
+			for (int i = 1; i <= MAX_BOMB_RADIUS; i++) {
+				if (map.getField(getxPos() - i, getyPos()).isExplodable()
+						&& gotonext) {
+					range++;
+				} else {
+					gotonext = false;
+				}
+			}
+			break;
+		case DOWN:
+			for (int i = 1; i <= MAX_BOMB_RADIUS; i++) {
+				if (map.getField(getxPos(), getyPos() + i).isExplodable()
+						&& gotonext) {
+					range++;
+				} else {
+					gotonext = false;
+				}
+			}
+			break;
+		case RIGHT:
+			for (int i = 1; i <= MAX_BOMB_RADIUS; i++) {
+				if (map.getField(getxPos() + i, getyPos()).isExplodable()
+						&& gotonext) {
+					range++;
+				} else {
+					gotonext = false;
+				}
+			}
+			break;
+		case UP:
+			for (int i = 1; i <= MAX_BOMB_RADIUS; i++) {
+				if (map.getField(getxPos(), getyPos() - i).isExplodable()
+						&& gotonext) {
+					range++;
+				} else {
+					gotonext = false;
+				}
+			}
+			break;
+		}
+		return range;
 	}
 
 	/**

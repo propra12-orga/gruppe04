@@ -7,14 +7,17 @@ public class ExitField extends Field {
 	private static final String DEFAULT_PIC = "../images/db_field_exit.gif";
 	private static final boolean DEFAULT_BLOCKED = false;
 	private static final boolean DEAFULT_DESTROYABLE = false;
+	private static final boolean DEFAULT_EXPLODABLE = true;
 	private static final Item DEFAULT_ITEM = new Exit(false);
 
-	ExitField(boolean blocked, boolean destroyable, Item item, String pic) {
-		super(blocked, destroyable, item, pic);
+	ExitField(boolean blocked, boolean destroyable, boolean explodable,
+			Item item, String pic) {
+		super(blocked, destroyable, explodable, item, pic);
 	}
 
 	public ExitField() {
-		super(DEFAULT_BLOCKED, DEAFULT_DESTROYABLE, DEFAULT_ITEM, DEFAULT_PIC);
+		super(DEFAULT_BLOCKED, DEAFULT_DESTROYABLE, DEFAULT_EXPLODABLE,
+				DEFAULT_ITEM, DEFAULT_PIC);
 	}
 
 }

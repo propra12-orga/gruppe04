@@ -6,14 +6,18 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import de.propra12.gruppe04.dynamiteboy.Item.Bomb;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
 
 public class GameTest {
 	private Map g;
+	private Bomb b;
 
 	@Before
 	public void setUp() {
 		g = new Map(640, 480);
+		b = new Bomb(5, 6, false, g);
+
 	}
 
 	@Ignore
@@ -55,4 +59,5 @@ public class GameTest {
 	public void destroyableTest() {
 		assertEquals(false, g.getField(1, 1).isDestroyable());
 	}
+
 }
