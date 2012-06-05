@@ -160,13 +160,13 @@ public class Game extends JPanel {
 	 */
 
 	public void plantBomb(int pIndex) {
-		if (map.getField(player[pIndex].getGridXByMiddle(),
-				player[pIndex].getGridYByMiddle()).getItem() instanceof Bomb) {
+		if (map.getField(player[pIndex].getGridfieldXByMiddle(),
+				player[pIndex].getGridfieldYByMiddle()).getItem() instanceof Bomb) {
 			// DO NOTHING
-		} else if (map.getField(player[pIndex].getGridXByMiddle(),
-				player[pIndex].getGridYByMiddle()).getItem() == null) {
-			Bomb bomb = new Bomb(player[pIndex].getGridX(player[pIndex]
-					.getxPos() + 16), player[pIndex].getGridY(player[pIndex]
+		} else if (map.getField(player[pIndex].getGridfieldXByMiddle(),
+				player[pIndex].getGridfieldYByMiddle()).getItem() == null) {
+			Bomb bomb = new Bomb(player[pIndex].getGridfieldX(player[pIndex]
+					.getxPos() + 16), player[pIndex].getGridfieldY(player[pIndex]
 					.getyPos() + 16), false, map);
 			Thread bombThread = new Thread(bomb);
 			bombThread.start();

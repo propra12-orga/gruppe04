@@ -39,7 +39,6 @@ public abstract class Field {
 
 	public boolean isDeadly() {
 		return deadly;
-
 	}
 
 	/**

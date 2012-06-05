@@ -193,7 +193,7 @@ public class Bomb extends Item implements Runnable {
 		switch (direction) {
 		case LEFT:
 			for (int i = 1; i <= MAX_BOMB_RADIUS; i++) {
-				if (isExpoldable(getxPos() - i, getyPos()) && gotonext) {
+				if (isExplodable(getxPos() - i, getyPos()) && gotonext) {
 					range++;
 				} else {
 					gotonext = false;
@@ -202,7 +202,7 @@ public class Bomb extends Item implements Runnable {
 			break;
 		case DOWN:
 			for (int i = 1; i <= MAX_BOMB_RADIUS; i++) {
-				if (isExpoldable(getxPos(), getyPos() + i) && gotonext) {
+				if (isExplodable(getxPos(), getyPos() + i) && gotonext) {
 					range++;
 				} else {
 					gotonext = false;
@@ -211,7 +211,7 @@ public class Bomb extends Item implements Runnable {
 			break;
 		case RIGHT:
 			for (int i = 1; i <= MAX_BOMB_RADIUS; i++) {
-				if (isExpoldable(getxPos() + i, getyPos()) && gotonext) {
+				if (isExplodable(getxPos() + i, getyPos()) && gotonext) {
 					range++;
 				} else {
 					gotonext = false;
@@ -220,7 +220,7 @@ public class Bomb extends Item implements Runnable {
 			break;
 		case UP:
 			for (int i = 1; i <= MAX_BOMB_RADIUS; i++) {
-				if (isExpoldable(getxPos(), getyPos() - i) && gotonext) {
+				if (isExplodable(getxPos(), getyPos() - i) && gotonext) {
 					range++;
 				} else {
 					gotonext = false;
@@ -251,7 +251,7 @@ public class Bomb extends Item implements Runnable {
 		}
 	}
 
-	private boolean isExpoldable(int x, int y) {
+	private boolean isExplodable(int x, int y) {
 		if (x >= 0 && x < Map.getGridWidth() && y >= 0
 				&& y < Map.getGridHeight()) {
 			if (map.getField(x, y).isExplodable()) {

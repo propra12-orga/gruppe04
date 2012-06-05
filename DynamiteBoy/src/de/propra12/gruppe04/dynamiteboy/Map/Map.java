@@ -18,21 +18,7 @@ public class Map {
 	private static int gridHeight;
 
 	/**
-	 * Creates the default Map (no XML file needed)
-	 * 
-	 * @param width
-	 *            map width in px
-	 * @param height
-	 *            map height in px
-	 */
-	public Map(int width, int height) {
-		this.gridWidth = width / 32;
-		this.gridHeight = height / 32;
-		generateFieldGrid();
-	}
-
-	/**
-	 * Creates a Map from
+	 * Creates a Map from an XML file
 	 * 
 	 * @param width
 	 *            map width in px
@@ -78,49 +64,6 @@ public class Map {
 	 */
 	public void setGridHeight(int gridHeight) {
 		this.gridHeight = gridHeight;
-	}
-
-	/**
-	 * [DEPRECATED] Generates the grid and creates Field objects in
-	 * FieldGrid[x][y] based on static values given within the method
-	 * 
-	 * 
-	 * @param width
-	 *            Map-width in px
-	 * @param height
-	 *            Map-height in px
-	 */
-	private void generateFieldGrid() {
-		FieldGrid = new Field[gridWidth][gridHeight];
-		// Set unblocked-references
-		for (int i = 0; i < gridWidth; i++) {
-			for (int j = 0; j < gridHeight; j++) {
-				FieldGrid[i][j] = new FloorField();
-			}
-		}
-		// Set blocked-references
-		for (int i = 0; i < gridHeight; i++) {
-			FieldGrid[0][i] = new WallField();
-			FieldGrid[gridWidth - 1][i] = new WallField();
-		}
-		for (int i = 0; i < gridWidth; i++) {
-			FieldGrid[i][0] = new WallField();
-			FieldGrid[i][gridHeight - 1] = new WallField();
-		}
-		for (int i = 2; i < (gridWidth / 2) - 1; i += 2) {
-			for (int j = 2; j < gridHeight - 2; j += 2)
-				FieldGrid[i][j] = new WallField();
-		}
-		for (int i = ((gridWidth / 2) + 1); i < gridWidth - 2; i += 2) {
-			for (int j = 2; j < gridHeight - 2; j += 2)
-				FieldGrid[i][j] = new WallField();
-		}
-		// TODO Remove debug
-		FieldGrid[1][5] = new DestroyableField();
-
-		// Set Exit-field
-		FieldGrid[1][10] = new ExitField();
-
 	}
 
 	/**

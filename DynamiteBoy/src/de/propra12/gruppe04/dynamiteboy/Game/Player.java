@@ -15,10 +15,9 @@ public class Player {
 	private String playerPicture[] = { "../images/player1.png",
 			"../images/player2.png" };
 	private Map map;
+	// DIRECTION CONSTANTS
 	private final int LEFT = 0, DOWN = 1, RIGHT = 2, UP = 3;
 	private final int COLLISION_OFFSET = 5;
-
-	// playerPicture[0] = "../images/db_char_placeholder.png";
 
 	Player(int playerPictureIndex, int startxPos, int startyPos, Map map) {
 		ImageIcon img = new ImageIcon(this.getClass().getResource(
@@ -109,17 +108,17 @@ public class Player {
 	}
 
 	/**
-	 * @return x-position in current map
+	 * @return y-position of current Gridfield
 	 */
-	public int getGridX(int x) {
+	public int getGridfieldX(int x) {
 		x = x / 32;
 		return x;
 	}
 
 	/**
-	 * @return x-position in current map
+	 * @return y-position of current Gridfield
 	 */
-	public int getGridY(int y) {
+	public int getGridfieldY(int y) {
 		y = y / 32;
 		return y;
 	}
@@ -158,13 +157,21 @@ public class Player {
 		this.dy = dy;
 	}
 
-	public int getGridXByMiddle() {
-		return getGridX(getxPos() + 16);
+	/**
+	 * 
+	 * * @return x position of current Gridfield based on player middle
+	 */
+	public int getGridfieldXByMiddle() {
+		return getGridfieldX(getxPos() + 16);
 
 	}
 
-	public int getGridYByMiddle() {
-		return getGridY(getyPos() + 16);
+	/**
+	 * 
+	 * * @return y position of current Gridfield based on player middle
+	 */
+	public int getGridfieldYByMiddle() {
+		return getGridfieldY(getyPos() + 16);
 
 	}
 
