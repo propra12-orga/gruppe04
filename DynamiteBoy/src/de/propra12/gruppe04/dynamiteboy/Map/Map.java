@@ -13,9 +13,10 @@ import org.w3c.dom.NodeList;
 import de.propra12.gruppe04.dynamiteboy.Item.Exit;
 
 public class Map {
-	private static Field[][] FieldGrid;
-	private static int gridWidth;
-	private static int gridHeight;
+	private static Field[][] FieldGrid; // Array that contains all fields of the
+										// map
+	private static int gridWidth; // width of the map in fields
+	private static int gridHeight; // height of the map in fields
 
 	/**
 	 * Creates a Map from an XML file
@@ -31,79 +32,6 @@ public class Map {
 		this.gridWidth = width / 32;
 		this.gridHeight = height / 32;
 		generateFieldGrid(fileLocation);
-	}
-
-	/**
-	 * 
-	 * @return gridWidth horizontal number of fields
-	 */
-	public static int getGridWidth() {
-		return gridWidth;
-	}
-
-	/**
-	 * 
-	 * @param gridWidth
-	 *            horizontal number of fields
-	 */
-	public void setGridWidth(int gridWidth) {
-		this.gridWidth = gridWidth;
-	}
-
-	/**
-	 * 
-	 * @return gridHeight vertical number of fields
-	 */
-	public static int getGridHeight() {
-		return gridHeight;
-	}
-
-	/**
-	 * 
-	 * @return gridHeight vertical number of fields
-	 */
-	public void setGridHeight(int gridHeight) {
-		this.gridHeight = gridHeight;
-	}
-
-	/**
-	 * 
-	 * @param x
-	 *            x-coordinate of field
-	 * @param y
-	 *            y-coordinate of field
-	 * @return Field object
-	 */
-	public Field getField(int x, int y) {
-		Field f = null;
-		if (x >= 0 && x < getGridWidth() && y >= 0 && y < getGridHeight()) {
-			f = FieldGrid[x][y];
-		}
-		return f;
-	}
-
-	/**
-	 * 
-	 * @param x
-	 *            pixel x-coordinate
-	 * @param y
-	 *            pixel y-coordinate
-	 * @return field object at pixel coordinates x and y
-	 */
-	public Field getFieldByPixel(int x, int y) {
-		Field f = FieldGrid[(x / 32)][(y / 32)];
-		return f;
-	}
-
-	/**
-	 * 
-	 * @param x
-	 *            pixel x-coordinate
-	 * @param y
-	 *            pixel y-coordinate
-	 */
-	public void setFloorField(int x, int y) {
-		FieldGrid[x][y] = new FloorField();
 	}
 
 	/**
@@ -191,7 +119,41 @@ public class Map {
 		return f;
 	}
 
+	public Field getField(int x, int y) {
+		Field f = null;
+		if (x >= 0 && x < getGridWidth() && y >= 0 && y < getGridHeight()) {
+			f = FieldGrid[x][y];
+		}
+		return f;
+	}
+
+	public Field getFieldByPixel(int x, int y) {
+		Field f = FieldGrid[(x / 32)][(y / 32)];
+		return f;
+	}
+
+	public void setFloorField(int x, int y) {
+		FieldGrid[x][y] = new FloorField();
+	}
+
 	public void setExitField(int x, int y) {
 		FieldGrid[x][y] = new ExitField();
 	}
+
+	public static int getGridWidth() {
+		return gridWidth;
+	}
+
+	public void setGridWidth(int gridWidth) {
+		this.gridWidth = gridWidth;
+	}
+
+	public static int getGridHeight() {
+		return gridHeight;
+	}
+
+	public void setGridHeight(int gridHeight) {
+		this.gridHeight = gridHeight;
+	}
+
 }

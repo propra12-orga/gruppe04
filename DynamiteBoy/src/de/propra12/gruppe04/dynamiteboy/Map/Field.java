@@ -7,7 +7,32 @@ import javax.swing.ImageIcon;
 import de.propra12.gruppe04.dynamiteboy.Item.Item;
 
 public abstract class Field {
+	private boolean blocked; // true=moving over this field not allowed,
+								// false=moving is allowed
+	private boolean destroyable; // true=this field can be destroyed by bombs,
+									// false=this field can not be destroyed
+	private boolean explodable; // true=explosions are possible on this field,
+								// false=explosions are impossible
+	private boolean deadly = false; // true=this field kills players when on it,
+									// false=this field does not kill players
+	private Item item; // item that this field holds
+	private ImageIcon image; // image of this field
+	String fieldpic; // path to the iamge of this field
 
+	/**
+	 * creates a new Field
+	 * 
+	 * @param blocked
+	 *            determines if moving over this field allowed
+	 * @param destroyable
+	 *            determines if this field can be destroyed by bombs
+	 * @param explodable
+	 *            determines if an explosion is displayed on this field
+	 * @param item
+	 *            sets the item that this field holds
+	 * @param fieldpic
+	 *            path to the image of this field
+	 */
 	Field(boolean blocked, boolean destroyable, boolean explodable, Item item,
 			String fieldpic) {
 		this.blocked = blocked;
@@ -18,14 +43,11 @@ public abstract class Field {
 		setImage(fieldpic);
 	}
 
-	private boolean blocked;
-	private boolean destroyable;
-	private boolean explodable;
-	private Item item;
-	private ImageIcon image;
-	private boolean deadly = false;
-	String fieldpic;
-
+	/**
+	 * makes this field an "exploding" (therefore deadly) field
+	 * 
+	 * @param deadly
+	 */
 	public void beDeadly(boolean deadly) {
 		if (deadly) {
 			this.deadly = true;
@@ -41,55 +63,26 @@ public abstract class Field {
 		return deadly;
 	}
 
-	/**
-	 * 
-	 * @return true if field is blocked
-	 */
 	public boolean isBlocked() {
 		return blocked;
 	}
 
-	/**
-	 * Sets blocked state of field
-	 * 
-	 * 
-	 * @param blocked
-	 *            set true for the field to be blocked
-	 */
 	public void setBlocked(boolean blocked) {
 		this.blocked = blocked;
 	}
 
-	/**
-	 * 
-	 * @return true if block is destroyable
-	 */
 	public boolean isDestroyable() {
 		return destroyable;
 	}
 
-	/**
-	 * 
-	 * @param destroyable
-	 *            set true for the field to be destroyable
-	 */
 	public void setDestroyable(boolean destroyable) {
 		this.destroyable = destroyable;
 	}
 
-	/**
-	 * 
-	 * @return item type of field
-	 */
 	public Item getItem() {
 		return item;
 	}
 
-	/**
-	 * 
-	 * @param item
-	 *            set item type for field
-	 */
 	public void setItem(Item item) {
 		this.item = item;
 	}
