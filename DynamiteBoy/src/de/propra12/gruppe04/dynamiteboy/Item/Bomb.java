@@ -32,7 +32,7 @@ public class Bomb extends Item implements Runnable {
 	}
 
 	/**
-	 * Bombthread method
+	 * Handles bomb behavior on threadstart
 	 */
 	@Override
 	public void run() {
@@ -69,7 +69,7 @@ public class Bomb extends Item implements Runnable {
 			destroy(x, y);
 		}
 		// right
-		for (int i = 1; i <= exploRange(RIGHT); i++) {
+		for (int i = 1; i <= calcExploRange(RIGHT); i++) {
 			x = startx + (1 * i);
 			y = starty;
 			if (map.getField(x, y) != null) {
@@ -80,7 +80,7 @@ public class Bomb extends Item implements Runnable {
 			}
 		}
 		// left
-		for (int i = 1; i <= exploRange(LEFT); i++) {
+		for (int i = 1; i <= calcExploRange(LEFT); i++) {
 			x = startx - (1 * i);
 			y = starty;
 			if (map.getField(x, y) != null) {
@@ -91,7 +91,7 @@ public class Bomb extends Item implements Runnable {
 			}
 		}
 		// DOWN
-		for (int i = 1; i <= exploRange(DOWN); i++) {
+		for (int i = 1; i <= calcExploRange(DOWN); i++) {
 			x = startx;
 			y = starty + (1 * i);
 			if (map.getField(x, y) != null) {
@@ -102,7 +102,7 @@ public class Bomb extends Item implements Runnable {
 			}
 		}
 		// UP
-		for (int i = 1; i <= exploRange(UP); i++) {
+		for (int i = 1; i <= calcExploRange(UP); i++) {
 			x = startx;
 			y = starty - (1 * i);
 			if (map.getField(x, y) != null) {
@@ -128,7 +128,7 @@ public class Bomb extends Item implements Runnable {
 			map.getField(x, y).beDeadly(false);
 		}
 		// right
-		for (int i = 1; i <= exploRange(RIGHT); i++) {
+		for (int i = 1; i <= calcExploRange(RIGHT); i++) {
 			x = startx + (1 * i);
 			y = starty;
 			if (map.getField(x, y) != null) {
@@ -136,7 +136,7 @@ public class Bomb extends Item implements Runnable {
 			}
 		}
 		// left
-		for (int i = 1; i <= exploRange(LEFT); i++) {
+		for (int i = 1; i <= calcExploRange(LEFT); i++) {
 			x = startx - (1 * i);
 			y = starty;
 			if (map.getField(x, y) != null) {
@@ -144,7 +144,7 @@ public class Bomb extends Item implements Runnable {
 			}
 		}
 		// DOWN
-		for (int i = 1; i <= exploRange(DOWN); i++) {
+		for (int i = 1; i <= calcExploRange(DOWN); i++) {
 			x = startx;
 			y = starty + (1 * i);
 			if (map.getField(x, y) != null) {
@@ -152,7 +152,7 @@ public class Bomb extends Item implements Runnable {
 			}
 		}
 		// UP
-		for (int i = 1; i <= exploRange(UP); i++) {
+		for (int i = 1; i <= calcExploRange(UP); i++) {
 			x = startx;
 			y = starty - (1 * i);
 			if (map.getField(x, y) != null) {
@@ -185,9 +185,9 @@ public class Bomb extends Item implements Runnable {
 	 * Calculates range depending on passed direction
 	 * 
 	 * @param direction
-	 * @return
+	 * @return explosion radius
 	 */
-	public int exploRange(int direction) {
+	public int calcExploRange(int direction) {
 		boolean gotonext = true;
 		int range = 0;
 		switch (direction) {
@@ -251,6 +251,13 @@ public class Bomb extends Item implements Runnable {
 		}
 	}
 
+	/**
+	 * Checks if field is within the map and if it is explodable
+	 * 
+	 * @param x
+	 * @param y
+	 * @return true if explodable
+	 */
 	private boolean isExplodable(int x, int y) {
 		if (x >= 0 && x < Map.getGridWidth() && y >= 0
 				&& y < Map.getGridHeight()) {

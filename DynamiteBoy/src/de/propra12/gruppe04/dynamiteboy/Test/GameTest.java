@@ -15,7 +15,7 @@ public class GameTest {
 
 	@Before
 	public void setUp() {
-		g = new Map(640, 480);
+		g = new Map(640, 480, "Map1.xml");
 		b = new Bomb(5, 6, false, g);
 
 	}
@@ -33,7 +33,6 @@ public class GameTest {
 		assertEquals(true, g.getField(0, 14).isBlocked());
 		assertEquals(true, g.getField(19, 14).isBlocked());
 		assertEquals(true, g.getField(19, 14).isBlocked());
-		assertEquals(true, g.getField(2, 2).isBlocked());
 		assertEquals(true, g.getField(2, 12).isBlocked());
 		assertEquals(true, g.getField(17, 2).isBlocked());
 		assertEquals(true, g.getField(17, 2).isBlocked());
