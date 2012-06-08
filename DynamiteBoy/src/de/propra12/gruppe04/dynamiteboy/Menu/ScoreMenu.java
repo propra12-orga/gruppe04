@@ -11,10 +11,14 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import de.propra12.gruppe04.dynamiteboy.Game.Game;
+
 public class ScoreMenu extends JPanel {
-	private JButton buttonStart;
-	private JFrame frame;
+	private JButton buttonBackToMain;
 	private TitlePanel title = new TitlePanel();
+	private static String winnerName;
+	private static String loserName;
+	private JFrame frame;
 
 	/**
 	 * Constructor Sets up MainMenu with a Start Button to start the game
@@ -24,20 +28,22 @@ public class ScoreMenu extends JPanel {
 	 * @param height
 	 *            Window-height
 	 */
-	public ScoreMenu(final JFrame frame) {
+	public ScoreMenu(final JFrame frame, Game g) {
 		this.frame = frame;
-		buttonStart = new JButton("Zurück zum Hauptmenü");
-		buttonStart.addActionListener(new ActionListener() {
+		this.winnerName = g.getWinnerName();
+		this.loserName = g.getLoserName();
+		buttonBackToMain = new JButton("Zurück zum Hauptmenü");
+		buttonBackToMain.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				MainMenu m = new MainMenu(frame);
-				buttonStart.setVisible(false);
+				buttonBackToMain.setVisible(false);
 				title.setVisible(false);
 			}
 		});
 		frame.getContentPane().add(BorderLayout.CENTER, this.title);
-		buttonStart.setPreferredSize(new Dimension(100, 80));
-		frame.getContentPane().add(BorderLayout.SOUTH, buttonStart);
+		buttonBackToMain.setPreferredSize(new Dimension(100, 80));
+		frame.getContentPane().add(BorderLayout.SOUTH, buttonBackToMain);
 	}
 
 	static class TitlePanel extends JPanel {
@@ -47,7 +53,8 @@ public class ScoreMenu extends JPanel {
 
 		public void paintComponent(Graphics g) {
 			g.drawImage(img.getImage(), 0, 0, this);
-
+			g.drawString("Winner:" + winnerName, 50, 150);
+			g.drawString("Loser:" + loserName, 50, 200);
 		}
 
 	}

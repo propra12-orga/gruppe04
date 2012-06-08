@@ -164,7 +164,7 @@ public class Bomb extends Item implements Runnable {
 	}
 
 	/**
-	 * Calculates range depending on passed direction
+	 * Calculates range for each direction
 	 * 
 	 * @param direction
 	 * @return explosion radius

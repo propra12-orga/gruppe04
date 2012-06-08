@@ -12,20 +12,26 @@ public class Player {
 	private int xPos;
 	private int yPos;
 	private Image image;
+	private ImageIcon img;
+	private String name = "";
+	private int playerIndex;
 	private String playerPicture[] = { "../images/player1.png",
 			"../images/player2.png" };
+	private String playerName[] = { "Player 1", "Player 2" };
 	private Map map;
 	// DIRECTION CONSTANTS
 	private final int LEFT = 0, DOWN = 1, RIGHT = 2, UP = 3;
 	private final int COLLISION_OFFSET = 5;
 
-	Player(int playerPictureIndex, int startxPos, int startyPos, Map map) {
-		ImageIcon img = new ImageIcon(this.getClass().getResource(
-				playerPicture[playerPictureIndex]));
-		image = img.getImage();
-		xPos = startxPos;
-		yPos = startyPos;
+	Player(int playerIndex, int startxPos, int startyPos, Map map) {
+		this.img = new ImageIcon(this.getClass().getResource(
+				playerPicture[playerIndex]));
+		this.image = img.getImage();
+		this.xPos = startxPos;
+		this.yPos = startyPos;
 		this.map = map;
+		this.playerIndex = playerIndex;
+		this.name = playerName[playerIndex];
 	}
 
 	/**
@@ -173,6 +179,10 @@ public class Player {
 	public int getGridfieldYByMiddle() {
 		return getGridfieldY(getyPos() + 16);
 
+	}
+
+	public String getPlayerName() {
+		return name;
 	}
 
 }

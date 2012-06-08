@@ -9,7 +9,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import de.propra12.gruppe04.dynamiteboy.Item.Bomb;
-import de.propra12.gruppe04.dynamiteboy.Item.Item;
 import de.propra12.gruppe04.dynamiteboy.Map.ExitField;
 import de.propra12.gruppe04.dynamiteboy.Map.Field;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
@@ -20,6 +19,8 @@ public class Game extends JPanel {
 	private Player player[] = new Player[2];
 	private Map map;
 	private JFrame frame;
+	private String winnerName;
+	private String loserName;
 	private int numberOfPlayers;
 	private InputHandler input;
 	// Player constants
@@ -107,12 +108,12 @@ public class Game extends JPanel {
 	private void updateGame() {
 		if (numberOfPlayers == 1) {
 			movePlayer1();
-			itemHandling(player[PLAYER1].getxPos(), player[PLAYER1].getyPos());
+			itemHandling(player[PLAYER1]);
 		} else if (numberOfPlayers == 2) {
 			movePlayer1();
-			itemHandling(player[PLAYER1].getxPos(), player[PLAYER1].getyPos());
+			itemHandling(player[PLAYER1]);
 			movePlayer2();
-			itemHandling(player[PLAYER2].getxPos(), player[PLAYER2].getyPos());
+			itemHandling(player[PLAYER2]);
 		}
 	}
 
@@ -165,39 +166,49 @@ public class Game extends JPanel {
 			// DO NOTHING
 		} else if (map.getField(player[pIndex].getGridfieldXByMiddle(),
 				player[pIndex].getGridfieldYByMiddle()).getItem() == null) {
-			Bomb bomb = new Bomb(player[pIndex].getGridfieldX(player[pIndex]
-					.getxPos() + 16), player[pIndex].getGridfieldY(player[pIndex]
-					.getyPos() + 16), false, map);
+			Bomb bomb = new Bomb(
+					player[pIndex].getGridfieldX(player[pIndex].getxPos() + 16),
+					player[pIndex].getGridfieldY(player[pIndex].getyPos() + 16),
+					false, map);
 			Thread bombThread = new Thread(bomb);
 			bombThread.start();
 		}
 	}
 
 	/**
-	 * Checks if item is at field with pixel-coordinates x and y and handles it
+	 * Decides what to do on this field
 	 * 
-	 * First: Checks if Field is ExitField (has nothing to do with items but is
-	 * easier to implement here atm than elsewhere) and exits if it is
-	 * 
-	 * Second: Checks if Field is currently deadly
-	 * 
-	 * Then: Other items are handled
+	 * First: Checks if Field is ExitField and exits if it is Second: Checks if
+	 * Field is currently deadly
 	 * 
 	 * @param x
 	 *            x-coordinate of player (in px)
 	 * @param y
 	 *            y-coordinate of player (in px)
 	 */
-	public void itemHandling(int x, int y) {
+	public void itemHandling(Player player) {
+		int x = player.getxPos();
+		int y = player.getyPos();
 		Field f = map.getFieldByPixel(x + 16, y + 16);
-		Item item = map.getFieldByPixel(x + 16, y + 16).getItem();
 		if (f instanceof ExitField) {
-			ScoreMenu m = new ScoreMenu(frame);
+			this.winnerName = player.getPlayerName();
+			ScoreMenu m = new ScoreMenu(frame, this);
 			this.setVisible(false);
 			running = false;
 		}
 		if (f.isDeadly() == true) {
-			ScoreMenu m = new ScoreMenu(frame);
+			if (player == this.player[PLAYER1]) {
+				if (numberOfPlayers == 1) {
+					this.loserName = player.getPlayerName();
+				} else {
+					this.loserName = player.getPlayerName();
+					this.winnerName = this.player[PLAYER2].getPlayerName();
+				}
+			} else {
+				this.loserName = player.getPlayerName();
+				this.winnerName = this.player[PLAYER1].getPlayerName();
+			}
+			ScoreMenu m = new ScoreMenu(frame, this);
 			this.setVisible(false);
 			running = false;
 		}
@@ -337,5 +348,13 @@ public class Game extends JPanel {
 		if (input.isKeyUp(KeyEvent.VK_SPACE)) {
 			// DO NOTHING
 		}
+	}
+
+	public String getWinnerName() {
+		return winnerName;
+	}
+
+	public String getLoserName() {
+		return loserName;
 	}
 }
