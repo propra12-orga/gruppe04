@@ -20,7 +20,7 @@ public class Bomb extends Item implements Runnable {
 	private int yPos;
 	// BOMB CONSTANTS
 	private static final int BOMB_DELAY = 3000;
-	private static final int EXPLOSION_DURATION = 3000;
+	private static final int EXPLOSION_DURATION = 400;
 	private static final int BOMB_RADIUS = 3;
 	// MAP CONSTANTS
 	private final int MAP_GRIDWIDTH;
@@ -80,44 +80,29 @@ public class Bomb extends Item implements Runnable {
 		int starty = y;
 		// middle
 		map.getField(x, y).beDeadly(true);
-		if (isDestroyable(x, y)) {
-			destroy(x, y);
-		}
 		// right
 		for (int i = 1; i <= calcExploRange(RIGHT); i++) {
 			x = startx + (1 * i);
 			y = starty;
 			map.getField(x, y).beDeadly(true);
-			if (isDestroyable(x, y)) {
-				destroy(x, y);
-			}
 		}
 		// left
 		for (int i = 1; i <= calcExploRange(LEFT); i++) {
 			x = startx - (1 * i);
 			y = starty;
 			map.getField(x, y).beDeadly(true);
-			if (isDestroyable(x, y)) {
-				destroy(x, y);
-			}
 		}
 		// DOWN
 		for (int i = 1; i <= calcExploRange(DOWN); i++) {
 			x = startx;
 			y = starty + (1 * i);
 			map.getField(x, y).beDeadly(true);
-			if (isDestroyable(x, y)) {
-				destroy(x, y);
-			}
 		}
 		// UP
 		for (int i = 1; i <= calcExploRange(UP); i++) {
 			x = startx;
 			y = starty - (1 * i);
 			map.getField(x, y).beDeadly(true);
-			if (isDestroyable(x, y)) {
-				destroy(x, y);
-			}
 		}
 	}
 
@@ -137,24 +122,36 @@ public class Bomb extends Item implements Runnable {
 			x = startx + (1 * i);
 			y = starty;
 			map.getField(x, y).beDeadly(false);
+			if (isDestroyable(x, y)) {
+				destroy(x, y);
+			}
 		}
 		// left
 		for (int i = 1; i <= calcExploRange(LEFT); i++) {
 			x = startx - (1 * i);
 			y = starty;
 			map.getField(x, y).beDeadly(false);
+			if (isDestroyable(x, y)) {
+				destroy(x, y);
+			}
 		}
 		// DOWN
 		for (int i = 1; i <= calcExploRange(DOWN); i++) {
 			x = startx;
 			y = starty + (1 * i);
 			map.getField(x, y).beDeadly(false);
+			if (isDestroyable(x, y)) {
+				destroy(x, y);
+			}
 		}
 		// UP
 		for (int i = 1; i <= calcExploRange(UP); i++) {
 			x = startx;
 			y = starty - (1 * i);
 			map.getField(x, y).beDeadly(false);
+			if (isDestroyable(x, y)) {
+				destroy(x, y);
+			}
 		}
 	}
 
@@ -224,14 +221,9 @@ public class Bomb extends Item implements Runnable {
 	 */
 	private void destroy(int x, int y) {
 		if (map.getField(x, y).getItem() instanceof Exit) {
-			try {
-				TimeUnit.MILLISECONDS.sleep(EXPLOSION_DURATION);
-				map.setExitField(x, y);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
-		} else if (map.getField(x, y).getItem() == null) {
+			map.setExitField(x, y);
+		}
+		if (map.getField(x, y).getItem() == null) {
 			map.setFloorField(x, y);
 		}
 	}
