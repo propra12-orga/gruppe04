@@ -119,9 +119,19 @@ public class Map {
 		return f;
 	}
 
+	/**
+	 * checks if field exists at given coordinates and returns Field-object if
+	 * it does, otherwise returns null
+	 * 
+	 * @param x
+	 *            x-gridposition
+	 * @param y
+	 *            y-gridposition
+	 * @return Field
+	 */
 	public Field getField(int x, int y) {
 		Field f = null;
-		if (x >= 0 && x < getGridWidth() && y >= 0 && y < getGridHeight()) {
+		if (x >= 0 && x < gridWidth && y >= 0 && y < gridHeight) {
 			f = FieldGrid[x][y];
 		}
 		return f;
