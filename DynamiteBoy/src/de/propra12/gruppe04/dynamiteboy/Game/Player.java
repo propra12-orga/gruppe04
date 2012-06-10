@@ -19,7 +19,7 @@ public class Player {
 			"../images/player2.png" };
 	private String playerName[] = { "Player 1", "Player 2" };
 	private Map map;
-	// DIRECTION CONSTANTS
+	// CONSTANTS
 	private final int LEFT = 0, DOWN = 1, RIGHT = 2, UP = 3;
 	private final int COLLISION_OFFSET = 5;
 

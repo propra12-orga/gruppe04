@@ -31,12 +31,15 @@ public class MainMenu extends JPanel {
 
 	public MainMenu(final JFrame frame) {
 		this.frame = frame;
-		// final JFrame frame = new JFrame();
+
 		ButtonStart1p = new JButton("1 Spieler");
 		ButtonStart2p = new JButton("2 Spieler");
 		panelButton.add(ButtonStart1p);
 		panelButton.add(ButtonStart2p);
 
+		/**
+		 * Sets up a single player game
+		 */
 		ButtonStart1p.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -45,7 +48,9 @@ public class MainMenu extends JPanel {
 			}
 
 		});
-
+		/**
+		 * Sets up a two player game
+		 */
 		ButtonStart2p.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

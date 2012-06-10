@@ -23,6 +23,7 @@ public class Game extends JPanel {
 	private String loserName;
 	private int numberOfPlayers;
 	private InputHandler input;
+	private int bombcount;
 	// Player constants
 	private final int PLAYER1 = 0, PLAYER2 = 1;
 	// Movement constants
@@ -56,6 +57,9 @@ public class Game extends JPanel {
 		}
 	}
 
+	/**
+	 * Creates a thread to run the game loop
+	 */
 	public void runGameLoop() {
 		Thread loop = new Thread() {
 			public void run() {
@@ -118,24 +122,6 @@ public class Game extends JPanel {
 	}
 
 	/**
-	 * 
-	 * @return current map-object
-	 */
-	public Map getMap() {
-		return map;
-	}
-
-	/**
-	 * 
-	 * @param playerIndex
-	 *            index of player to return
-	 * @return player object
-	 */
-	public Player getPlayer(int playerIndex) {
-		return player[playerIndex];
-	}
-
-	/**
 	 * creates players and sets starting positions
 	 * 
 	 * @param numberOfPlayers
@@ -172,6 +158,7 @@ public class Game extends JPanel {
 					false, map);
 			Thread bombThread = new Thread(bomb);
 			bombThread.start();
+			bombcount++;
 		}
 	}
 
@@ -211,10 +198,11 @@ public class Game extends JPanel {
 			ScoreMenu m = new ScoreMenu(frame, this);
 			this.setVisible(false);
 			running = false;
+
 		}
 	}
 
-	// KEY HANDLING AND PAINT METHODS DOWN FROM HERE
+	// KEY HANDLING AND PAINT METHODS
 
 	/**
 	 * draws the map
@@ -350,11 +338,31 @@ public class Game extends JPanel {
 		}
 	}
 
+	// GETTERS AND SETTERS
+
 	public String getWinnerName() {
 		return winnerName;
 	}
 
 	public String getLoserName() {
 		return loserName;
+	}
+
+	public Map getMap() {
+		return map;
+	}
+
+	public int getBombcount() {
+		return bombcount;
+	}
+
+	/**
+	 * 
+	 * @param playerIndex
+	 *            index of player to return
+	 * @return player object
+	 */
+	public Player getPlayer(int playerIndex) {
+		return player[playerIndex];
 	}
 }

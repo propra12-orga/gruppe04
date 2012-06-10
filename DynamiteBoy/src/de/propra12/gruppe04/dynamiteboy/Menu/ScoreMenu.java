@@ -19,6 +19,7 @@ public class ScoreMenu extends JPanel {
 	private static String winnerName;
 	private static String loserName;
 	private JFrame frame;
+	private static int bombcount;
 
 	/**
 	 * Constructor Sets up MainMenu with a Start Button to start the game
@@ -32,6 +33,7 @@ public class ScoreMenu extends JPanel {
 		this.frame = frame;
 		this.winnerName = g.getWinnerName();
 		this.loserName = g.getLoserName();
+		this.bombcount = g.getBombcount();
 		buttonBackToMain = new JButton("Zurück zum Hauptmenü");
 		buttonBackToMain.addActionListener(new ActionListener() {
 			@Override
@@ -54,7 +56,8 @@ public class ScoreMenu extends JPanel {
 		public void paintComponent(Graphics g) {
 			g.drawImage(img.getImage(), 0, 0, this);
 			g.drawString("Winner:" + winnerName, 50, 150);
-			g.drawString("Loser:" + loserName, 50, 200);
+			g.drawString("Loser:" + loserName, 50, 180);
+			g.drawString(bombcount + " bombs used", 50, 210);
 		}
 
 	}
