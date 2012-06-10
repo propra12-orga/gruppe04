@@ -54,9 +54,20 @@ public class Bomb extends Item implements Runnable {
 	@Override
 	public void run() {
 		try {
+			boolean wait = true;
+			int timecounter = 0;
 			map.getField(xPos, yPos).setItem(this);
-			TimeUnit.MILLISECONDS.sleep(BOMB_DELAY);
-			detonate(xPos, yPos);
+			// wait until detonation
+			while (wait) {
+				TimeUnit.MILLISECONDS.sleep(1);
+				timecounter++;
+				if (map.getField(getxPos(), getyPos()).isDeadly()
+						|| timecounter >= BOMB_DELAY) {
+					detonate(xPos, yPos);
+					wait = false;
+				}
+			}
+
 			// TODO Remove debug
 			System.out.println("BOOM!");
 			TimeUnit.MILLISECONDS.sleep(EXPLOSION_DURATION);
