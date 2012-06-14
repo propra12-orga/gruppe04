@@ -75,7 +75,7 @@ public class MainMenu extends JPanel {
 	}
 
 	static class TitlePanel extends JPanel {
-		private String titleScreenImage = "../images/db_menu_titlescreen2.png";
+		private String titleScreenImage = "../images/db_menu_titlescreen.png";
 		ImageIcon img = new ImageIcon(this.getClass().getResource(
 				titleScreenImage));
 

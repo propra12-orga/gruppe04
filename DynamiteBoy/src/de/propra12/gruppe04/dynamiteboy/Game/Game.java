@@ -1,10 +1,13 @@
 package de.propra12.gruppe04.dynamiteboy.Game;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -42,12 +45,15 @@ public class Game extends JPanel {
 	final double TIME_BETWEEN_UPDATES = 1000000000 / GAME_FREQUENCY;
 	final int MAX_UPDATES_BEFORE_RENDER = 5;
 	final double TARGET_TIME_BETWEEN_RENDERS = 1000000000 / MAX_FPS;
+	double startTime = System.currentTimeMillis();
+	double currentGameTime;
 
 	public Game(JFrame frame, int numberOfPlayers, String mapName) {
 		// SET UP
 		this.numberOfPlayers = numberOfPlayers;
 		this.map = new Map(640, 480, mapName);
 		this.frame = frame;
+		frame.setSize(643, 540);
 		createPlayers(numberOfPlayers);
 		setFocusable(true);
 		this.input = new InputHandler();
@@ -88,6 +94,7 @@ public class Game extends JPanel {
 			this.interpolation = Math.min(1.0f,
 					(float) ((now - lastUpdateTime) / TIME_BETWEEN_UPDATES));
 			repaint();
+			currentGameTime = (System.currentTimeMillis() - startTime) / 1000;
 			lastRenderTime = now;
 
 			int thisSecond = (int) (lastUpdateTime / 1000000000);
@@ -151,14 +158,15 @@ public class Game extends JPanel {
 				player[pIndex].getGridfieldYByMiddle()).getItem() instanceof Bomb) {
 			// DO NOTHING
 		} else if (map.getField(player[pIndex].getGridfieldXByMiddle(),
-				player[pIndex].getGridfieldYByMiddle()).getItem() == null) {
+				player[pIndex].getGridfieldYByMiddle()).getItem() == null
+				&& player[pIndex].getBombCount() > 0) {
 			Bomb bomb = new Bomb(
 					player[pIndex].getGridfieldX(player[pIndex].getxPos() + 16),
 					player[pIndex].getGridfieldY(player[pIndex].getyPos() + 16),
 					false, map);
 			Thread bombThread = new Thread(bomb);
 			bombThread.start();
-			bombcount++;
+			player[pIndex].setBombCount(player[pIndex].getBombCount() - 1);
 		}
 	}
 
@@ -203,6 +211,29 @@ public class Game extends JPanel {
 	}
 
 	// KEY HANDLING AND PAINT METHODS
+
+	/**
+	 * paints the hub on the bottom of the game window
+	 * 
+	 */
+	public void paintHud(Graphics g2d) {
+		ImageIcon hudbg = new ImageIcon(this.getClass().getResource(
+				"../images/db_hud_bg.png"));
+		g2d.drawImage(hudbg.getImage(), 0, 480, this);
+		g2d.setColor(Color.black);
+		Font font = new Font("Ubuntu", Font.BOLD, 12);
+		g2d.setFont(font);
+		g2d.drawString("Time: " + (int) currentGameTime / 60 + ":"
+				+ (int) currentGameTime % 60, 5, 492);
+		g2d.drawString("Player #1", 100, 492);
+		g2d.drawString("Bombs left: " + player[PLAYER1].getBombCount(), 100,
+				505);
+		if (numberOfPlayers > 1) {
+			g2d.drawString("Player #2", 200, 492);
+			g2d.drawString("Bombs left: " + player[PLAYER2].getBombCount(),
+					200, 505);
+		}
+	}
 
 	/**
 	 * draws the map
@@ -260,6 +291,7 @@ public class Game extends JPanel {
 		for (int i = 0; i < numberOfPlayers; i++) {
 			paintPlayer(g2d, i);
 		}
+		paintHud(g2d);
 		Toolkit.getDefaultToolkit().sync();
 		g.dispose();
 	}
@@ -352,10 +384,6 @@ public class Game extends JPanel {
 		return map;
 	}
 
-	public int getBombcount() {
-		return bombcount;
-	}
-
 	/**
 	 * 
 	 * @param playerIndex
@@ -365,4 +393,13 @@ public class Game extends JPanel {
 	public Player getPlayer(int playerIndex) {
 		return player[playerIndex];
 	}
+
+	public double getCurrentGameTime() {
+		return currentGameTime;
+	}
+
+	public int getNumberOfPlayers() {
+		return this.numberOfPlayers;
+	}
+
 }

@@ -19,9 +19,11 @@ public class Player {
 			"../images/player2.png" };
 	private String playerName[] = { "Player 1", "Player 2" };
 	private Map map;
+	private int bombcount;
 	// CONSTANTS
 	private final int LEFT = 0, DOWN = 1, RIGHT = 2, UP = 3;
 	private final int COLLISION_OFFSET = 5;
+	public final int BOMBS = 10;
 
 	Player(int playerIndex, int startxPos, int startyPos, Map map) {
 		this.img = new ImageIcon(this.getClass().getResource(
@@ -32,6 +34,7 @@ public class Player {
 		this.map = map;
 		this.playerIndex = playerIndex;
 		this.name = playerName[playerIndex];
+		this.setBombCount(BOMBS);
 	}
 
 	/**
@@ -183,6 +186,14 @@ public class Player {
 
 	public String getPlayerName() {
 		return name;
+	}
+
+	public int getBombCount() {
+		return bombcount;
+	}
+
+	public void setBombCount(int bombs) {
+		this.bombcount = bombs;
 	}
 
 }
