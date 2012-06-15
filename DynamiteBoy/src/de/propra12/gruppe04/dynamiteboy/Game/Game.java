@@ -11,7 +11,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import de.propra12.gruppe04.dynamiteboy.Item.Bomb;
 import de.propra12.gruppe04.dynamiteboy.Map.ExitField;
 import de.propra12.gruppe04.dynamiteboy.Map.Field;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
@@ -143,30 +142,6 @@ public class Game extends JPanel {
 			player[i] = new Player(i, playerStartPos[i][0],
 					playerStartPos[i][1], map);
 
-		}
-	}
-
-	/**
-	 * Plants a bomb on current grid-position
-	 * 
-	 * @param pIndex
-	 *            player to plant the bomb
-	 */
-
-	public void plantBomb(int pIndex) {
-		if (map.getField(player[pIndex].getGridfieldXByMiddle(),
-				player[pIndex].getGridfieldYByMiddle()).getItem() instanceof Bomb) {
-			// DO NOTHING
-		} else if (map.getField(player[pIndex].getGridfieldXByMiddle(),
-				player[pIndex].getGridfieldYByMiddle()).getItem() == null
-				&& player[pIndex].getBombCount() > 0) {
-			Bomb bomb = new Bomb(
-					player[pIndex].getGridfieldX(player[pIndex].getxPos() + 16),
-					player[pIndex].getGridfieldY(player[pIndex].getyPos() + 16),
-					false, map);
-			Thread bombThread = new Thread(bomb);
-			bombThread.start();
-			player[pIndex].setBombCount(player[pIndex].getBombCount() - 1);
 		}
 	}
 
@@ -314,7 +289,7 @@ public class Game extends JPanel {
 			player[PLAYER1].move(DOWN);
 		}
 		if (input.isKeyDown(KeyEvent.VK_ENTER)) {
-			plantBomb(PLAYER1);
+			player[PLAYER1].plantBomb();
 		}
 		if (input.isKeyUp(KeyEvent.VK_LEFT)) {
 			player[PLAYER1].setDx(0);
@@ -351,7 +326,7 @@ public class Game extends JPanel {
 			player[PLAYER2].move(DOWN);
 		}
 		if (input.isKeyDown(KeyEvent.VK_SPACE)) {
-			plantBomb(PLAYER2);
+			player[PLAYER2].plantBomb();
 		}
 		if (input.isKeyUp(KeyEvent.VK_A)) {
 			player[PLAYER2].setDx(0);

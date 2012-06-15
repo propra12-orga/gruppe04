@@ -12,6 +12,7 @@ public class NetworkGame extends JPanel {
 	private String ipAddress;
 	private JFrame frame;
 	private Map map;
+	private InputHandler input;
 
 	public NetworkGame(final JFrame frame, String ip, int type, String mapName) {
 		// TODO REMOVE DEBUG
@@ -21,12 +22,17 @@ public class NetworkGame extends JPanel {
 		frame.setTitle("DynamiteBoy");
 		this.ipAddress = ip;
 		this.map = new Map(640, 480, mapName);
+
 		// Be client or Server
 		if (type == SERVER) {
 			ServerHandler server = new ServerHandler(ip);
 		} else if (type == CLIENT) {
 			ClientHandler client = new ClientHandler();
 		}
+
+		this.addKeyListener(input);
+		this.input = new InputHandler();
+		setFocusable(true);
 	}
 
 }

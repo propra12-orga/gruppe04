@@ -4,6 +4,7 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
+import de.propra12.gruppe04.dynamiteboy.Item.Bomb;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
 
 public class Player {
@@ -89,6 +90,28 @@ public class Player {
 				yPos += dy;
 			}
 			break;
+		}
+	}
+
+	/**
+	 * Plants a bomb on current grid-position
+	 * 
+	 * @param pIndex
+	 *            player to plant the bomb
+	 */
+
+	public void plantBomb() {
+		if (map.getField(getGridfieldXByMiddle(), getGridfieldYByMiddle())
+				.getItem() instanceof Bomb) {
+			// DO NOTHING
+		} else if (map.getField(getGridfieldXByMiddle(),
+				getGridfieldYByMiddle()).getItem() == null
+				&& getBombCount() > 0) {
+			Bomb bomb = new Bomb(getGridfieldXByMiddle(),
+					getGridfieldYByMiddle(), false, map);
+			Thread bombThread = new Thread(bomb);
+			bombThread.start();
+			setBombCount(getBombCount() - 1);
 		}
 	}
 
