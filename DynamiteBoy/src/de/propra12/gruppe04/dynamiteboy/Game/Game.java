@@ -50,10 +50,10 @@ public class Game extends JPanel {
 
 	public Game(JFrame frame, int numberOfPlayers, String mapName) {
 		// SET UP
+		frame.setTitle("DynamiteBoy");
 		this.numberOfPlayers = numberOfPlayers;
 		this.map = new Map(640, 480, mapName);
 		this.frame = frame;
-		frame.setSize(643, 540);
 		createPlayers(numberOfPlayers);
 		setFocusable(true);
 		this.input = new InputHandler();

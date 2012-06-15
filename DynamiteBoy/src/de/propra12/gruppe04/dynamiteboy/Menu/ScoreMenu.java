@@ -36,7 +36,7 @@ public class ScoreMenu extends JPanel {
 	 */
 	public ScoreMenu(final JFrame frame, Game g) {
 		this.frame = frame;
-		frame.setSize(643, 510);
+		frame.setTitle("DynamiteBoy - Und der Gewinner ist...");
 		this.winnerName = g.getWinnerName();
 		this.loserName = g.getLoserName();
 		this.gameMinutes = (int) g.getCurrentGameTime() / 60;

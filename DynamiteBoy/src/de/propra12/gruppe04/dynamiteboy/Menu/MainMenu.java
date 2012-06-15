@@ -17,12 +17,11 @@ import de.propra12.gruppe04.dynamiteboy.Game.Game;
 public class MainMenu extends JPanel {
 	private JButton ButtonStart1p;
 	private JButton ButtonStart2p;
+	private JButton ButtonNetworkPlay;
 	private JFrame frame;
 	private TitlePanel title = new TitlePanel();
 
-	private JPanel panelButton = new JPanel(new GridLayout(1, 2)); // panelButton
-																	// das
-																	// GridLayout
+	private JPanel panelButton = new JPanel(new GridLayout(1, 3));
 
 	/**
 	 * Constructor Sets up MainMenu with a Start Button to start the game
@@ -31,11 +30,13 @@ public class MainMenu extends JPanel {
 
 	public MainMenu(final JFrame frame) {
 		this.frame = frame;
-
+		frame.setTitle("DynamiteBoy - Hauptmenü");
 		ButtonStart1p = new JButton("1 Spieler");
 		ButtonStart2p = new JButton("2 Spieler");
+		ButtonNetworkPlay = new JButton("Netzwerkspiel");
 		panelButton.add(ButtonStart1p);
 		panelButton.add(ButtonStart2p);
+		panelButton.add(ButtonNetworkPlay);
 
 		/**
 		 * Sets up a single player game
@@ -56,6 +57,20 @@ public class MainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				ButtonStart2p.setText("Spiel wird gestartet...");
 				loadGame(2, "Maze.xml");
+			}
+
+		});
+
+		/**
+		 * Go to Network Menu for further setup
+		 * 
+		 */
+		ButtonNetworkPlay.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				title.setVisible(false);
+				panelButton.setVisible(false);
+				NetworkMenu nMenu = new NetworkMenu(frame);
 			}
 
 		});

@@ -7,7 +7,7 @@ import de.propra12.gruppe04.dynamiteboy.Menu.MainMenu;
 public class Main {
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
-		frame.setSize(643, 510);
+		frame.setSize(643, 540);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MainMenu m = new MainMenu(frame);
 		frame.setVisible(true);
