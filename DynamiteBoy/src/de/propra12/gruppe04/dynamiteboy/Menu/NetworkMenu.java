@@ -163,8 +163,9 @@ public class NetworkMenu {
 				while (e2.hasMoreElements()) {
 					InetAddress ip = (InetAddress) e2.nextElement();
 					System.out.println("IP address: " + ip.toString());
-					if (ni.getName().equals("eth0")
-							&& ip.toString().startsWith("/192")) {
+					if ((ni.getName().equals("eth0") || (ni.getName()
+							.equals("wlan0"))
+							&& ip.toString().startsWith("/192"))) {
 						String ipString = ip.toString();
 						ipLabel = new JLabel("Your IP: " + ipString);
 						ipPanel.add(ipLabel);
