@@ -53,7 +53,6 @@ public class Map {
 			Document doc = dBuilder.parse(mapData);
 			NodeList mapRows = doc.getElementsByTagName("row");
 			// FieldGrid gets created here
-			// TODO Currently only FloorFields are created
 			for (int i = 0; i < mapRows.getLength(); i++) {
 				Node node = mapRows.item(i);
 				Element element = (Element) node;
