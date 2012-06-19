@@ -23,7 +23,8 @@ public class Player {
 	private int bombcount;
 	// CONSTANTS
 	private final int LEFT = 0, DOWN = 1, RIGHT = 2, UP = 3;
-	private final int COLLISION_OFFSET = 5;
+	private final int COLLISION_X_OFFSET = 5;
+	private final int COLLISION_Y_OFFSET = 3;
 	public final int BOMBS = 10;
 
 	Player(int playerIndex, int startxPos, int startyPos, Map map) {
@@ -47,10 +48,10 @@ public class Player {
 	public void move(int direction) {
 		switch (direction) {
 		case LEFT:
-			if (map.getFieldByPixel(getxPos() + COLLISION_OFFSET,
-					getyPos() + COLLISION_OFFSET).isBlocked() == false
-					&& map.getFieldByPixel(getxPos() + COLLISION_OFFSET,
-							getyPos() + 32 - COLLISION_OFFSET).isBlocked() == false) {
+			if (map.getFieldByPixel(getxPos() + COLLISION_X_OFFSET,
+					getyPos() + COLLISION_Y_OFFSET).isBlocked() == false
+					&& map.getFieldByPixel(getxPos() + COLLISION_X_OFFSET,
+							getyPos() + 32 - COLLISION_Y_OFFSET).isBlocked() == false) {
 				// MOVE LEFT
 				setDx(-4);
 				setDy(0);
@@ -58,10 +59,10 @@ public class Player {
 			}
 			break;
 		case DOWN:
-			if (map.getFieldByPixel(getxPos() + COLLISION_OFFSET,
-					getyPos() + 32 - COLLISION_OFFSET).isBlocked() == false
-					&& map.getFieldByPixel(getxPos() + 32 - COLLISION_OFFSET,
-							getyPos() + 32 - COLLISION_OFFSET).isBlocked() == false) {
+			if (map.getFieldByPixel(getxPos() + COLLISION_X_OFFSET,
+					getyPos() + 32 - COLLISION_Y_OFFSET).isBlocked() == false
+					&& map.getFieldByPixel(getxPos() + 32 - COLLISION_X_OFFSET,
+							getyPos() + 32 - COLLISION_Y_OFFSET).isBlocked() == false) {
 				// MOVE DOWN
 				setDy(4);
 				setDx(0);
@@ -69,10 +70,10 @@ public class Player {
 			}
 			break;
 		case RIGHT:
-			if (map.getFieldByPixel(getxPos() + 32 - COLLISION_OFFSET,
-					getyPos() + COLLISION_OFFSET).isBlocked() == false
-					&& map.getFieldByPixel(getxPos() + 32 - COLLISION_OFFSET,
-							getyPos() + 32 - COLLISION_OFFSET).isBlocked() == false) {
+			if (map.getFieldByPixel(getxPos() + 32 - COLLISION_X_OFFSET,
+					getyPos() + COLLISION_Y_OFFSET).isBlocked() == false
+					&& map.getFieldByPixel(getxPos() + 32 - COLLISION_X_OFFSET,
+							getyPos() + 32 - COLLISION_Y_OFFSET).isBlocked() == false) {
 				// MOVE RIGHT
 				setDx(4);
 				setDy(0);
@@ -80,10 +81,10 @@ public class Player {
 			}
 			break;
 		case UP:
-			if (map.getFieldByPixel(getxPos() + COLLISION_OFFSET,
-					getyPos() + COLLISION_OFFSET).isBlocked() == false
-					&& map.getFieldByPixel(getxPos() + 32 - COLLISION_OFFSET,
-							getyPos() + COLLISION_OFFSET).isBlocked() == false) {
+			if (map.getFieldByPixel(getxPos() + COLLISION_X_OFFSET,
+					getyPos() + COLLISION_Y_OFFSET).isBlocked() == false
+					&& map.getFieldByPixel(getxPos() + 32 - COLLISION_X_OFFSET,
+							getyPos() + COLLISION_Y_OFFSET).isBlocked() == false) {
 				// MOVE UP
 				setDx(0);
 				setDy(-4);
