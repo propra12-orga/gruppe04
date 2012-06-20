@@ -1,7 +1,13 @@
 package de.propra12.gruppe04.dynamiteboy.Game;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Toolkit;
+
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
@@ -23,33 +29,37 @@ public class NetworkGame extends JPanel {
 	private final int LEFT = 0, DOWN = 1, RIGHT = 2, UP = 3;
 	double startTime = System.currentTimeMillis();
 	double currentGameTime;
+	private int gameType;
+	private Player[] player = new Player[2];
+	private int lastp1x;
+	private int lastp2x;
+	private int lastp1y;
+	private int lastp2y;
 
 	public NetworkGame(final JFrame frame, String ip, int type, String mapName) {
-		// TODO REMOVE DEBUG
-		System.out.println("A network-game will now be set up");
 		this.frame = frame;
 		frame.setTitle("DynamiteBoy");
 		this.serverIP = ip;
 		this.map = new Map(640, 480, mapName);
+		this.gameType = type;
+		createPlayers();
 
 		// Be client or Server
 		if (type == SERVER) {
 			frame.setTitle("Server is waiting for client");
 			ServerHandler server = new ServerHandler();
-			frame.setTitle("Connection to client established");
+			frame.setTitle("DynamiteBoy - Server");
 		} else if (type == CLIENT) {
 			frame.setTitle("Client is waiting for server");
 			ClientHandler client = new ClientHandler(ip);
-			frame.setTitle("Connection to server established");
+			frame.setTitle("DynamiteBoy - Client");
 		}
-		this.add(new JLabel("UNDER CONSTRUCTION... COME BACK LATER"));
-		frame.setTitle("DynamiteBoy");
+		setFocusable(true);
 		this.addKeyListener(input);
 		this.input = new InputHandler();
-		setFocusable(true);
-		this.setVisible(true);
 		if (running) {
 			runGameLoop();
+			System.out.println("Gameloop started");
 		}
 	}
 
@@ -110,6 +120,98 @@ public class NetworkGame extends JPanel {
 		// move player
 
 		// item handling
+	}
+
+	/**
+	 * creates players and sets starting positions
+	 * 
+	 * @param numberOfPlayers
+	 *            to create
+	 */
+	public void createPlayers() {
+		this.player[SERVER] = new Player(SERVER, 32, 32, map);
+		this.player[CLIENT] = new Player(CLIENT, 581, 461, map);
+
+	}
+
+	// PAINT METHODS
+
+	/**
+	 * draws the map
+	 * 
+	 * @param g2d
+	 *            Graphics object (painter)
+	 */
+	public void paintField(Graphics g2d) {
+		for (int y = 0; y < 480; y += 32) {
+			for (int x = 0; x < 640; x += 32) {
+				g2d.drawImage(map.getFieldByPixel(x, y).getImageIcon()
+						.getImage(), x, y, this);
+			}
+		}
+	}
+
+	/**
+	 * paints the hub on the bottom of the game window
+	 * 
+	 */
+	public void paintHud(Graphics g2d) {
+		ImageIcon hudbg = new ImageIcon(this.getClass().getResource(
+				"../images/db_hud_bg.png"));
+		g2d.drawImage(hudbg.getImage(), 0, 480, this);
+		g2d.setColor(Color.black);
+		Font font = new Font("Ubuntu", Font.BOLD, 12);
+		g2d.setFont(font);
+		g2d.drawString("Time: " + (int) currentGameTime / 60 + ":"
+				+ (int) currentGameTime % 60, 5, 492);
+		g2d.drawString("Player #1", 100, 492);
+		g2d.drawString("Bombs left: " + player[CLIENT].getBombCount(), 100, 505);
+		g2d.drawString("Player #2", 200, 492);
+		g2d.drawString("Bombs left: " + player[SERVER].getBombCount(), 200, 505);
+	}
+
+	/**
+	 * draws the player
+	 * 
+	 * @param g2d
+	 *            g2d Graphics object (painter)
+	 * @param pIndex
+	 *            index of player to be drawn
+	 * @param interpolation
+	 *            number to generate smooth drawing (is calculated in GameLoop)
+	 */
+	public void paintPlayer(Graphics g2d, int pIndex) {
+		int x = player[pIndex].getxPos();
+		int y = player[pIndex].getyPos();
+		if (pIndex == 0) {
+			x = (int) ((player[pIndex].getxPos() - lastp1x)
+					* this.interpolation + lastp1x);
+			y = (int) ((player[pIndex].getyPos() - lastp1y)
+					* this.interpolation + lastp1y);
+			lastp1x = player[pIndex].getxPos();
+			lastp1y = player[pIndex].getyPos();
+		} else if (pIndex == 1) {
+			x = (int) ((player[pIndex].getxPos() - lastp2x)
+					* this.interpolation + lastp2x);
+			y = (int) ((player[pIndex].getyPos() - lastp2y)
+					* this.interpolation + lastp2y);
+			lastp2x = player[pIndex].getxPos();
+			lastp2y = player[pIndex].getyPos();
+		}
+		g2d.drawImage(player[pIndex].getImage(), x, y, this);
+	}
+
+	// Everything to paint goes in here
+	public void paint(Graphics g) {
+		super.paint(g);
+		Graphics g2d = (Graphics2D) g;
+		paintField(g2d);
+		paintHud(g2d);
+		paintPlayer(g2d, CLIENT);
+		paintPlayer(g2d, SERVER);
+
+		Toolkit.getDefaultToolkit().sync();
+		g.dispose();
 	}
 
 }

@@ -71,7 +71,8 @@ public class NetworkMenu {
 				if (beClient.isSelected()) {
 					ipAdressToConnect = JOptionPane.showInputDialog(frame,
 							"Bitte IP Adresse eingeben" + "\n"
-									+ "Zum Beispiel \"192.168.0.1\"");
+									+ "Zum Beispiel \"192.168.0.1\"",
+							"127.0.0.1");
 					if (ipAdressToConnect != null) {
 						if (!validate(ipAdressToConnect)) {
 							JOptionPane.showMessageDialog(frame,
@@ -130,7 +131,8 @@ public class NetworkMenu {
 		ipPanel.setVisible(false);
 		confirmPanel.setVisible(false);
 		NetworkGame netG = new NetworkGame(frame, ip, type, "Maze.xml");
-
+		frame.getContentPane().add(netG);
+		netG.setVisible(true);
 	}
 
 	/**
