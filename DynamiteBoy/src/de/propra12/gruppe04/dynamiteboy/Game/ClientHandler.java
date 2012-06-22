@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
@@ -13,13 +14,14 @@ public class ClientHandler {
 	BufferedReader reader;
 	PrintWriter writer;
 	Socket socket;
+	private final int LEFT = 0, DOWN = 1, RIGHT = 2, UP = 3;
+	public int direction;
 
 	public ClientHandler(String ip) {
 		this.serverIP = ip;
 		setUpConnection();
 		Thread readerThread = new Thread(new IncomingReader());
 		readerThread.start();
-		sendHello();
 
 	}
 
@@ -42,36 +44,26 @@ public class ClientHandler {
 
 	}
 
-	private void sendHello() {
-		try {
-			writer.println("Client says Hello");
-			writer.flush();
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
-
 	public void movePlayer(int direction) {
 		// LEFT = 0, DOWN = 1, RIGHT = 2, UP = 3;
 		try {
 			switch (direction) {
-			case 0:
+			case LEFT:
 				writer.println("moveleft");
 				writer.flush();
 
 				break;
-			case 1:
+			case DOWN:
 				writer.println("movedown");
 				writer.flush();
 
 				break;
-			case 2:
+			case RIGHT:
 				writer.println("moveright");
 				writer.flush();
 
 				break;
-			case 3:
+			case UP:
 				writer.println("moveup");
 				writer.flush();
 				break;
@@ -85,31 +77,27 @@ public class ClientHandler {
 	}
 
 	public class IncomingReader implements Runnable {
-		private int dx;
-		private int dy;
 
 		@Override
 		public void run() {
-			String message;
+			String message = "0";
 			try {
-				while ((message = reader.readLine()) != null) {
-					// TODO REMOVE DEBUG
-					System.out.println("Client got message: " + message);
+				while (true) {
 					if (message.equals("moveleft")) {
-						dx = -4;
-						dy = 0;
+						direction = LEFT;
 					}
 					if (message.equals("moveright")) {
-						dx = 4;
-						dy = 0;
+						direction = RIGHT;
 					}
 					if (message.equals("movedown")) {
-						dy = 4;
-						dx = 0;
+						direction = DOWN;
 					}
 					if (message.equals("moveup")) {
-						dy = -4;
-						dx = 0;
+						direction = UP;
+					}
+					if (message.equals("0")) {
+						direction = -1;
+						TimeUnit.MILLISECONDS.sleep(100);
 					}
 
 				}
@@ -118,4 +106,9 @@ public class ClientHandler {
 			}
 		}
 	} // close IncomingReader
+
+	public int getDirection() {
+		return direction;
+	}
+
 }

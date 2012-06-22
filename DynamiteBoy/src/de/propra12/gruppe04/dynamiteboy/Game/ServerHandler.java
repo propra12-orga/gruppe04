@@ -5,15 +5,17 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.TimeUnit;
 
 public class ServerHandler {
 	PrintWriter writer;
 	ServerSocket serverSocket;
 	Socket clientSocket;
+	private final int LEFT = 0, DOWN = 1, RIGHT = 2, UP = 3;
+	public int direction;
 
 	public ServerHandler() {
 		setUpConnection();
-		sendHello();
 	}
 
 	private void setUpConnection() {
@@ -32,16 +34,6 @@ public class ServerHandler {
 			ex.printStackTrace();
 		}
 
-	}
-
-	private void sendHello() {
-		try {
-			writer.println("Server says Hello");
-			writer.flush();
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
 	}
 
 	public void movePlayer(int direction) {
@@ -78,9 +70,7 @@ public class ServerHandler {
 
 	public class HandleClient implements Runnable {
 		BufferedReader reader;
-		Socket socket;
-		private int dx;
-		private int dy;
+		Socket socket;;
 
 		public HandleClient(Socket clientSocket) {
 			try {
@@ -98,26 +88,24 @@ public class ServerHandler {
 		@Override
 		public void run() {
 
-			String message;
+			String message = "0";
 			try {
-				while ((message = reader.readLine()) != null) {
-					// TODO REMOVE DEBUG
-					System.out.println("Client got message: " + message);
+				while (true) {
 					if (message.equals("moveleft")) {
-						dx = -4;
-						dy = 0;
+						direction = LEFT;
 					}
 					if (message.equals("moveright")) {
-						dx = 4;
-						dy = 0;
+						direction = RIGHT;
 					}
 					if (message.equals("movedown")) {
-						dy = 4;
-						dx = 0;
+						direction = DOWN;
 					}
 					if (message.equals("moveup")) {
-						dy = -4;
-						dx = 0;
+						direction = UP;
+					}
+					if (message.equals("0")) {
+						direction = -1;
+						TimeUnit.MILLISECONDS.sleep(100);
 					}
 
 				}
@@ -129,5 +117,9 @@ public class ServerHandler {
 		}
 
 	}// close HandleClient
+
+	public int getDirection() {
+		return direction;
+	}
 
 }

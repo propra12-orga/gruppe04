@@ -5,12 +5,16 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import de.propra12.gruppe04.dynamiteboy.Map.ExitField;
+import de.propra12.gruppe04.dynamiteboy.Map.Field;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
+import de.propra12.gruppe04.dynamiteboy.Menu.ScoreMenu;
 
 public class NetworkGame extends JPanel {
 	private final int SERVER = 1;
@@ -35,6 +39,10 @@ public class NetworkGame extends JPanel {
 	private int lastp2x;
 	private int lastp1y;
 	private int lastp2y;
+	private String winnerName;
+	private String loserName;
+	ServerHandler server;
+	ClientHandler client;
 
 	public NetworkGame(final JFrame frame, String ip, int type, String mapName) {
 		this.frame = frame;
@@ -47,16 +55,17 @@ public class NetworkGame extends JPanel {
 		// Be client or Server
 		if (type == SERVER) {
 			frame.setTitle("Server is waiting for client");
-			ServerHandler server = new ServerHandler();
+			server = new ServerHandler();
 			frame.setTitle("DynamiteBoy - Server");
 		} else if (type == CLIENT) {
 			frame.setTitle("Client is waiting for server");
-			ClientHandler client = new ClientHandler(ip);
+			client = new ClientHandler(ip);
 			frame.setTitle("DynamiteBoy - Client");
 		}
+
 		setFocusable(true);
-		this.addKeyListener(input);
 		this.input = new InputHandler();
+		this.addKeyListener(input);
 		if (running) {
 			runGameLoop();
 			System.out.println("Gameloop started");
@@ -117,9 +126,24 @@ public class NetworkGame extends JPanel {
 	 * makes changes to the game objects (gets called within each gameLoop-step)
 	 */
 	private void updateGame() {
-		// move player
+		movePlayer();
+		moveNetworkPlayer();
+		itemHandling(SERVER);
+		itemHandling(CLIENT);
+	}
 
-		// item handling
+	private void moveNetworkPlayer() {
+		if (gameType == SERVER) {
+			if (server.getDirection() != -1) {
+				System.out.println(server.getDirection());
+				player[CLIENT].move(server.getDirection());
+			}
+		} else if (gameType == CLIENT) {
+			if (client.getDirection() != -1) {
+				System.out.println(client.getDirection());
+				player[SERVER].move(client.getDirection());
+			}
+		}
 	}
 
 	/**
@@ -130,8 +154,78 @@ public class NetworkGame extends JPanel {
 	 */
 	public void createPlayers() {
 		this.player[SERVER] = new Player(SERVER, 32, 32, map);
-		this.player[CLIENT] = new Player(CLIENT, 581, 461, map);
+		this.player[CLIENT] = new Player(CLIENT, 581, 416, map);
 
+	}
+
+	public void itemHandling(int player) {
+		int x = this.player[player].getxPos();
+		int y = this.player[player].getyPos();
+		Field f = map.getFieldByPixel(x + 16, y + 16);
+		if (f instanceof ExitField) {
+			this.winnerName = this.player[player].getPlayerName();
+			ScoreMenu m = new ScoreMenu(frame, this);
+			this.setVisible(false);
+			running = false;
+		}
+	}
+
+	// Key handling
+	/**
+	 * Moves Player 1 when keys are pressed
+	 */
+	public void movePlayer() {
+		if (input.isKeyDown(KeyEvent.VK_LEFT)) {
+			player[gameType].move(LEFT);
+			if (gameType == SERVER) {
+				server.movePlayer(LEFT);
+			} else if (gameType == CLIENT) {
+				client.movePlayer(LEFT);
+			}
+
+		}
+		if (input.isKeyDown(KeyEvent.VK_RIGHT)) {
+			player[gameType].move(RIGHT);
+			if (gameType == SERVER) {
+				server.movePlayer(RIGHT);
+			} else if (gameType == CLIENT) {
+				client.movePlayer(RIGHT);
+			}
+		}
+		if (input.isKeyDown(KeyEvent.VK_UP)) {
+			player[gameType].move(UP);
+			if (gameType == SERVER) {
+				server.movePlayer(UP);
+			} else if (gameType == CLIENT) {
+				client.movePlayer(UP);
+			}
+		}
+		if (input.isKeyDown(KeyEvent.VK_DOWN)) {
+			player[gameType].move(DOWN);
+			if (gameType == SERVER) {
+				server.movePlayer(DOWN);
+			} else if (gameType == CLIENT) {
+				client.movePlayer(DOWN);
+			}
+		}
+		if (input.isKeyDown(KeyEvent.VK_ENTER)) {
+			player[gameType].plantBomb();
+		}
+		if (input.isKeyUp(KeyEvent.VK_LEFT)) {
+			player[gameType].setDx(0);
+		}
+		if (input.isKeyUp(KeyEvent.VK_RIGHT)) {
+			player[gameType].setDx(0);
+		}
+		if (input.isKeyUp(KeyEvent.VK_UP)) {
+			player[gameType].setDy(0);
+		}
+		if (input.isKeyUp(KeyEvent.VK_DOWN)) {
+			player[gameType].setDy(0);
+		}
+		if (input.isKeyUp(KeyEvent.VK_ENTER)) {
+			// DO NOTHING
+		}
 	}
 
 	// PAINT METHODS
@@ -212,6 +306,27 @@ public class NetworkGame extends JPanel {
 
 		Toolkit.getDefaultToolkit().sync();
 		g.dispose();
+	}
+
+	public String getWinnerName() {
+		return winnerName;
+	}
+
+	public String getLoserName() {
+		return loserName;
+	}
+
+	public Map getMap() {
+		return map;
+	}
+
+	public double getCurrentGameTime() {
+
+		return currentGameTime;
+	}
+
+	public Player getPlayer(int playerIndex) {
+		return player[playerIndex];
 	}
 
 }
