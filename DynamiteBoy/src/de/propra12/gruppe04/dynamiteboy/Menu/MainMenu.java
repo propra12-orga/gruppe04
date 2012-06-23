@@ -18,6 +18,7 @@ public class MainMenu extends JPanel {
 	private JButton ButtonStart1p;
 	private JButton ButtonStart2p;
 	private JButton ButtonNetworkPlay;
+	private JButton ButtonMapEditor;
 	private JFrame frame;
 	private TitlePanel title = new TitlePanel();
 
@@ -34,9 +35,11 @@ public class MainMenu extends JPanel {
 		ButtonStart1p = new JButton("1 Spieler");
 		ButtonStart2p = new JButton("2 Spieler");
 		ButtonNetworkPlay = new JButton("Netzwerkspiel");
+		ButtonMapEditor = new JButton("Karten Editor");
 		panelButton.add(ButtonStart1p);
 		panelButton.add(ButtonStart2p);
 		panelButton.add(ButtonNetworkPlay);
+		panelButton.add(ButtonMapEditor);
 
 		/**
 		 * Sets up a single player game
@@ -58,11 +61,10 @@ public class MainMenu extends JPanel {
 				ButtonStart2p.setText("Spiel wird gestartet...");
 				loadGame(2, "Maze.xml");
 			}
-
 		});
 
 		/**
-		 * Go to Network Menu for further setup
+		 * Go to Network Menu for setting up network game
 		 * 
 		 */
 		ButtonNetworkPlay.addActionListener(new ActionListener() {
@@ -71,6 +73,19 @@ public class MainMenu extends JPanel {
 				title.setVisible(false);
 				panelButton.setVisible(false);
 				NetworkMenu nMenu = new NetworkMenu(frame);
+			}
+
+		});
+
+		/**
+		 * Go to Editor Menu and start editor
+		 */
+		ButtonMapEditor.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				title.setVisible(false);
+				panelButton.setVisible(false);
+				EditorMenu eMenu = new EditorMenu(frame);
 			}
 
 		});

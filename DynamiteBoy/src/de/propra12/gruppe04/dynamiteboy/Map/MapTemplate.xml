@@ -1,4 +1,4 @@
-<map mode="singleplayer/multiplayer" name="mapname">
+<map mode="singleplayer" name="mapname">
 	<row>
 		<Field xPos="0" yPos="0"></Field>
 		<Field xPos="1" yPos="0"></Field>
