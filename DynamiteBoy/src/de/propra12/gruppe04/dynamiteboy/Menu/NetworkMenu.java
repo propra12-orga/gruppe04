@@ -1,6 +1,7 @@
 package de.propra12.gruppe04.dynamiteboy.Menu;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.InetAddress;
@@ -93,6 +94,7 @@ public class NetworkMenu {
 		});
 
 		// Stuff referring to the ipPanel @ CENTER
+		this.ipPanel.setLayout(new GridLayout(0, 1));
 		getInterfaces(); // Display IP address
 
 		// Stuff referring to the connectPanel @ SOUTH
@@ -165,13 +167,10 @@ public class NetworkMenu {
 				while (e2.hasMoreElements()) {
 					InetAddress ip = (InetAddress) e2.nextElement();
 					System.out.println("IP address: " + ip.toString());
-					if ((ni.getName().equals("eth0") || (ni.getName()
-							.equals("wlan0"))
-							&& ip.toString().startsWith("/192"))) {
-						String ipString = ip.toString();
-						ipLabel = new JLabel("Your IP: " + ipString);
-						ipPanel.add(ipLabel);
-					}
+					String ipString = ip.toString();
+					ipLabel = new JLabel("Net interface: " + ni.getName()
+							+ " IP: " + ipString);
+					ipPanel.add(ipLabel);
 				}
 			}
 		} catch (Exception e) {

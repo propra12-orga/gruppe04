@@ -24,6 +24,8 @@ public class NetworkGame extends JPanel {
 	private Map map;
 	private InputHandler input;
 	private boolean running = true;
+	double startTime;
+	private int numberOfPlayers = 2;
 	final double GAME_FREQUENCY = 30.0;
 	final double MAX_FPS = 60;
 	final double TIME_BETWEEN_UPDATES = 1000000000 / GAME_FREQUENCY;
@@ -31,9 +33,9 @@ public class NetworkGame extends JPanel {
 	final double TARGET_TIME_BETWEEN_RENDERS = 1000000000 / MAX_FPS;
 	private float interpolation;
 	private final int LEFT = 0, DOWN = 1, RIGHT = 2, UP = 3;
-	double startTime = System.currentTimeMillis();
 	double currentGameTime;
 	private int gameType;
+	private int netType;
 	private Player[] player = new Player[2];
 	private int lastp1x;
 	private int lastp2x;
@@ -41,8 +43,7 @@ public class NetworkGame extends JPanel {
 	private int lastp2y;
 	private String winnerName;
 	private String loserName;
-	ServerHandler server;
-	ClientHandler client;
+	NetworkHandler net;
 
 	public NetworkGame(final JFrame frame, String ip, int type, String mapName) {
 		this.frame = frame;
@@ -54,12 +55,14 @@ public class NetworkGame extends JPanel {
 
 		// Be client or Server
 		if (type == SERVER) {
+			netType = CLIENT;
 			frame.setTitle("Server is waiting for client");
-			server = new ServerHandler();
+			net = new NetworkHandler(ip, SERVER);
 			frame.setTitle("DynamiteBoy - Server");
 		} else if (type == CLIENT) {
+			netType = SERVER;
 			frame.setTitle("Client is waiting for server");
-			client = new ClientHandler(ip);
+			net = new NetworkHandler(ip, CLIENT);
 			frame.setTitle("DynamiteBoy - Client");
 		}
 
@@ -68,7 +71,6 @@ public class NetworkGame extends JPanel {
 		this.addKeyListener(input);
 		if (running) {
 			runGameLoop();
-			System.out.println("Gameloop started");
 		}
 	}
 
@@ -120,37 +122,29 @@ public class NetworkGame extends JPanel {
 			}
 		};
 		loop.start();
+		// set at this point so everyone has the same time
+		startTime = System.currentTimeMillis();
 	}
 
 	/**
 	 * makes changes to the game objects (gets called within each gameLoop-step)
+	 * 
 	 */
 	private void updateGame() {
 		movePlayer();
-		moveNetworkPlayer();
+		sendPlayerPosition();
+		updateNetworkPlayer();
 		itemHandling(SERVER);
 		itemHandling(CLIENT);
 	}
 
-	private void moveNetworkPlayer() {
-		if (gameType == SERVER) {
-			if (server.getDirection() != -1) {
-				System.out.println(server.getDirection());
-				player[CLIENT].move(server.getDirection());
-			}
-		} else if (gameType == CLIENT) {
-			if (client.getDirection() != -1) {
-				System.out.println(client.getDirection());
-				player[SERVER].move(client.getDirection());
-			}
-		}
+	private void sendPlayerPosition() {
+		net.sendPlayerdata(this.getPlayer(gameType));
 	}
 
 	/**
 	 * creates players and sets starting positions
 	 * 
-	 * @param numberOfPlayers
-	 *            to create
 	 */
 	public void createPlayers() {
 		this.player[SERVER] = new Player(SERVER, 32, 32, map);
@@ -168,48 +162,56 @@ public class NetworkGame extends JPanel {
 			this.setVisible(false);
 			running = false;
 		}
+		if (f.isDeadly() == true) {
+			if (player == CLIENT) {
+				this.loserName = "Client";
+				this.winnerName = "Server";
+			} else {
+				this.loserName = "Server";
+				this.winnerName = "Client";
+			}
+			ScoreMenu m = new ScoreMenu(frame, this);
+			this.setVisible(false);
+			running = false;
+		}
 	}
 
-	// Key handling
+	// Key handling / Player movement
+
 	/**
-	 * Moves Player 1 when keys are pressed
+	 * Updates everything referring to the networkplayer such as position and
+	 * bombs
+	 * 
+	 */
+	private void updateNetworkPlayer() {
+		player[netType].setxPos(net.getPlayerXPos());
+		player[netType].setyPos(net.getPlayerYPos());
+		player[netType].setBombCount(net.getPlayerBombcount());
+		if (net.playerBomb == true) {
+			net.setPlayerBomb(false);
+			player[netType].plantBomb();
+		}
+	}
+
+	/**
+	 * Moves Player of this instance when keys are pressed
 	 */
 	public void movePlayer() {
 		if (input.isKeyDown(KeyEvent.VK_LEFT)) {
 			player[gameType].move(LEFT);
-			if (gameType == SERVER) {
-				server.movePlayer(LEFT);
-			} else if (gameType == CLIENT) {
-				client.movePlayer(LEFT);
-			}
-
 		}
 		if (input.isKeyDown(KeyEvent.VK_RIGHT)) {
 			player[gameType].move(RIGHT);
-			if (gameType == SERVER) {
-				server.movePlayer(RIGHT);
-			} else if (gameType == CLIENT) {
-				client.movePlayer(RIGHT);
-			}
 		}
 		if (input.isKeyDown(KeyEvent.VK_UP)) {
 			player[gameType].move(UP);
-			if (gameType == SERVER) {
-				server.movePlayer(UP);
-			} else if (gameType == CLIENT) {
-				client.movePlayer(UP);
-			}
 		}
 		if (input.isKeyDown(KeyEvent.VK_DOWN)) {
 			player[gameType].move(DOWN);
-			if (gameType == SERVER) {
-				server.movePlayer(DOWN);
-			} else if (gameType == CLIENT) {
-				client.movePlayer(DOWN);
-			}
 		}
 		if (input.isKeyDown(KeyEvent.VK_ENTER)) {
 			player[gameType].plantBomb();
+			net.sendBombData(true);
 		}
 		if (input.isKeyUp(KeyEvent.VK_LEFT)) {
 			player[gameType].setDx(0);
@@ -224,7 +226,6 @@ public class NetworkGame extends JPanel {
 			player[gameType].setDy(0);
 		}
 		if (input.isKeyUp(KeyEvent.VK_ENTER)) {
-			// DO NOTHING
 		}
 	}
 
@@ -258,10 +259,10 @@ public class NetworkGame extends JPanel {
 		g2d.setFont(font);
 		g2d.drawString("Time: " + (int) currentGameTime / 60 + ":"
 				+ (int) currentGameTime % 60, 5, 492);
-		g2d.drawString("Player #1", 100, 492);
+		g2d.drawString("Player #1 (Client)", 100, 492);
 		g2d.drawString("Bombs left: " + player[CLIENT].getBombCount(), 100, 505);
-		g2d.drawString("Player #2", 200, 492);
-		g2d.drawString("Bombs left: " + player[SERVER].getBombCount(), 200, 505);
+		g2d.drawString("Player #2 (Server)", 250, 492);
+		g2d.drawString("Bombs left: " + player[SERVER].getBombCount(), 250, 505);
 	}
 
 	/**

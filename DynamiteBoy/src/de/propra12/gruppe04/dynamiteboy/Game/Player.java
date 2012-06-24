@@ -124,12 +124,20 @@ public class Player {
 		return xPos;
 	}
 
+	public void setxPos(int xPos) {
+		this.xPos = xPos;
+	}
+
 	/**
 	 * 
 	 * @return Player-position in pixel
 	 */
 	public int getyPos() {
 		return yPos;
+	}
+
+	public void setyPos(int yPos) {
+		this.yPos = yPos;
 	}
 
 	/**

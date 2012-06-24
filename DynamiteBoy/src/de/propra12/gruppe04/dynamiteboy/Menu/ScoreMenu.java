@@ -70,6 +70,7 @@ public class ScoreMenu extends JPanel {
 		this.loserName = g.getLoserName();
 		this.gameMinutes = (int) g.getCurrentGameTime() / 60;
 		this.gameSeconds = (int) g.getCurrentGameTime() % 60;
+		this.playerCount = 2;
 		this.player1BombCount = g.getPlayer(0).BOMBS
 				- g.getPlayer(0).getBombCount();
 		this.player2BombCount = g.getPlayer(1).BOMBS
