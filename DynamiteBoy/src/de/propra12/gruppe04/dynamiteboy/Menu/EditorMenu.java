@@ -23,13 +23,14 @@ public class EditorMenu extends JPanel {
 		frame.setTitle("DynamiteBoy - Karteneditor");
 		buttonStartEditor = new JButton("Starte Editor");
 		panelButton.add(buttonStartEditor);
-
 		buttonStartEditor.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				panelButton.setVisible(false);
 				Editor editor = new Editor(frame);
+				frame.add(editor);
+				editor.setVisible(true);
 			}
 		});
 		frame.getContentPane().add(BorderLayout.SOUTH, panelButton);

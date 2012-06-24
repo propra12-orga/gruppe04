@@ -17,6 +17,7 @@ public class Map {
 										// map
 	private static int gridWidth; // width of the map in fields
 	private static int gridHeight; // height of the map in fields
+	private String mapName;
 
 	/**
 	 * Creates a Map from an XML file

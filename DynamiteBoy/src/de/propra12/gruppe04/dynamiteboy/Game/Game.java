@@ -26,9 +26,7 @@ public class Game extends JPanel {
 	private int numberOfPlayers;
 	private InputHandler input;
 	private int bombcount;
-	// Player constants
-
-	// Movement constants
+	// Stuff for the loop
 	private boolean running = true;
 	private float interpolation;
 	// TODO find a nicer way to handle lastplayer positions (maybe store them in
@@ -181,7 +179,7 @@ public class Game extends JPanel {
 	// KEY HANDLING AND PAINT METHODS
 
 	/**
-	 * paints the hub on the bottom of the game window
+	 * paints the hud on the bottom of the game window
 	 * 
 	 */
 	public void paintHud(Graphics g2d) {

@@ -17,7 +17,7 @@ public abstract class Field {
 									// false=this field does not kill players
 	private Item item; // item that this field holds
 	private ImageIcon image; // image of this field
-	String fieldpic; // path to the iamge of this field
+	String fieldpic; // path to the image of this field
 
 	/**
 	 * creates a new Field
