@@ -1,13 +1,9 @@
 package de.propra12.gruppe04.dynamiteboy.Map;
 
+import de.propra12.gruppe04.dynamiteboy.Game.C;
 import de.propra12.gruppe04.dynamiteboy.Item.Item;
 
 public class DestroyableField extends Field {
-	private static final String DEFAULT_PIC = "../images/db_field_destroyable.png";
-	private static final boolean DEFAULT_BLOCKED = true;
-	private static final boolean DEFAULT_DESTROYABLE = true;
-	private static final boolean DEFAULT_EXPLODABLE = true;
-	private static final Item DEFAULT_ITEM = null;
 
 	DestroyableField(boolean blocked, boolean destroyable, boolean explodable,
 			Item item, String pic) {
@@ -15,8 +11,9 @@ public class DestroyableField extends Field {
 	}
 
 	DestroyableField() {
-		super(DEFAULT_BLOCKED, DEFAULT_DESTROYABLE, DEFAULT_EXPLODABLE,
-				DEFAULT_ITEM, DEFAULT_PIC);
+		super(C.DESTROYABLEFIELD_DEFAULT_BLOCKED, C.DESTROYABLEFIELD_DEFAULT_DESTROYABLE,
+				C.DESTROYABLEFIELD_DEFAULT_EXPLODABLE, C.DESTROYABLEFIELD_DEFAULT_ITEM,
+				C.DESTROYABLEFIELD_DEFAULT_PIC);
 	}
 
 }

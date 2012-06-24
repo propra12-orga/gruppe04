@@ -1,15 +1,9 @@
 package de.propra12.gruppe04.dynamiteboy.Map;
 
+import de.propra12.gruppe04.dynamiteboy.Game.C;
 import de.propra12.gruppe04.dynamiteboy.Item.Item;
 
 public class WallField extends Field {
-	// CONSTANTS
-	private static final String DEFAULT_PIC = "../images/db_field_wall.png";
-	private static final boolean DEFAULT_BLOCKED = true;
-	private static final boolean DEAFULT_DESTROYABLE = false;
-	private static final boolean DEFAULT_EXPLODABLE = false;
-	private static final Item DEFAULT_ITEM = null;
-	private static final boolean DEFAULT_DEADLY = false;
 
 	WallField(boolean blocked, boolean destroyable, boolean explodable,
 			Item item, String pic) {
@@ -18,11 +12,12 @@ public class WallField extends Field {
 
 	WallField(boolean blocked, boolean destroyable, boolean explodable,
 			Item item) {
-		super(blocked, destroyable, explodable, item, DEFAULT_PIC);
+		super(blocked, destroyable, explodable, item, C.WALLFIELD_DEFAULT_PIC);
 	}
 
 	WallField() {
-		super(DEFAULT_BLOCKED, DEAFULT_DESTROYABLE, DEFAULT_EXPLODABLE,
-				DEFAULT_ITEM, DEFAULT_PIC);
+		super(C.WALLFIELD_DEFAULT_BLOCKED, C.WALLFIELD_DEAFULT_DESTROYABLE,
+				C.WALLFIELD_DEFAULT_EXPLODABLE, C.WALLFIELD_DEFAULT_ITEM,
+				C.WALLFIELD_DEFAULT_PIC);
 	}
 }

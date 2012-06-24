@@ -22,7 +22,6 @@ public class NetworkHandler {
 	protected ServerSocket serverSocket;
 	protected Socket clientSocket;
 	protected ObjectInputStream in;
-	private final int SERVER = 1, CLIENT = 0;
 	private String ip;
 	protected Socket socket;
 	protected BufferedReader reader;
@@ -45,10 +44,10 @@ public class NetworkHandler {
 	public NetworkHandler(String ip, int type) {
 		this.ip = ip;
 		switch (type) {
-		case SERVER:
+		case C.SERVER:
 			setUpServer();
 			break;
-		case CLIENT:
+		case C.CLIENT:
 			setUpClient(ip);
 			break;
 		}

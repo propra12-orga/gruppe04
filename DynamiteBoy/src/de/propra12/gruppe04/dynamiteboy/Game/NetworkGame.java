@@ -17,8 +17,6 @@ import de.propra12.gruppe04.dynamiteboy.Map.Map;
 import de.propra12.gruppe04.dynamiteboy.Menu.ScoreMenu;
 
 public class NetworkGame extends JPanel {
-	private final int SERVER = 1;
-	private final int CLIENT = 0;
 	private String serverIP;
 	private JFrame frame;
 	private Map map;
@@ -26,13 +24,8 @@ public class NetworkGame extends JPanel {
 	private boolean running = true;
 	double startTime;
 	private int numberOfPlayers = 2;
-	final double GAME_FREQUENCY = 30.0;
-	final double MAX_FPS = 60;
-	final double TIME_BETWEEN_UPDATES = 1000000000 / GAME_FREQUENCY;
-	final int MAX_UPDATES_BEFORE_RENDER = 5;
-	final double TARGET_TIME_BETWEEN_RENDERS = 1000000000 / MAX_FPS;
+
 	private float interpolation;
-	private final int LEFT = 0, DOWN = 1, RIGHT = 2, UP = 3;
 	double currentGameTime;
 	private int gameType;
 	private int netType;
@@ -54,15 +47,15 @@ public class NetworkGame extends JPanel {
 		createPlayers();
 
 		// Be client or Server
-		if (type == SERVER) {
-			netType = CLIENT;
+		if (type == C.SERVER) {
+			netType = C.CLIENT;
 			frame.setTitle("Server is waiting for client");
-			net = new NetworkHandler(ip, SERVER);
+			net = new NetworkHandler(ip, C.SERVER);
 			frame.setTitle("DynamiteBoy - Server");
-		} else if (type == CLIENT) {
-			netType = SERVER;
+		} else if (type == C.CLIENT) {
+			netType = C.SERVER;
 			frame.setTitle("Client is waiting for server");
-			net = new NetworkHandler(ip, CLIENT);
+			net = new NetworkHandler(ip, C.CLIENT);
 			frame.setTitle("DynamiteBoy - Client");
 		}
 
@@ -81,17 +74,17 @@ public class NetworkGame extends JPanel {
 		while (running) {
 			double now = System.nanoTime();
 			int updateCount = 0;
-			while (now - lastUpdateTime > TIME_BETWEEN_UPDATES
-					&& updateCount < MAX_UPDATES_BEFORE_RENDER) {
+			while (now - lastUpdateTime > C.TIME_BETWEEN_UPDATES
+					&& updateCount < C.MAX_UPDATES_BEFORE_RENDER) {
 				updateGame();
-				lastUpdateTime += TIME_BETWEEN_UPDATES;
+				lastUpdateTime += C.TIME_BETWEEN_UPDATES;
 				updateCount++;
 			}
-			if (now - lastUpdateTime > TIME_BETWEEN_UPDATES) {
-				lastUpdateTime = now - TIME_BETWEEN_UPDATES;
+			if (now - lastUpdateTime > C.TIME_BETWEEN_UPDATES) {
+				lastUpdateTime = now - C.TIME_BETWEEN_UPDATES;
 			}
 			this.interpolation = Math.min(1.0f,
-					(float) ((now - lastUpdateTime) / TIME_BETWEEN_UPDATES));
+					(float) ((now - lastUpdateTime) / C.TIME_BETWEEN_UPDATES));
 			repaint();
 			currentGameTime = (System.currentTimeMillis() - startTime) / 1000;
 			lastRenderTime = now;
@@ -100,8 +93,8 @@ public class NetworkGame extends JPanel {
 			if (thisSecond > lastSecondTime) {
 				lastSecondTime = thisSecond;
 			}
-			while (now - lastRenderTime < TARGET_TIME_BETWEEN_RENDERS
-					&& now - lastUpdateTime < TIME_BETWEEN_UPDATES) {
+			while (now - lastRenderTime < C.TARGET_TIME_BETWEEN_RENDERS
+					&& now - lastUpdateTime < C.TIME_BETWEEN_UPDATES) {
 				Thread.yield();
 				try {
 					Thread.sleep(1);
@@ -134,8 +127,8 @@ public class NetworkGame extends JPanel {
 		movePlayer();
 		sendPlayerPosition();
 		updateNetworkPlayer();
-		itemHandling(SERVER);
-		itemHandling(CLIENT);
+		itemHandling(C.SERVER);
+		itemHandling(C.CLIENT);
 	}
 
 	private void sendPlayerPosition() {
@@ -147,8 +140,8 @@ public class NetworkGame extends JPanel {
 	 * 
 	 */
 	public void createPlayers() {
-		this.player[SERVER] = new Player(SERVER, 32, 32, map);
-		this.player[CLIENT] = new Player(CLIENT, 581, 416, map);
+		this.player[C.SERVER] = new Player(C.SERVER, 32, 32, map);
+		this.player[C.CLIENT] = new Player(C.CLIENT, 581, 416, map);
 
 	}
 
@@ -163,7 +156,7 @@ public class NetworkGame extends JPanel {
 			running = false;
 		}
 		if (f.isDeadly() == true) {
-			if (player == CLIENT) {
+			if (player == C.CLIENT) {
 				this.loserName = "Client";
 				this.winnerName = "Server";
 			} else {
@@ -198,16 +191,16 @@ public class NetworkGame extends JPanel {
 	 */
 	public void movePlayer() {
 		if (input.isKeyDown(KeyEvent.VK_LEFT)) {
-			player[gameType].move(LEFT);
+			player[gameType].move(C.LEFT);
 		}
 		if (input.isKeyDown(KeyEvent.VK_RIGHT)) {
-			player[gameType].move(RIGHT);
+			player[gameType].move(C.RIGHT);
 		}
 		if (input.isKeyDown(KeyEvent.VK_UP)) {
-			player[gameType].move(UP);
+			player[gameType].move(C.UP);
 		}
 		if (input.isKeyDown(KeyEvent.VK_DOWN)) {
-			player[gameType].move(DOWN);
+			player[gameType].move(C.DOWN);
 		}
 		if (input.isKeyDown(KeyEvent.VK_ENTER)) {
 			player[gameType].plantBomb();
@@ -260,9 +253,11 @@ public class NetworkGame extends JPanel {
 		g2d.drawString("Time: " + (int) currentGameTime / 60 + ":"
 				+ (int) currentGameTime % 60, 5, 492);
 		g2d.drawString("Player #1 (Client)", 100, 492);
-		g2d.drawString("Bombs left: " + player[CLIENT].getBombCount(), 100, 505);
+		g2d.drawString("Bombs left: " + player[C.CLIENT].getBombCount(), 100,
+				505);
 		g2d.drawString("Player #2 (Server)", 250, 492);
-		g2d.drawString("Bombs left: " + player[SERVER].getBombCount(), 250, 505);
+		g2d.drawString("Bombs left: " + player[C.SERVER].getBombCount(), 250,
+				505);
 	}
 
 	/**
@@ -302,8 +297,8 @@ public class NetworkGame extends JPanel {
 		Graphics g2d = (Graphics2D) g;
 		paintField(g2d);
 		paintHud(g2d);
-		paintPlayer(g2d, CLIENT);
-		paintPlayer(g2d, SERVER);
+		paintPlayer(g2d, C.CLIENT);
+		paintPlayer(g2d, C.SERVER);
 
 		Toolkit.getDefaultToolkit().sync();
 		g.dispose();

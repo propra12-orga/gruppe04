@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import de.propra12.gruppe04.dynamiteboy.Game.C;
 import de.propra12.gruppe04.dynamiteboy.Game.NetworkGame;
 
 public class NetworkMenu {
@@ -34,8 +35,7 @@ public class NetworkMenu {
 	private JButton buttonConnect;
 	private JLabel confirmLabel;
 	private String ipAdressToConnect;
-	private final int SERVER = 1;
-	private final int CLIENT = 0;
+
 	// IP Address Verification
 	private static final String IPADDRESS_REGEX = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
 			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
@@ -125,9 +125,9 @@ public class NetworkMenu {
 	}
 
 	private void loadGame(String ip) {
-		int type = CLIENT;
+		int type = C.CLIENT;
 		if (beServer.isSelected()) {
-			type = SERVER;
+			type = C.SERVER;
 		}
 		choosePanel.setVisible(false);
 		ipPanel.setVisible(false);

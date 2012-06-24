@@ -27,9 +27,8 @@ public class Game extends JPanel {
 	private InputHandler input;
 	private int bombcount;
 	// Player constants
-	private final int PLAYER1 = 0, PLAYER2 = 1;
+
 	// Movement constants
-	private final int LEFT = 0, DOWN = 1, RIGHT = 2, UP = 3;
 	private boolean running = true;
 	private float interpolation;
 	// TODO find a nicer way to handle lastplayer positions (maybe store them in
@@ -38,12 +37,6 @@ public class Game extends JPanel {
 	private int lastp2x;
 	private int lastp1y;
 	private int lastp2y;
-	// Game constants
-	final double GAME_FREQUENCY = 30.0;
-	final double MAX_FPS = 60;
-	final double TIME_BETWEEN_UPDATES = 1000000000 / GAME_FREQUENCY;
-	final int MAX_UPDATES_BEFORE_RENDER = 5;
-	final double TARGET_TIME_BETWEEN_RENDERS = 1000000000 / MAX_FPS;
 	double startTime = System.currentTimeMillis();
 	double currentGameTime;
 
@@ -81,17 +74,17 @@ public class Game extends JPanel {
 		while (running) {
 			double now = System.nanoTime();
 			int updateCount = 0;
-			while (now - lastUpdateTime > TIME_BETWEEN_UPDATES
-					&& updateCount < MAX_UPDATES_BEFORE_RENDER) {
+			while (now - lastUpdateTime > C.TIME_BETWEEN_UPDATES
+					&& updateCount < C.MAX_UPDATES_BEFORE_RENDER) {
 				updateGame();
-				lastUpdateTime += TIME_BETWEEN_UPDATES;
+				lastUpdateTime += C.TIME_BETWEEN_UPDATES;
 				updateCount++;
 			}
-			if (now - lastUpdateTime > TIME_BETWEEN_UPDATES) {
-				lastUpdateTime = now - TIME_BETWEEN_UPDATES;
+			if (now - lastUpdateTime > C.TIME_BETWEEN_UPDATES) {
+				lastUpdateTime = now - C.TIME_BETWEEN_UPDATES;
 			}
 			this.interpolation = Math.min(1.0f,
-					(float) ((now - lastUpdateTime) / TIME_BETWEEN_UPDATES));
+					(float) ((now - lastUpdateTime) / C.TIME_BETWEEN_UPDATES));
 			repaint();
 			currentGameTime = (System.currentTimeMillis() - startTime) / 1000;
 			lastRenderTime = now;
@@ -100,8 +93,8 @@ public class Game extends JPanel {
 			if (thisSecond > lastSecondTime) {
 				lastSecondTime = thisSecond;
 			}
-			while (now - lastRenderTime < TARGET_TIME_BETWEEN_RENDERS
-					&& now - lastUpdateTime < TIME_BETWEEN_UPDATES) {
+			while (now - lastRenderTime < C.TARGET_TIME_BETWEEN_RENDERS
+					&& now - lastUpdateTime < C.TIME_BETWEEN_UPDATES) {
 				Thread.yield();
 				try {
 					Thread.sleep(1);
@@ -118,12 +111,12 @@ public class Game extends JPanel {
 	private void updateGame() {
 		if (numberOfPlayers == 1) {
 			movePlayer1();
-			itemHandling(player[PLAYER1]);
+			itemHandling(player[C.PLAYER1]);
 		} else if (numberOfPlayers == 2) {
 			movePlayer1();
-			itemHandling(player[PLAYER1]);
+			itemHandling(player[C.PLAYER1]);
 			movePlayer2();
-			itemHandling(player[PLAYER2]);
+			itemHandling(player[C.PLAYER2]);
 		}
 	}
 
@@ -167,16 +160,16 @@ public class Game extends JPanel {
 			running = false;
 		}
 		if (f.isDeadly() == true) {
-			if (player == this.player[PLAYER1]) {
+			if (player == this.player[C.PLAYER1]) {
 				if (numberOfPlayers == 1) {
 					this.loserName = player.getPlayerName();
 				} else {
 					this.loserName = player.getPlayerName();
-					this.winnerName = this.player[PLAYER2].getPlayerName();
+					this.winnerName = this.player[C.PLAYER2].getPlayerName();
 				}
 			} else {
 				this.loserName = player.getPlayerName();
-				this.winnerName = this.player[PLAYER1].getPlayerName();
+				this.winnerName = this.player[C.PLAYER1].getPlayerName();
 			}
 			ScoreMenu m = new ScoreMenu(frame, this);
 			this.setVisible(false);
@@ -201,11 +194,11 @@ public class Game extends JPanel {
 		g2d.drawString("Time: " + (int) currentGameTime / 60 + ":"
 				+ (int) currentGameTime % 60, 5, 492);
 		g2d.drawString("Player #1", 100, 492);
-		g2d.drawString("Bombs left: " + player[PLAYER1].getBombCount(), 100,
+		g2d.drawString("Bombs left: " + player[C.PLAYER1].getBombCount(), 100,
 				505);
 		if (numberOfPlayers > 1) {
 			g2d.drawString("Player #2", 200, 492);
-			g2d.drawString("Bombs left: " + player[PLAYER2].getBombCount(),
+			g2d.drawString("Bombs left: " + player[C.PLAYER2].getBombCount(),
 					200, 505);
 		}
 	}
@@ -277,31 +270,31 @@ public class Game extends JPanel {
 	public void movePlayer1() {
 		// Player 1 Movement
 		if (input.isKeyDown(KeyEvent.VK_LEFT)) {
-			player[PLAYER1].move(LEFT);
+			player[C.PLAYER1].move(C.LEFT);
 		}
 		if (input.isKeyDown(KeyEvent.VK_RIGHT)) {
-			player[PLAYER1].move(RIGHT);
+			player[C.PLAYER1].move(C.RIGHT);
 		}
 		if (input.isKeyDown(KeyEvent.VK_UP)) {
-			player[PLAYER1].move(UP);
+			player[C.PLAYER1].move(C.UP);
 		}
 		if (input.isKeyDown(KeyEvent.VK_DOWN)) {
-			player[PLAYER1].move(DOWN);
+			player[C.PLAYER1].move(C.DOWN);
 		}
 		if (input.isKeyDown(KeyEvent.VK_ENTER)) {
-			player[PLAYER1].plantBomb();
+			player[C.PLAYER1].plantBomb();
 		}
 		if (input.isKeyUp(KeyEvent.VK_LEFT)) {
-			player[PLAYER1].setDx(0);
+			player[C.PLAYER1].setDx(0);
 		}
 		if (input.isKeyUp(KeyEvent.VK_RIGHT)) {
-			player[PLAYER1].setDx(0);
+			player[C.PLAYER1].setDx(0);
 		}
 		if (input.isKeyUp(KeyEvent.VK_UP)) {
-			player[PLAYER1].setDy(0);
+			player[C.PLAYER1].setDy(0);
 		}
 		if (input.isKeyUp(KeyEvent.VK_DOWN)) {
-			player[PLAYER1].setDy(0);
+			player[C.PLAYER1].setDy(0);
 		}
 		if (input.isKeyUp(KeyEvent.VK_ENTER)) {
 			// DO NOTHING
@@ -314,31 +307,31 @@ public class Game extends JPanel {
 
 	public void movePlayer2() {
 		if (input.isKeyDown(KeyEvent.VK_A)) {
-			player[PLAYER2].move(LEFT);
+			player[C.PLAYER2].move(C.LEFT);
 		}
 		if (input.isKeyDown(KeyEvent.VK_D)) {
-			player[PLAYER2].move(RIGHT);
+			player[C.PLAYER2].move(C.RIGHT);
 		}
 		if (input.isKeyDown(KeyEvent.VK_W)) {
-			player[PLAYER2].move(UP);
+			player[C.PLAYER2].move(C.UP);
 		}
 		if (input.isKeyDown(KeyEvent.VK_S)) {
-			player[PLAYER2].move(DOWN);
+			player[C.PLAYER2].move(C.DOWN);
 		}
 		if (input.isKeyDown(KeyEvent.VK_SPACE)) {
-			player[PLAYER2].plantBomb();
+			player[C.PLAYER2].plantBomb();
 		}
 		if (input.isKeyUp(KeyEvent.VK_A)) {
-			player[PLAYER2].setDx(0);
+			player[C.PLAYER2].setDx(0);
 		}
 		if (input.isKeyUp(KeyEvent.VK_D)) {
-			player[PLAYER2].setDx(0);
+			player[C.PLAYER2].setDx(0);
 		}
 		if (input.isKeyUp(KeyEvent.VK_W)) {
-			player[PLAYER2].setDy(0);
+			player[C.PLAYER2].setDy(0);
 		}
 		if (input.isKeyUp(KeyEvent.VK_S)) {
-			player[PLAYER2].setDy(0);
+			player[C.PLAYER2].setDy(0);
 		}
 		if (input.isKeyUp(KeyEvent.VK_SPACE)) {
 			// DO NOTHING

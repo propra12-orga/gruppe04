@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import de.propra12.gruppe04.dynamiteboy.Game.C;
 import de.propra12.gruppe04.dynamiteboy.Game.Game;
 import de.propra12.gruppe04.dynamiteboy.Game.NetworkGame;
 
@@ -43,11 +44,9 @@ public class ScoreMenu extends JPanel {
 		this.gameMinutes = (int) g.getCurrentGameTime() / 60;
 		this.gameSeconds = (int) g.getCurrentGameTime() % 60;
 		this.playerCount = g.getNumberOfPlayers();
-		this.player1BombCount = g.getPlayer(0).BOMBS
-				- g.getPlayer(0).getBombCount();
+		this.player1BombCount = C.BOMBS - g.getPlayer(0).getBombCount();
 		if (playerCount > 1) {
-			this.player2BombCount = g.getPlayer(1).BOMBS
-					- g.getPlayer(1).getBombCount();
+			this.player2BombCount = C.BOMBS - g.getPlayer(1).getBombCount();
 		}
 		buttonBackToMain = new JButton("Zurück zum Hauptmenü");
 		buttonBackToMain.addActionListener(new ActionListener() {
@@ -71,10 +70,8 @@ public class ScoreMenu extends JPanel {
 		this.gameMinutes = (int) g.getCurrentGameTime() / 60;
 		this.gameSeconds = (int) g.getCurrentGameTime() % 60;
 		this.playerCount = 2;
-		this.player1BombCount = g.getPlayer(0).BOMBS
-				- g.getPlayer(0).getBombCount();
-		this.player2BombCount = g.getPlayer(1).BOMBS
-				- g.getPlayer(1).getBombCount();
+		this.player1BombCount = C.BOMBS - g.getPlayer(0).getBombCount();
+		this.player2BombCount = C.BOMBS - g.getPlayer(1).getBombCount();
 		buttonBackToMain = new JButton("Zurück zum Hauptmenü");
 		buttonBackToMain.addActionListener(new ActionListener() {
 			@Override
