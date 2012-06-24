@@ -1,7 +1,6 @@
 package de.propra12.gruppe04.dynamiteboy.Menu;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.InetAddress;
@@ -10,13 +9,17 @@ import java.util.Enumeration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.UIManager;
 
 import de.propra12.gruppe04.dynamiteboy.Game.C;
 import de.propra12.gruppe04.dynamiteboy.Game.NetworkGame;
@@ -79,14 +82,11 @@ public class NetworkMenu {
 							JOptionPane.showMessageDialog(frame,
 									"IP Adresse nicht korrekt");
 						} else if (validate(ipAdressToConnect)) {
-							confirmLabel
-									.setText("Du darfst dich nun verbinden!");
 							setConnectButtonActive();
 						}
 					}
 
 				} else if (beServer.isSelected()) {
-					confirmLabel.setText("Du darfst dich nun verbinden!");
 					setConnectButtonActive();
 				}
 			}
@@ -94,13 +94,24 @@ public class NetworkMenu {
 		});
 
 		// Stuff referring to the ipPanel @ CENTER
-		this.ipPanel.setLayout(new GridLayout(0, 1));
+		ipPanel.setLayout(new BoxLayout(ipPanel, BoxLayout.Y_AXIS));
+		ipPanel.setBorder(BorderFactory.createBevelBorder(0));
+		JLabel steps1 = new JLabel(
+				"Bitte wählen sie ihren Verbindungstyp und bestätigen sie die Auswahl!");
+		ipPanel.add(steps1);
+		JLabel steps2 = new JLabel("Dann erst können sie sich Verbinden");
+		ipPanel.add(steps2);
+		JLabel warningLabel = new JLabel(
+				"BEACHTEN SIE DAS DER SERVER ZUERST STARTEN MUSS!");
+		Icon icon = UIManager.getIcon("OptionPane.warningIcon");
+		warningLabel.setIcon(icon);
+		ipPanel.add(warningLabel);
+		JLabel blanklabel = new JLabel(" ");
+		ipPanel.add(blanklabel);
 		getInterfaces(); // Display IP address
 
 		// Stuff referring to the connectPanel @ SOUTH
-		confirmLabel = new JLabel("Alles richtig eingegeben?");
 		buttonConnect = new JButton("Verbinden");
-		confirmPanel.add(confirmLabel);
 		confirmPanel.add(buttonConnect);
 
 		// Add everything to the frame and set it visible
@@ -150,9 +161,7 @@ public class NetworkMenu {
 	}
 
 	/**
-	 * Gets all ip-addresses of the current system and prints out the one of
-	 * eth0 that starts with /192 so one can use it to connect to the specific
-	 * server socket
+	 * Gets all ip-addresses of the current system and prints them out
 	 * 
 	 */
 	private void getInterfaces() {
