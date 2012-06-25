@@ -3,6 +3,11 @@ package de.propra12.gruppe04.dynamiteboy.Game;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+/**
+ * 
+ * Handles key events
+ * 
+ */
 public class InputHandler implements KeyListener {
 	private int[] keys = new int[256];
 
@@ -31,10 +36,22 @@ public class InputHandler implements KeyListener {
 		}
 	}
 
+	/**
+	 * @param key
+	 *            Keys are referred by the constants in
+	 *            <i>java.awt.event.KeyEvent</i>
+	 * @return true if specified key is pressed
+	 */
 	public boolean isKeyDown(int key) {
 		return is_key_down[key];
 	}
 
+	/**
+	 * @param key
+	 *            Keys are referred by the constants in
+	 *            <i>java.awt.event.KeyEvent</i>
+	 * @return true if specified key is not pressed
+	 */
 	public boolean isKeyUp(int key) {
 		return is_key_up[key];
 	}

@@ -7,6 +7,10 @@ import javax.swing.ImageIcon;
 import de.propra12.gruppe04.dynamiteboy.Item.Bomb;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
 
+/**
+ * Player class with everything the player does e.g. move or plantBomb
+ * 
+ */
 public class Player {
 	private int dx;
 	private int dy;
@@ -95,10 +99,7 @@ public class Player {
 	/**
 	 * Plants a bomb on current grid-position
 	 * 
-	 * @param pIndex
-	 *            player to plant the bomb
 	 */
-
 	public void plantBomb() {
 		if (map.getField(getGridfieldXByMiddle(), getGridfieldYByMiddle())
 				.getItem() instanceof Bomb) {
@@ -122,6 +123,12 @@ public class Player {
 		return xPos;
 	}
 
+	/**
+	 * Sets the x position of the player
+	 * 
+	 * @param xPos
+	 *            Position in pixel
+	 */
 	public void setxPos(int xPos) {
 		this.xPos = xPos;
 	}
@@ -134,6 +141,12 @@ public class Player {
 		return yPos;
 	}
 
+	/**
+	 * Sets the y position of the player
+	 * 
+	 * @param yPos
+	 *            Position in pixel
+	 */
 	public void setyPos(int yPos) {
 		this.yPos = yPos;
 	}
@@ -172,8 +185,8 @@ public class Player {
 
 	/**
 	 * 
-	 * @param set
-	 *            x-movement of player
+	 * @param dx
+	 *            set x-movement of player
 	 */
 	public void setDx(int dx) {
 		this.dx = dx;
@@ -189,8 +202,8 @@ public class Player {
 
 	/**
 	 * 
-	 * @param set
-	 *            y-movement of player
+	 * @param dy
+	 *            set y-movement of player
 	 */
 	public void setDy(int dy) {
 		this.dy = dy;
@@ -214,14 +227,27 @@ public class Player {
 
 	}
 
+	/**
+	 * 
+	 * @return the name of the player
+	 */
 	public String getPlayerName() {
 		return name;
 	}
 
+	/**
+	 * 
+	 * @return remaining bombs of the player
+	 */
 	public int getBombCount() {
 		return bombcount;
 	}
 
+	/**
+	 * Set the bombcount to passed number
+	 * 
+	 * @param bombs
+	 */
 	public void setBombCount(int bombs) {
 		this.bombcount = bombs;
 	}

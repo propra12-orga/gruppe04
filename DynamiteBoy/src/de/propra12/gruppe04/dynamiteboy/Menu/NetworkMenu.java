@@ -24,6 +24,11 @@ import javax.swing.UIManager;
 import de.propra12.gruppe04.dynamiteboy.Game.C;
 import de.propra12.gruppe04.dynamiteboy.Game.NetworkGame;
 
+/**
+ * 
+ * NetworkMenu is created to set up a NetworkGame
+ * 
+ */
 public class NetworkMenu {
 	private JFrame frame;
 	private JRadioButton beClient;
@@ -40,13 +45,16 @@ public class NetworkMenu {
 	private String ipAdressToConnect;
 
 	// IP Address Verification
-	private static final String IPADDRESS_REGEX = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
-			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
-			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
-			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
-	private Pattern pattern = Pattern.compile(IPADDRESS_REGEX);
+
+	private Pattern pattern = Pattern.compile(C.IPADDRESS_REGEX);
 	private Matcher matcher;
 
+	/**
+	 * Creates a NetworkMenu to set up a NetworkGame
+	 * 
+	 * @param frame
+	 *            Frame to display the Menu on
+	 */
 	public NetworkMenu(final JFrame frame) {
 		this.frame = frame;
 		frame.setTitle("DynamiteBoy - Netzwerkmenü");
@@ -122,6 +130,10 @@ public class NetworkMenu {
 
 	} // Close constructor
 
+	/**
+	 * Sets the connect button active <br>
+	 * Is called when server/client selection is confirmed
+	 */
 	private void setConnectButtonActive() {
 		buttonConnect.addActionListener(new ActionListener() {
 			@Override
@@ -135,6 +147,12 @@ public class NetworkMenu {
 		});
 	}
 
+	/**
+	 * Loads a NetworkGame with the specified IP adress
+	 * 
+	 * @param ip
+	 *            If beClient is selected
+	 */
 	private void loadGame(String ip) {
 		int type = C.CLIENT;
 		if (beServer.isSelected()) {
@@ -161,7 +179,8 @@ public class NetworkMenu {
 	}
 
 	/**
-	 * Gets all ip-addresses of the current system and prints them out
+	 * Gets all ip-addresses of the current system and prints them out by
+	 * netinterfaces
 	 * 
 	 */
 	private void getInterfaces() {

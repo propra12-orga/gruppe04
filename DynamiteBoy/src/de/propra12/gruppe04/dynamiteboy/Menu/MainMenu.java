@@ -25,10 +25,13 @@ public class MainMenu extends JPanel {
 	private JPanel panelButton = new JPanel(new GridLayout(1, 3));
 
 	/**
-	 * Constructor Sets up MainMenu with a Start Button to start the game
+	 * Constructor sets up MainMenu with buttons for: <br>
+	 * - Starting a singleplayer game <br>
+	 * - Starting a multiplayer game <br>
+	 * - Going to the NetworkMenu <br>
+	 * - Starting the MapEditor <br>
 	 * 
 	 */
-
 	public MainMenu(final JFrame frame) {
 		this.frame = frame;
 		frame.setTitle("DynamiteBoy - Hauptmenü");
@@ -64,7 +67,7 @@ public class MainMenu extends JPanel {
 		});
 
 		/**
-		 * Go to Network Menu for setting up network game
+		 * Go to Network Menu for setting up a network game
 		 * 
 		 */
 		ButtonNetworkPlay.addActionListener(new ActionListener() {
@@ -96,6 +99,15 @@ public class MainMenu extends JPanel {
 		frame.getContentPane().add(BorderLayout.SOUTH, panelButton);
 	}
 
+	/**
+	 * Loads a game with passed number of players and map
+	 * 
+	 * @param numberOfPlayers
+	 *            Number of players to create the game with ( currently max. 2
+	 *            players)
+	 * @param mapName
+	 *            Name of the XML file
+	 */
 	public void loadGame(int numberOfPlayers, String mapName) {
 		Game game = new Game(frame, numberOfPlayers, mapName);
 		frame.getContentPane().add(game);
@@ -104,6 +116,10 @@ public class MainMenu extends JPanel {
 		game.setVisible(true);
 	}
 
+	/**
+	 * Class to paint the title image
+	 * 
+	 */
 	static class TitlePanel extends JPanel {
 		private String titleScreenImage = "../images/db_menu_titlescreen.png";
 		ImageIcon img = new ImageIcon(this.getClass().getResource(

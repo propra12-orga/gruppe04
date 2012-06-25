@@ -4,6 +4,12 @@ import javax.swing.JFrame;
 
 import de.propra12.gruppe04.dynamiteboy.Menu.MainMenu;
 
+/**
+ * 
+ * The Main class is used for creating an Instance of DynamiteBoy <br>
+ * So basically it starts the fun!
+ * 
+ */
 public class Main {
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();

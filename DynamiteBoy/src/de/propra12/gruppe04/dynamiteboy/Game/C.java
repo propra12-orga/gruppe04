@@ -4,13 +4,18 @@ import de.propra12.gruppe04.dynamiteboy.Item.Exit;
 import de.propra12.gruppe04.dynamiteboy.Item.Item;
 
 /**
- * This class is for storing constants, so you only have to declare them ONCE
+ * This class stores all constants such as default field properties, game,
+ * player and bomb settings.
  * 
  */
 public class C {
 	// Network
 	public static final int SERVER = 1;
 	public static final int CLIENT = 0;
+	public static final String IPADDRESS_REGEX = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
 	// Game
 	public static final double GAME_FREQUENCY = 30.0;
 	public static final double MAX_FPS = 60;

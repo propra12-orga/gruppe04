@@ -12,10 +12,8 @@ import de.propra12.gruppe04.dynamiteboy.Map.Map;
  * 
  */
 public class Bomb extends Item implements Runnable {
-	/**
-	 * TODO clarify checking for existence of exploding fields (currently
-	 * happening in isExplodable())
-	 */
+	// TODO clarify checking for existence of exploding fields (currently
+	// happening in isExplodable())
 	private Map map;
 	private int xPos;
 	private int yPos;
@@ -26,9 +24,13 @@ public class Bomb extends Item implements Runnable {
 	 * Creats bomb instance
 	 * 
 	 * @param x
+	 *            Grid x to plant the bomb on
 	 * @param y
+	 *            Grid y to plant the bomb on
 	 * @param collectable
+	 *            true if bomb should be collectable
 	 * @param map
+	 *            map to plant the bomb on
 	 */
 	public Bomb(int x, int y, boolean collectable, Map map) {
 		super(collectable);
@@ -43,7 +45,7 @@ public class Bomb extends Item implements Runnable {
 	}
 
 	/**
-	 * Handles bomb behavior on threadstart
+	 * Handles bomb behavior on start of the bomb-thread
 	 */
 	@Override
 	public void run() {
@@ -115,7 +117,9 @@ public class Bomb extends Item implements Runnable {
 	 * Sets all fields back to undeadly
 	 * 
 	 * @param x
+	 *            x Position of bomb
 	 * @param y
+	 *            x Position of bomb
 	 */
 	private void stopDetonating(int x, int y) {
 		int startx = x;
@@ -169,7 +173,7 @@ public class Bomb extends Item implements Runnable {
 	}
 
 	/**
-	 * Calculates range for each direction
+	 * Calculates range for passed direction
 	 * 
 	 * @param direction
 	 * @return explosion radius
@@ -219,7 +223,7 @@ public class Bomb extends Item implements Runnable {
 	}
 
 	/**
-	 * Handles field-change on destroy on passed fieldposition
+	 * Handles field-change on destroy at passed fieldposition
 	 * 
 	 * @param x
 	 * @param y
@@ -255,18 +259,36 @@ public class Bomb extends Item implements Runnable {
 
 	// GETTERS AND SETTERS
 
+	/**
+	 * 
+	 * @return x Position in Grid
+	 */
 	public int getxPos() {
 		return xPos;
 	}
 
+	/**
+	 * 
+	 * @param xPos
+	 *            set x position in Grid
+	 */
 	public void setxPos(int xPos) {
 		this.xPos = xPos;
 	}
 
+	/**
+	 * 
+	 * @return y Position in Grid
+	 */
 	public int getyPos() {
 		return yPos;
 	}
 
+	/**
+	 * 
+	 * @param yPos
+	 *            set y position in Grid
+	 */
 	public void setyPos(int yPos) {
 		this.yPos = yPos;
 	}

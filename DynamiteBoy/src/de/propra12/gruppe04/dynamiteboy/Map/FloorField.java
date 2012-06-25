@@ -4,6 +4,11 @@ import de.propra12.gruppe04.dynamiteboy.Game.C;
 import de.propra12.gruppe04.dynamiteboy.Item.Bomb;
 import de.propra12.gruppe04.dynamiteboy.Item.Item;
 
+/**
+ * 
+ * Represents a floor field
+ * 
+ */
 public class FloorField extends Field {
 
 	FloorField(boolean blocked, boolean destroyable, boolean explodable,

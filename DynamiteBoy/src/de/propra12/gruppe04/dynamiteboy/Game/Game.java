@@ -16,6 +16,12 @@ import de.propra12.gruppe04.dynamiteboy.Map.Field;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
 import de.propra12.gruppe04.dynamiteboy.Menu.ScoreMenu;
 
+/**
+ * Handles everything related to the game. Extends JPanel and must be added to
+ * the passed frame.
+ * 
+ * 
+ */
 public class Game extends JPanel {
 	private int playerStartPos[][] = new int[2][2];
 	private Player player[] = new Player[2];
@@ -25,8 +31,6 @@ public class Game extends JPanel {
 	private String loserName;
 	private int numberOfPlayers;
 	private InputHandler input;
-	private int bombcount;
-	// Stuff for the loop
 	private boolean running = true;
 	private float interpolation;
 	// TODO find a nicer way to handle lastplayer positions (maybe store them in
@@ -38,6 +42,19 @@ public class Game extends JPanel {
 	double startTime = System.currentTimeMillis();
 	double currentGameTime;
 
+	/**
+	 * Creates a Game instance with passed number of players. The map is created
+	 * from specified mapname
+	 * 
+	 * @param frame
+	 *            Frame the game must be displayed on.
+	 * @param numberOfPlayers
+	 *            Number of players to be created. Note that currently only two
+	 *            players are supported
+	 * @param mapName
+	 *            XML file for the map parser e.g. "Map1.xml". Stored in the map
+	 *            package.
+	 */
 	public Game(JFrame frame, int numberOfPlayers, String mapName) {
 		// SET UP
 		frame.setTitle("DynamiteBoy");
@@ -65,6 +82,9 @@ public class Game extends JPanel {
 		loop.start();
 	}
 
+	/**
+	 * The actual gameloop. Repaints up to MAX_FPS (specified in C class)
+	 */
 	private void gameLoop() {
 		double lastUpdateTime = System.nanoTime();
 		double lastRenderTime = System.nanoTime();
@@ -139,13 +159,11 @@ public class Game extends JPanel {
 	/**
 	 * Decides what to do on this field
 	 * 
-	 * First: Checks if Field is ExitField and exits if it is Second: Checks if
+	 * First: Checks if Field is ExitField and exits if it is. Second: Checks if
 	 * Field is currently deadly
 	 * 
-	 * @param x
-	 *            x-coordinate of player (in px)
-	 * @param y
-	 *            y-coordinate of player (in px)
+	 * @param player
+	 *            Player that is affected by the items
 	 */
 	public void itemHandling(Player player) {
 		int x = player.getxPos();
@@ -179,8 +197,10 @@ public class Game extends JPanel {
 	// KEY HANDLING AND PAINT METHODS
 
 	/**
-	 * paints the hud on the bottom of the game window
+	 * Paints the hud on the bottom of the game window.
 	 * 
+	 * @param g2d
+	 *            Graphics object (painter)
 	 */
 	public void paintHud(Graphics g2d) {
 		ImageIcon hudbg = new ImageIcon(this.getClass().getResource(
@@ -202,7 +222,7 @@ public class Game extends JPanel {
 	}
 
 	/**
-	 * draws the map
+	 * Draws the map
 	 * 
 	 * @param g2d
 	 *            Graphics object (painter)
@@ -217,14 +237,12 @@ public class Game extends JPanel {
 	}
 
 	/**
-	 * draws the player
+	 * Draws the player
 	 * 
 	 * @param g2d
 	 *            g2d Graphics object (painter)
 	 * @param pIndex
 	 *            index of player to be drawn
-	 * @param interpolation
-	 *            number to generate smooth drawing (is calculated in GameLoop)
 	 */
 	public void paintPlayer(Graphics g2d, int pIndex) {
 		int x = player[pIndex].getxPos();
@@ -248,8 +266,12 @@ public class Game extends JPanel {
 	}
 
 	/**
-	 * paints everything
+	 * Paint methods
+	 * 
+	 * @param g
+	 *            Current graphics object
 	 */
+	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
 		Graphics g2d = (Graphics2D) g;
@@ -263,7 +285,13 @@ public class Game extends JPanel {
 	}
 
 	/**
-	 * Moves Player 1 when keys are pressed
+	 * Moves Player 1 and plants bomb when keys are pressed<br>
+	 * Left: move player to the left <br>
+	 * Right: move player to the right<br>
+	 * Down: move player down<br>
+	 * Up: move player up<br>
+	 * Enter: plant bomb<br>
+	 * 
 	 */
 	public void movePlayer1() {
 		// Player 1 Movement
@@ -300,9 +328,14 @@ public class Game extends JPanel {
 	}
 
 	/**
-	 * Moves Player 2 when keys are pressed
+	 * Moves Player 2 and plants bomb when keys are pressed<br>
+	 * A: move player to the left<br>
+	 * D: move player to the right<br>
+	 * S: move player down<br>
+	 * W: move player up<br>
+	 * Space: plant bomb<br>
+	 * 
 	 */
-
 	public void movePlayer2() {
 		if (input.isKeyDown(KeyEvent.VK_A)) {
 			player[C.PLAYER2].move(C.LEFT);
@@ -338,14 +371,29 @@ public class Game extends JPanel {
 
 	// GETTERS AND SETTERS
 
+	/**
+	 * 
+	 * @return Winnername of current game <br>
+	 *         <b>null</b> while the game running
+	 */
 	public String getWinnerName() {
 		return winnerName;
 	}
 
+	/**
+	 * 
+	 * @return Losername of current game <br>
+	 *         <b>null</b> while the game running
+	 */
 	public String getLoserName() {
 		return loserName;
 	}
 
+	/**
+	 * 
+	 * @return Map that was created from the XML file specified on creating the
+	 *         game
+	 */
 	public Map getMap() {
 		return map;
 	}
@@ -360,10 +408,18 @@ public class Game extends JPanel {
 		return player[playerIndex];
 	}
 
+	/**
+	 * 
+	 * @return The current gametime in milliseconds
+	 */
 	public double getCurrentGameTime() {
 		return currentGameTime;
 	}
 
+	/**
+	 * 
+	 * @return Returns the current number of players
+	 */
 	public int getNumberOfPlayers() {
 		return this.numberOfPlayers;
 	}

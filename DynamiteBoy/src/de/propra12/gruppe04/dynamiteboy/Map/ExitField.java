@@ -3,6 +3,11 @@ package de.propra12.gruppe04.dynamiteboy.Map;
 import de.propra12.gruppe04.dynamiteboy.Game.C;
 import de.propra12.gruppe04.dynamiteboy.Item.Item;
 
+/**
+ * 
+ * Represents an exit field
+ * 
+ */
 public class ExitField extends Field {
 
 	ExitField(boolean blocked, boolean destroyable, boolean explodable,

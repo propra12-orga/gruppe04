@@ -3,6 +3,11 @@ package de.propra12.gruppe04.dynamiteboy.Map;
 import de.propra12.gruppe04.dynamiteboy.Game.C;
 import de.propra12.gruppe04.dynamiteboy.Item.Item;
 
+/**
+ * 
+ * Represents a wall field
+ * 
+ */
 public class WallField extends Field {
 
 	WallField(boolean blocked, boolean destroyable, boolean explodable,

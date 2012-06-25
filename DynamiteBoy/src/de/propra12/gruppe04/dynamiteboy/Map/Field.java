@@ -6,6 +6,11 @@ import javax.swing.ImageIcon;
 
 import de.propra12.gruppe04.dynamiteboy.Item.Item;
 
+/**
+ * 
+ * Abstract superclass for field objects
+ * 
+ */
 public abstract class Field {
 	private boolean blocked; // true=moving over this field not allowed,
 								// false=moving is allowed
@@ -47,6 +52,7 @@ public abstract class Field {
 	 * makes this field an "exploding" (therefore deadly) field
 	 * 
 	 * @param deadly
+	 *            true if field should be deadly
 	 */
 	public void beDeadly(boolean deadly) {
 		if (deadly) {

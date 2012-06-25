@@ -16,6 +16,12 @@ import de.propra12.gruppe04.dynamiteboy.Map.Field;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
 import de.propra12.gruppe04.dynamiteboy.Menu.ScoreMenu;
 
+/**
+ * Handles everything related to the network-game. Extends JPanel and must be
+ * added to the passed frame.
+ * 
+ * 
+ */
 public class NetworkGame extends JPanel {
 	private String serverIP;
 	private JFrame frame;
@@ -38,6 +44,21 @@ public class NetworkGame extends JPanel {
 	private String loserName;
 	NetworkHandler net;
 
+	/**
+	 * Creates a Game instance with passed number of players on passed frame.
+	 * The map is created from specified map-name
+	 * 
+	 * @param frame
+	 *            Frame the game must be displayed on.
+	 * @param ip
+	 *            If NetworkGame instance is created with type CLIENT(0) this is
+	 *            the ip it will connect to
+	 * @param type
+	 *            Pass 0 to be client or 1 to be server
+	 * @param mapName
+	 *            XML file for the map parser e.g. "Map1.xml". Stored in the map
+	 *            package.
+	 */
 	public NetworkGame(final JFrame frame, String ip, int type, String mapName) {
 		this.frame = frame;
 		frame.setTitle("DynamiteBoy");
@@ -67,6 +88,9 @@ public class NetworkGame extends JPanel {
 		}
 	}
 
+	/**
+	 * The actual game-loop. Repaints up to MAX_FPS (specified in C class)
+	 */
 	private void gameLoop() {
 		double lastUpdateTime = System.nanoTime();
 		double lastRenderTime = System.nanoTime();
@@ -115,7 +139,7 @@ public class NetworkGame extends JPanel {
 			}
 		};
 		loop.start();
-		// set at this point so everyone has the same time
+		// set starttime at this point so everyone has the same time
 		startTime = System.currentTimeMillis();
 	}
 
@@ -125,19 +149,22 @@ public class NetworkGame extends JPanel {
 	 */
 	private void updateGame() {
 		movePlayer();
-		sendPlayerPosition();
+		sendPlayerData();
 		updateNetworkPlayer();
 		itemHandling(C.SERVER);
 		itemHandling(C.CLIENT);
 	}
 
-	private void sendPlayerPosition() {
+	/**
+	 * Sends the playerdata through the network that will be extracted from the
+	 * playerobject of this NetworkGame instance
+	 */
+	private void sendPlayerData() {
 		net.sendPlayerdata(this.getPlayer(gameType));
 	}
 
 	/**
 	 * creates players and sets starting positions
-	 * 
 	 */
 	public void createPlayers() {
 		this.player[C.SERVER] = new Player(C.SERVER, 32, 32, map);
@@ -145,6 +172,15 @@ public class NetworkGame extends JPanel {
 
 	}
 
+	/**
+	 * Decides what to do on this field
+	 * 
+	 * First: Checks if Field is ExitField and exits if it is. <br>
+	 * Second: Checks if Field is currently deadly
+	 * 
+	 * @param player
+	 *            Player that is affected by the items
+	 */
 	public void itemHandling(int player) {
 		int x = this.player[player].getxPos();
 		int y = this.player[player].getyPos();
@@ -187,7 +223,14 @@ public class NetworkGame extends JPanel {
 	}
 
 	/**
-	 * Moves Player of this instance when keys are pressed
+	 * Moves Player and plants bomb when keys are pressed<br>
+	 * Also sends BombData when a bomb is planted <br>
+	 * Left: move player to the left <br>
+	 * Right: move player to the right<br>
+	 * Down: move player down<br>
+	 * Up: move player up<br>
+	 * Enter: plant bomb<br>
+	 * 
 	 */
 	public void movePlayer() {
 		if (input.isKeyDown(KeyEvent.VK_LEFT)) {
@@ -240,8 +283,10 @@ public class NetworkGame extends JPanel {
 	}
 
 	/**
-	 * paints the hub on the bottom of the game window
+	 * Paints the hud on the bottom of the game window.
 	 * 
+	 * @param g2d
+	 *            Graphics object (painter)
 	 */
 	public void paintHud(Graphics g2d) {
 		ImageIcon hudbg = new ImageIcon(this.getClass().getResource(
@@ -261,14 +306,12 @@ public class NetworkGame extends JPanel {
 	}
 
 	/**
-	 * draws the player
+	 * Draws the player
 	 * 
 	 * @param g2d
 	 *            g2d Graphics object (painter)
 	 * @param pIndex
 	 *            index of player to be drawn
-	 * @param interpolation
-	 *            number to generate smooth drawing (is calculated in GameLoop)
 	 */
 	public void paintPlayer(Graphics g2d, int pIndex) {
 		int x = player[pIndex].getxPos();
@@ -304,23 +347,48 @@ public class NetworkGame extends JPanel {
 		g.dispose();
 	}
 
+	/**
+	 * 
+	 * @return Winnername of current game <br>
+	 *         <b>null</b> while the game running
+	 */
 	public String getWinnerName() {
 		return winnerName;
 	}
 
+	/**
+	 * 
+	 * @return Losername of current game <br>
+	 *         <b>null</b> while the game running
+	 */
 	public String getLoserName() {
 		return loserName;
 	}
 
+	/**
+	 * 
+	 * @return Map that was created from the XML file specified on creating the
+	 *         game
+	 */
 	public Map getMap() {
 		return map;
 	}
 
+	/**
+	 * 
+	 * @return The current gametime in milliseconds
+	 */
 	public double getCurrentGameTime() {
 
 		return currentGameTime;
 	}
 
+	/**
+	 * 
+	 * @param playerIndex
+	 *            index of player to return
+	 * @return player object
+	 */
 	public Player getPlayer(int playerIndex) {
 		return player[playerIndex];
 	}

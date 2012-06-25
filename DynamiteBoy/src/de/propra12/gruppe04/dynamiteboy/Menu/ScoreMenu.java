@@ -16,6 +16,11 @@ import de.propra12.gruppe04.dynamiteboy.Game.C;
 import de.propra12.gruppe04.dynamiteboy.Game.Game;
 import de.propra12.gruppe04.dynamiteboy.Game.NetworkGame;
 
+/**
+ * 
+ * ScoreMenu is created when a game ends and statistics are displayed.
+ * 
+ */
 public class ScoreMenu extends JPanel {
 	private JButton buttonBackToMain;
 	private TitlePanel title = new TitlePanel();
@@ -29,12 +34,14 @@ public class ScoreMenu extends JPanel {
 	private static int playerCount;
 
 	/**
-	 * Constructor Sets up MainMenu with a Start Button to start the game
+	 * Constructor Sets up ScoreMenu with a Button to go back to the main Menu
 	 * 
-	 * @param width
-	 *            Window-width
-	 * @param height
-	 *            Window-height
+	 * @param frame
+	 *            frame to display the Menu on
+	 * 
+	 * @param g
+	 *            game object to get parameters e.g. winner-name or looser-name
+	 * 
 	 */
 	public ScoreMenu(final JFrame frame, Game g) {
 		this.frame = frame;
@@ -62,6 +69,17 @@ public class ScoreMenu extends JPanel {
 		frame.getContentPane().add(BorderLayout.SOUTH, buttonBackToMain);
 	}
 
+	/**
+	 * Constructor Sets up ScoreMenu with a Button to go back to the main Menu
+	 * 
+	 * @param frame
+	 *            frame to display the Menu on
+	 * 
+	 * @param g
+	 *            NetworkGame object to get parameters e.g. winner-name or
+	 *            looser-name
+	 * 
+	 */
 	public ScoreMenu(final JFrame frame, NetworkGame g) {
 		this.frame = frame;
 		frame.setTitle("DynamiteBoy - Und der Gewinner ist...");
@@ -86,6 +104,10 @@ public class ScoreMenu extends JPanel {
 		frame.getContentPane().add(BorderLayout.SOUTH, buttonBackToMain);
 	}
 
+	/**
+	 * Class to paint the title image and display game statistics
+	 * 
+	 */
 	static class TitlePanel extends JPanel {
 		private String titleScreenImage = "../images/db_menu_titlescreen.png";
 		ImageIcon img = new ImageIcon(this.getClass().getResource(
