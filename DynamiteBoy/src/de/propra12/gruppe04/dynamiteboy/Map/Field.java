@@ -4,6 +4,7 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
+import de.propra12.gruppe04.dynamiteboy.Game.C;
 import de.propra12.gruppe04.dynamiteboy.Item.Item;
 
 /**
@@ -21,7 +22,7 @@ public abstract class Field {
 	private boolean deadly = false; // true=this field kills players when on it,
 									// false=this field does not kill players
 	private Item item; // item that this field holds
-	private ImageIcon image; // image of this field
+	protected ImageIcon image; // image of this field
 	String fieldpic; // path to the image of this field
 
 	/**
@@ -60,7 +61,11 @@ public abstract class Field {
 			this.setImage("../images/db_field_explosion.png");
 		} else if (!deadly) {
 			this.deadly = false;
-			this.setImage(fieldpic);
+			if (C.funny == true) {
+				this.setImage(C.FUNNYPILL_EXPLODED);
+			} else {
+				this.setImage(fieldpic);
+			}
 		}
 
 	}

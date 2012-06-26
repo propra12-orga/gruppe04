@@ -230,7 +230,12 @@ public class Bomb extends Item implements Runnable {
 	 */
 	private void destroy(int x, int y) {
 		if (map.getField(x, y).getItem() instanceof Exit) {
-			map.setExitField(x, y);
+			if (C.funny == true) {
+				map.setExitField(x, y);
+				map.getField(x, y).setImage(C.FUNNYPILL_EXIT);
+			} else {
+				map.setExitField(x, y);
+			}
 		}
 		if (map.getField(x, y).getItem() == null) {
 			map.setFloorField(x, y);

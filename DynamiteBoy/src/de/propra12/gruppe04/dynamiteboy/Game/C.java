@@ -34,6 +34,18 @@ public class C {
 	public static final int BOMB_DELAY = 3000;
 	public static final int EXPLOSION_DURATION = 400;
 	public static final int BOMB_RADIUS = 3;
+	public static final String BOMB_DEFAULT_PIC = "../images/db_field_floorbomb.png";
+	// FunnyPill
+	public static boolean funny;
+	public static final String FUNNYPILL_DESTROYABLEFIELD = "../images/funnypill/db_field_funnypill_destroyable.png";
+	public static final String FUNNYPILL_FLOORFIELD = "../images/funnypill/db_field_funnypill_floor.png";
+	public static final String FUNNYPILL_WALLFIELD = "../images/funnypill/db_field_funnypill_wall.png";
+	public static final String FUNNYPILL_BOMB = "../images/funnypill/db_item_funnypill_bomb.png";
+	public static final String FUNNYPILL_PLAYER = "../images/funnypill/funnypill_player1.png";
+	public static final String FUNNYPILL_HUD = "../images/funnypill/db_funnypill_hud_bg.png";
+	public static final String FUNNYPILL_EXPLODED = "../images/funnypill/db_field_funnypill_exploded.png";
+	public static final String FUNNYPILL_EXIT = "../images/funnypill/db_field_funnypill_wall.png";
+	public static final String FUNNYPILL_TELEPORTER = "../images/funnypill/db_field_funnypill_teleporter.png";
 	// Destroyable Field
 	public static final String DESTROYABLEFIELD_DEFAULT_PIC = "../images/db_field_destroyable.png";
 	public static final boolean DESTROYABLEFIELD_DEFAULT_BLOCKED = true;

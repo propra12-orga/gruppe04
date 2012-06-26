@@ -27,8 +27,7 @@ public class Player {
 	private int bombcount;
 
 	Player(int playerIndex, int startxPos, int startyPos, Map map) {
-		this.img = new ImageIcon(this.getClass().getResource(
-				playerPicture[playerIndex]));
+		setImage(playerPicture[playerIndex]);
 		this.image = img.getImage();
 		this.xPos = startxPos;
 		this.yPos = startyPos;
@@ -101,6 +100,7 @@ public class Player {
 	 * 
 	 */
 	public void plantBomb() {
+
 		if (map.getField(getGridfieldXByMiddle(), getGridfieldYByMiddle())
 				.getItem() instanceof Bomb) {
 			// DO NOTHING
@@ -250,6 +250,16 @@ public class Player {
 	 */
 	public void setBombCount(int bombs) {
 		this.bombcount = bombs;
+	}
+
+	public void setImage(String pic) {
+		if (pic.equals("default")) {
+			this.img = new ImageIcon(this.getClass().getResource(
+					playerPicture[playerIndex]));
+		} else {
+			this.img = new ImageIcon(this.getClass().getResource(pic));
+		}
+		this.image = img.getImage();
 	}
 
 }

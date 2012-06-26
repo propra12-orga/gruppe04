@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import de.propra12.gruppe04.dynamiteboy.Game.Game;
@@ -51,7 +52,8 @@ public class MainMenu extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ButtonStart1p.setText("Spiel wird gestartet...");
-				loadGame(1, "Map1.xml");
+				String map = askForMap();
+				loadGame(1, map);
 			}
 
 		});
@@ -97,6 +99,34 @@ public class MainMenu extends JPanel {
 		ButtonStart1p.setPreferredSize(new Dimension(100, 80));
 		ButtonStart2p.setPreferredSize(new Dimension(100, 80));
 		frame.getContentPane().add(BorderLayout.SOUTH, panelButton);
+	}
+
+	/**
+	 * Asks for the Player to choose a Map and returns it
+	 * 
+	 * @return chosen map
+	 */
+	public String askForMap() {
+		String map = "";
+		Object[] maps = { "Standardmap", "Spaßmap", "Multiplayermap" };
+		map = (String) JOptionPane.showInputDialog(frame,
+				"Bitte Map wählen: \n", "Map", JOptionPane.PLAIN_MESSAGE, null,
+				maps, "");
+		if ((map != null) && (map.length() > 0)) {
+			if (map.equals(maps[0])) {
+				map = "Map1.xml";
+				return map;
+			}
+			if (map.equals(maps[1])) {
+				map = "fghfdgh.xml";
+				return map;
+			}
+			if (map.equals(maps[2])) {
+				map = "Maze.xml";
+				return map;
+			}
+		}
+		return map;
 	}
 
 	/**

@@ -11,8 +11,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import de.propra12.gruppe04.dynamiteboy.Item.Exit;
+import de.propra12.gruppe04.dynamiteboy.Item.FunnyPill;
 import de.propra12.gruppe04.dynamiteboy.Item.Teleporter;
-import de.propra12.gruppe04.dynamiteboy.Map.ExitField;
 import de.propra12.gruppe04.dynamiteboy.Map.Field;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
 import de.propra12.gruppe04.dynamiteboy.Menu.ScoreMenu;
@@ -42,6 +43,7 @@ public class Game extends JPanel {
 	private int lastp2y;
 	double startTime = System.currentTimeMillis();
 	double currentGameTime;
+	ImageIcon hudbg;
 
 	/**
 	 * Creates a Game instance with passed number of players. The map is created
@@ -171,7 +173,7 @@ public class Game extends JPanel {
 		int y = player.getyPos();
 		Field f = map.getFieldByPixel(x + 16, y + 16);
 		// f is Exitfield
-		if (f instanceof ExitField) {
+		if (f.getItem() instanceof Exit) {
 			this.winnerName = player.getPlayerName();
 			ScoreMenu m = new ScoreMenu(frame, this);
 			this.setVisible(false);
@@ -198,6 +200,12 @@ public class Game extends JPanel {
 		if (f.getItem() instanceof Teleporter) {
 			((Teleporter) f.getItem()).teleport(player, this.getMap());
 		}
+		// f has lsd
+		if (f.getItem() instanceof FunnyPill) {
+			f.setImage(C.FLOORFIELD_DEFAULT_PIC);
+			((FunnyPill) f.getItem()).beFunny(this.getMap(), player);
+			// f.setItem(null);
+		}
 
 	}
 
@@ -210,10 +218,16 @@ public class Game extends JPanel {
 	 *            Graphics object (painter)
 	 */
 	public void paintHud(Graphics g2d) {
-		ImageIcon hudbg = new ImageIcon(this.getClass().getResource(
-				"../images/db_hud_bg.png"));
+		if (C.funny == true) {
+			hudbg = new ImageIcon(this.getClass().getResource(C.FUNNYPILL_HUD));
+			g2d.setColor(Color.yellow);
+		} else {
+			hudbg = new ImageIcon(this.getClass().getResource(
+					"../images/db_hud_bg.png"));
+			g2d.setColor(Color.black);
+		}
 		g2d.drawImage(hudbg.getImage(), 0, 480, this);
-		g2d.setColor(Color.black);
+
 		Font font = new Font("Ubuntu", Font.BOLD, 12);
 		g2d.setFont(font);
 		g2d.drawString("Time: " + (int) currentGameTime / 60 + ":"
@@ -226,6 +240,13 @@ public class Game extends JPanel {
 			g2d.drawString("Bombs left: " + player[C.PLAYER2].getBombCount(),
 					200, 505);
 		}
+		if (C.funny == true && numberOfPlayers == 1) {
+			g2d.setColor(Color.orange);
+			Font font2 = new Font("Ubuntu", Font.BOLD, 30);
+			g2d.setFont(font2);
+			g2d.drawString("FUNNYPILLLL", 215, 505);
+		}
+
 	}
 
 	/**

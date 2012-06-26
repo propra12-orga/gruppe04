@@ -160,7 +160,7 @@
 		<Field xPos="3" yPos="7"></Field>
 		<Field xPos="4" yPos="7"></Field>
 		<Field xPos="5" yPos="7"></Field>
-		<Field xPos="6" yPos="7"></Field>
+		<Field xPos="6" yPos="7" funnypill="1"></Field>
 		<Field xPos="7" yPos="7"></Field>
 		<Field xPos="8" yPos="7">wall</Field>
 		<Field xPos="9" yPos="7"></Field>

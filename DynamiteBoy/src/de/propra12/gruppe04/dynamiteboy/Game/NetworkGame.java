@@ -11,7 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import de.propra12.gruppe04.dynamiteboy.Map.ExitField;
+import de.propra12.gruppe04.dynamiteboy.Item.Exit;
 import de.propra12.gruppe04.dynamiteboy.Map.Field;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
 import de.propra12.gruppe04.dynamiteboy.Menu.ScoreMenu;
@@ -185,7 +185,7 @@ public class NetworkGame extends JPanel {
 		int x = this.player[player].getxPos();
 		int y = this.player[player].getyPos();
 		Field f = map.getFieldByPixel(x + 16, y + 16);
-		if (f instanceof ExitField) {
+		if (f.getItem() instanceof Exit) {
 			this.winnerName = this.player[player].getPlayerName();
 			ScoreMenu m = new ScoreMenu(frame, this);
 			this.setVisible(false);
