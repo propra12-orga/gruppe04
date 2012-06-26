@@ -65,6 +65,30 @@ public abstract class Field {
 
 	}
 
+	/**
+	 * returns a string representing the type of this field, ready for saving
+	 * into xml-file
+	 * 
+	 * @return
+	 */
+	public String getFieldType() {
+		// DEFAULT FIELD TYPE: FLOORFIELD
+		String type = "";
+		if (this instanceof FloorField) {
+			type = "";
+			return type;
+		}
+		if (this instanceof WallField) {
+			type = "wall";
+			return type;
+		}
+		if (this instanceof DestroyableField) {
+			type = "destroyable";
+			return type;
+		}
+		return type;
+	}
+
 	public boolean isDeadly() {
 		return deadly;
 	}

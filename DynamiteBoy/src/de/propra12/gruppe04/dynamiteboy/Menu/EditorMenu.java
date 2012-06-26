@@ -28,7 +28,7 @@ import de.propra12.gruppe04.dynamiteboy.Map.Map;
  */
 public class EditorMenu extends JPanel {
 	/**
-	 * for informations about the fields check initGUI()-method
+	 * for informations about the gui-fields check initGUI()-method
 	 */
 	private JFrame frame;
 	private Map map;

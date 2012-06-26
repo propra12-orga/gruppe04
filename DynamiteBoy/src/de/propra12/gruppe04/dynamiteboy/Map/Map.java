@@ -4,6 +4,12 @@ import java.io.File;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -18,6 +24,9 @@ public class Map {
 	private static int gridWidth; // width of the map in fields
 	private static int gridHeight; // height of the map in fields
 	private String mapName;
+	private String mapType;
+	private String mapAuthor;
+	String path = "src/de/propra12/gruppe04/dynamiteboy/Map/";
 
 	/**
 	 * Creates a Map from an XML file
@@ -29,10 +38,10 @@ public class Map {
 	 * @param fileLocation
 	 *            path of the XML file containing the map data
 	 */
-	public Map(int width, int height, String fileLocation) {
+	public Map(int width, int height, String filename) {
 		this.gridWidth = width / 32;
 		this.gridHeight = height / 32;
-		generateFieldGrid(fileLocation);
+		generateFieldGrid(filename);
 	}
 
 	/**
@@ -46,7 +55,6 @@ public class Map {
 	private void generateFieldGrid(String fileName) {
 		FieldGrid = new Field[gridWidth][gridHeight];
 		try {
-			String path = "src/de/propra12/gruppe04/dynamiteboy/Map/";
 			File mapData = new File(path + fileName);
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
 					.newInstance();
@@ -66,6 +74,53 @@ public class Map {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void saveFieldGridToXML() {
+		try {
+			DocumentBuilderFactory docFactory = DocumentBuilderFactory
+					.newInstance();
+			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+			// create root element (<map>)
+			Document doc = docBuilder.newDocument();
+			Element map = doc.createElement("map");
+			doc.appendChild(map);
+			// set maps attributes
+			map.setAttribute("type", mapType);
+			map.setAttribute("name", mapName);
+			map.setAttribute("author", mapAuthor);
+			// create rows, and then in each row the fields
+			for (int i = 0; i < gridHeight; i++) {
+				String yString = "" + i;
+				Element row = doc.createElement("row");
+				map.appendChild(row);
+				for (int j = 0; j < gridWidth; j++) {
+					Element field = doc.createElement("Field");
+					row.appendChild(field);
+					String xString = "" + j;
+					field.setAttribute("xPos", xString);
+					field.setAttribute("yPos", yString);
+					String fieldType = FieldGrid[j][i].getFieldType();
+					field.appendChild(doc.createTextNode(fieldType));
+				}
+			}
+
+			// write the contents of DOM-Object into xml file
+			TransformerFactory transformerFactory = TransformerFactory
+					.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			DOMSource source = new DOMSource(doc);
+			StreamResult result = new StreamResult(new File(path + mapName
+					+ ".xml"));
+			transformer.transform(source, result);
+			// TODO Remove Debug
+			System.out.println("Gespeichert");
+		} catch (ParserConfigurationException pce) {
+			pce.printStackTrace();
+		} catch (TransformerException tfe) {
+			tfe.printStackTrace();
 		}
 	}
 
@@ -150,6 +205,14 @@ public class Map {
 		FieldGrid[x][y] = new ExitField();
 	}
 
+	public void setDestroyableField(int x, int y) {
+		FieldGrid[x][y] = new DestroyableField();
+	}
+
+	public void setWallField(int x, int y) {
+		FieldGrid[x][y] = new WallField();
+	}
+
 	public static int getGridWidth() {
 		return gridWidth;
 	}
@@ -164,6 +227,30 @@ public class Map {
 
 	public void setGridHeight(int gridHeight) {
 		this.gridHeight = gridHeight;
+	}
+
+	public String getMapName() {
+		return mapName;
+	}
+
+	public void setMapName(String mapName) {
+		this.mapName = mapName;
+	}
+
+	public String getMapType() {
+		return mapType;
+	}
+
+	public void setMapType(String mapType) {
+		this.mapType = mapType;
+	}
+
+	public String getMapAuthor() {
+		return mapAuthor;
+	}
+
+	public void setMapAuthor(String mapAuthor) {
+		this.mapAuthor = mapAuthor;
 	}
 
 }

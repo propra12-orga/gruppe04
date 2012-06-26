@@ -10,17 +10,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Enumeration;
 
-import javax.swing.AbstractButton;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 
 import de.propra12.gruppe04.dynamiteboy.Game.InputHandler;
+import de.propra12.gruppe04.dynamiteboy.Item.Exit;
 
 /**
  * This class represents the Map Editor
@@ -30,7 +27,6 @@ import de.propra12.gruppe04.dynamiteboy.Game.InputHandler;
  */
 public class Editor extends JPanel implements MouseListener {
 	private JFrame frame;
-	private boolean running = true;
 	private Map map;
 	private String mapname;
 	private String authorname;
@@ -40,20 +36,11 @@ public class Editor extends JPanel implements MouseListener {
 	private JButton buttonResetSelection;
 	private JButton buttonSaveAndExit;
 	private JPanel panelEdit = new JPanel(new GridLayout(1, 3));
-	private Boolean selection = false;
-	private String oldpicture;
+	private Boolean fieldIsSelected = false;
 	private Field f = null;
-	private ButtonGroup buttonGroupFieldType;
-	private JRadioButton radioButtonFloorField;
-	private JRadioButton radioButtonWallField;
-	private JRadioButton radioButtonDestroyableField;
-	private ButtonGroup buttonGroupItemType;
-	private JRadioButton radioButtonExitItem;
-
-	// Add new items here to the editor
-	// TODO find a way to handle added items dynamically (build a resource
-	// manager that supplies the editor and the game with new items, maybe via
-	// some sort of "entity model")
+	private int fieldXPos;
+	private int fieldYPos;
+	private String oldpicture;
 
 	/**
 	 * Starts a new Editor with the given parameters
@@ -69,10 +56,6 @@ public class Editor extends JPanel implements MouseListener {
 	 */
 	public Editor(JFrame frame, String mapname, String authorname,
 			String mapType) {
-		// TODO: generate map-object and change mapname-element,author-element
-		// and maptype-element
-		// TODO map needs saveMap-method that saves dom into xml-file, name
-		// based on mapname-element
 		this.map = new Map(640, 480, "MapTemplate.xml");
 		this.mapname = mapname;
 		this.authorname = authorname;
@@ -98,11 +81,28 @@ public class Editor extends JPanel implements MouseListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String fieldType = getFieldTypeDecision();
+				if (fieldType == "") {
+					map.setFloorField(fieldXPos, fieldYPos);
+					repaint();
+					fieldIsSelected = false;
+				}
+				if (fieldType == "wall") {
+					map.setWallField(fieldXPos, fieldYPos);
+					repaint();
+					fieldIsSelected = false;
+				}
 				if (fieldType == "destroyable") {
 					String itemType = getItemTypeDecision();
+					map.setDestroyableField(fieldXPos, fieldYPos);
+					f = map.getField(fieldXPos, fieldYPos);
+					if (itemType == "exit") {
+						Exit exit = new Exit(false);
+						f.setItem(exit);
+					}
+					repaint();
+					fieldIsSelected = false;
+
 				}
-				// TODO Save FieldType and ItemType to DOM-Object (has to get
-				// coordinates from somewhere, too)
 			}
 		});
 		buttonResetSelection.addActionListener(new ActionListener() {
@@ -114,6 +114,11 @@ public class Editor extends JPanel implements MouseListener {
 		buttonSaveAndExit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Set Main Settings
+				map.setMapAuthor(authorname);
+				map.setMapType(mapType);
+				map.setMapName(mapname);
+				map.saveFieldGridToXML();
 			}
 		});
 		buttonChangeFieldType.setPreferredSize(new Dimension(60, 32));
@@ -122,23 +127,13 @@ public class Editor extends JPanel implements MouseListener {
 		frame.getContentPane().add(BorderLayout.SOUTH, panelEdit);
 	}
 
-	public String getSelectedButton(ButtonGroup group) {
-		Enumeration<AbstractButton> e = group.getElements();
-		while (e.hasMoreElements()) {
-			AbstractButton b = e.nextElement();
-			if (b.isSelected())
-				return b.getText();
-		}
-		return null;
-	}
-
 	/**
-	 * returns
+	 * shows the user a dialog to choose the currently selected fields type
 	 * 
 	 * Field Types: (1) "": empty string represents FloorField (2) "wall":
 	 * WallField (3) "destroyable": DestroyableField
 	 * 
-	 * @return
+	 * @return chosen FieldType
 	 */
 	public String getFieldTypeDecision() {
 		// DEFAULT FIELD TYPE GETS SET HERE
@@ -166,15 +161,32 @@ public class Editor extends JPanel implements MouseListener {
 	}
 
 	public String getItemTypeDecision() {
-		// TODO write method that checks whick radiobutton for item type of
-		// wallfield has been chosen
-		// and assigns it to the dom-object
-		// TODO change return
-		return authorname;
+		// DEFAULT ITEM TYPE GETS SET HERE
+		// TODO create constant
+		String itemType = "No Item";
+		Object[] itemTypes = { "No Item", "Exit" };
+		itemType = (String) JOptionPane.showInputDialog(frame,
+				"Bitte Feldtyp wählen: \n", "Feldtyp",
+				JOptionPane.PLAIN_MESSAGE, null, itemTypes, "");
+		if ((itemType != null) && (itemType.length() > 0)) {
+			if (itemType.equals(itemTypes[0])) {
+				itemType = "";
+				return itemType;
+			}
+			if (itemType.equals(itemTypes[1])) {
+				itemType = "exit";
+				return itemType;
+			}
+		}
+		return itemType;
 	}
 
 	public boolean isMapValid(Map map) {
-		// TODO write method that checks map vor validity
+		// TODO write method that checks if map is valid
+		// TODO singleplayer -> check if exit item is set
+		// TODO singleplayer -> check if exit is reachable
+		// TODO multiplayer -> check if 2 startpoints are set
+		// TODO multiplayer -> check if startpoints are reachable
 		return true;
 	}
 
@@ -182,17 +194,21 @@ public class Editor extends JPanel implements MouseListener {
 		if (f != null) {
 			f.setImage(oldpicture);
 			repaint();
-			selection = false;
+			fieldIsSelected = false;
 		}
 	}
 
 	public void selectField(int x, int y) {
-		if (x <= 640 && y <= 480 && !selection) {
+		if (x <= 640 && y <= 480 && !fieldIsSelected) {
 			f = map.getFieldByPixel(x, y);
+			fieldXPos = (x / 32);
+			fieldYPos = (y / 32);
+			System.out.println(fieldXPos);
+			System.out.println(fieldYPos);
 			oldpicture = f.fieldpic;
 			f.setImage("../images/dbedit_field_selected.png");
 			repaint();
-			selection = true;
+			fieldIsSelected = true;
 		}
 	}
 
