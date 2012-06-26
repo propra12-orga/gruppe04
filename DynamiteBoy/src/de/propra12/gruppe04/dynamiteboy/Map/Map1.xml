@@ -55,7 +55,7 @@
 		<Field xPos="8" yPos="2"></Field>
 		<Field xPos="9" yPos="2"></Field>
 		<Field xPos="10" yPos="2"></Field>
-		<Field xPos="11" yPos="2"></Field>
+		<Field xPos="11" yPos="2" teleporter="1" ></Field>
 		<Field xPos="12" yPos="2">wall</Field>
 		<Field xPos="13" yPos="2"></Field>
 		<Field xPos="14" yPos="2"></Field>

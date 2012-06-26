@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import de.propra12.gruppe04.dynamiteboy.Item.Teleporter;
 import de.propra12.gruppe04.dynamiteboy.Map.ExitField;
 import de.propra12.gruppe04.dynamiteboy.Map.Field;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
@@ -169,12 +170,14 @@ public class Game extends JPanel {
 		int x = player.getxPos();
 		int y = player.getyPos();
 		Field f = map.getFieldByPixel(x + 16, y + 16);
+		// f is Exitfield
 		if (f instanceof ExitField) {
 			this.winnerName = player.getPlayerName();
 			ScoreMenu m = new ScoreMenu(frame, this);
 			this.setVisible(false);
 			running = false;
 		}
+		// f is deadly
 		if (f.isDeadly() == true) {
 			if (player == this.player[C.PLAYER1]) {
 				if (numberOfPlayers == 1) {
@@ -190,8 +193,12 @@ public class Game extends JPanel {
 			ScoreMenu m = new ScoreMenu(frame, this);
 			this.setVisible(false);
 			running = false;
-
 		}
+		// f has Teleporter
+		if (f.getItem() instanceof Teleporter) {
+			((Teleporter) f.getItem()).teleport(player, this.getMap());
+		}
+
 	}
 
 	// KEY HANDLING AND PAINT METHODS

@@ -2,6 +2,7 @@ package de.propra12.gruppe04.dynamiteboy.Game;
 
 import de.propra12.gruppe04.dynamiteboy.Item.Exit;
 import de.propra12.gruppe04.dynamiteboy.Item.Item;
+import de.propra12.gruppe04.dynamiteboy.Item.Teleporter;
 
 /**
  * This class stores all constants such as default field properties, game,
@@ -33,7 +34,6 @@ public class C {
 	public static final int BOMB_DELAY = 3000;
 	public static final int EXPLOSION_DURATION = 400;
 	public static final int BOMB_RADIUS = 3;
-
 	// Destroyable Field
 	public static final String DESTROYABLEFIELD_DEFAULT_PIC = "../images/db_field_destroyable.png";
 	public static final boolean DESTROYABLEFIELD_DEFAULT_BLOCKED = true;
@@ -59,5 +59,12 @@ public class C {
 	public static final boolean WALLFIELD_DEFAULT_EXPLODABLE = false;
 	public static final Item WALLFIELD_DEFAULT_ITEM = null;
 	public static final boolean WALLFIELD_DEFAULT_DEADLY = false;
+	// Teleportfield
+	public static final String TELEPORTFIELD_DEFAULT_PIC = "../images/db_field_teleporter.png";
+	public static final boolean TELEPORTFIELD_DEFAULT_BLOCKED = false;
+	public static final boolean TELEPORTFIELD_DEAFULT_DESTROYABLE = false;
+	public static final boolean TELEPORTFIELD_DEFAULT_EXPLODABLE = false;
+	public static final Item TELEPORTFIELD_DEFAULT_ITEM = new Teleporter();
+	public static final boolean TELEPORTFIELD_DEFAULT_DEADLY = false;
 
 }

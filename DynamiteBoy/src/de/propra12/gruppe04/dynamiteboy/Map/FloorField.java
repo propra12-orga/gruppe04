@@ -6,7 +6,7 @@ import de.propra12.gruppe04.dynamiteboy.Item.Item;
 
 /**
  * 
- * Represents a floor field
+ * Represents a walkable floor field
  * 
  */
 public class FloorField extends Field {
