@@ -17,6 +17,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import de.propra12.gruppe04.dynamiteboy.Item.Exit;
+import de.propra12.gruppe04.dynamiteboy.Item.Lsd;
+import de.propra12.gruppe04.dynamiteboy.Item.Teleporter;
 
 public class Map {
 	private static Field[][] FieldGrid; // Array that contains all fields of the
@@ -162,6 +164,10 @@ public class Map {
 			f = new FloorField();
 			if (element.hasAttribute("exit")) {
 				f = new ExitField();
+			} else if (element.hasAttribute("teleporter")) {
+				f.setItem(new Teleporter());
+			} else if (element.hasAttribute("lsd")) {
+				f.setItem(new Lsd());
 			}
 		} else if (type.equals("wall")) {
 			f = new WallField();
