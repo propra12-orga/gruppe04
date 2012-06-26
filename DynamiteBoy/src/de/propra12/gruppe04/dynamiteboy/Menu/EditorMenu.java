@@ -45,6 +45,7 @@ public class EditorMenu extends JPanel {
 	private JRadioButton radioButtonSingleplayer;
 	private JRadioButton radioButtonMultiplayer;
 	private String mapType;
+	private JButton buttonBackToMain;
 	private JButton buttonStartEditor;
 
 	public EditorMenu(final JFrame frame) {
@@ -79,6 +80,7 @@ public class EditorMenu extends JPanel {
 		buttonGroupMapType.add(radioButtonSingleplayer);
 		buttonGroupMapType.add(radioButtonMultiplayer);
 		// Buttons and Dialogs
+		buttonBackToMain = new JButton("Zurück zum Hauptmenü");
 		buttonStartEditor = new JButton("Starte Editor");
 		// Add the GUI-Elements to their JPanels
 		panelInput.add(labelMapname);
@@ -88,6 +90,17 @@ public class EditorMenu extends JPanel {
 		panelInput.add(labelMaptype);
 		panelInput.add(radioButtonSingleplayer);
 		panelInput.add(radioButtonMultiplayer);
+		panelButton.add(buttonBackToMain);
+		buttonBackToMain.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				panelButton.setVisible(false);
+				panelInput.setVisible(false);
+				MainMenu m = new MainMenu(frame);
+			}
+
+		});
 		panelButton.add(buttonStartEditor);
 		buttonStartEditor.addActionListener(new ActionListener() {
 

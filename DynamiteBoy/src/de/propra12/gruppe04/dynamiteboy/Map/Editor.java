@@ -115,6 +115,7 @@ public class Editor extends JPanel implements MouseListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Set Main Settings
+				isMapValid(map);
 				map.setMapAuthor(authorname);
 				map.setMapType(mapType);
 				map.setMapName(mapname);
@@ -182,8 +183,10 @@ public class Editor extends JPanel implements MouseListener {
 	}
 
 	public boolean isMapValid(Map map) {
-		// TODO write method that checks if map is valid
 		// TODO singleplayer -> check if exit item is set
+		if (map.hasExit() == false) {
+			System.out.println("Kein Ausgang");
+		}
 		// TODO singleplayer -> check if exit is reachable
 		// TODO multiplayer -> check if 2 startpoints are set
 		// TODO multiplayer -> check if startpoints are reachable

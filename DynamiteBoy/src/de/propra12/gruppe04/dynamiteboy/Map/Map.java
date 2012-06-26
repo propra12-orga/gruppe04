@@ -17,7 +17,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import de.propra12.gruppe04.dynamiteboy.Item.Exit;
-import de.propra12.gruppe04.dynamiteboy.Item.Lsd;
 import de.propra12.gruppe04.dynamiteboy.Item.Teleporter;
 
 public class Map {
@@ -166,8 +165,9 @@ public class Map {
 				f = new ExitField();
 			} else if (element.hasAttribute("teleporter")) {
 				f.setItem(new Teleporter());
-			} else if (element.hasAttribute("lsd")) {
-				f.setItem(new Lsd());
+				// }
+				// else if (element.hasAttribute("funnypill")) {
+				// f.setItem(new FunnyPill());
 			}
 		} else if (type.equals("wall")) {
 			f = new WallField();
@@ -196,6 +196,19 @@ public class Map {
 			f = FieldGrid[x][y];
 		}
 		return f;
+	}
+
+	public boolean hasExit() {
+		for (int i = 0; i < getGridHeight(); i++) {
+			for (int j = 0; j < getGridWidth(); j++) {
+				if (getField(i, j).getItem() instanceof Exit) {
+					// TODO Remove Debug
+					System.out.println("Exit at " + i + "/" + j);
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public Field getFieldByPixel(int x, int y) {
