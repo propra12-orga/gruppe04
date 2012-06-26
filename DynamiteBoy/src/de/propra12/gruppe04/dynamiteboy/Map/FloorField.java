@@ -47,7 +47,7 @@ public class FloorField extends Field {
 			}
 		}
 		if (item instanceof FunnyPill) {
-			super.setImage("../images/funnypill/db_item_funnypill.png");
+			super.setImage("../images/db_item_funnypill.png");
 		}
 		if (item instanceof Teleporter) {
 			super.setImage("../images/db_field_teleporter.png");

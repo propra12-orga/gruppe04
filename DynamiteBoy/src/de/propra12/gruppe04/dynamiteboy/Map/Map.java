@@ -17,6 +17,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import de.propra12.gruppe04.dynamiteboy.Item.Exit;
+import de.propra12.gruppe04.dynamiteboy.Item.FunnyPill;
 import de.propra12.gruppe04.dynamiteboy.Item.Teleporter;
 
 public class Map {
@@ -162,12 +163,11 @@ public class Map {
 		if (type.equals("")) {
 			f = new FloorField();
 			if (element.hasAttribute("exit")) {
-				f = new ExitField();
+				f.setItem(new Exit(false));
 			} else if (element.hasAttribute("teleporter")) {
 				f.setItem(new Teleporter());
-				// }
-				// else if (element.hasAttribute("funnypill")) {
-				// f.setItem(new FunnyPill());
+			} else if (element.hasAttribute("funnypill")) {
+				f.setItem(new FunnyPill());
 			}
 		} else if (type.equals("wall")) {
 			f = new WallField();
@@ -221,7 +221,8 @@ public class Map {
 	}
 
 	public void setExitField(int x, int y) {
-		FieldGrid[x][y] = new ExitField();
+		FieldGrid[x][y] = new FloorField();
+		FieldGrid[x][y].setItem(new Exit(false));
 	}
 
 	public void setDestroyableField(int x, int y) {
