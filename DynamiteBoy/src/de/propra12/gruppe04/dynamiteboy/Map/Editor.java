@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 
 import de.propra12.gruppe04.dynamiteboy.Game.InputHandler;
 import de.propra12.gruppe04.dynamiteboy.Item.Exit;
+import de.propra12.gruppe04.dynamiteboy.Menu.MainMenu;
 
 /**
  * This class represents the Map Editor
@@ -75,33 +76,7 @@ public class Editor extends JPanel implements MouseListener {
 		buttonChangeFieldType.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String fieldType = getFieldTypeDecision();
-				for (int y = 0; y < map.getGridHeight(); y++) {
-					for (int x = 0; x < map.getGridWidth(); x++) {
-						Field f = map.getField(x, y);
-						if (f.isSelected()) {
-							if (fieldType == "") {
-								map.setFloorField(x, y);
-								repaint();
-							}
-							if (fieldType == "wall") {
-								map.setWallField(x, y);
-								repaint();
-							}
-							if (fieldType == "destroyable") {
-								String itemType = getItemTypeDecision();
-								map.setDestroyableField(x, y);
-								f = map.getField(x, y);
-								if (itemType == "exit") {
-									Exit exit = new Exit(false);
-									f.setItem(exit);
-								}
-							}
-							repaint();
-						}
-					}
-				}
-
+				changeFieldTypes();
 			}
 		});
 		buttonResetSelection.addActionListener(new ActionListener() {
@@ -117,13 +92,27 @@ public class Editor extends JPanel implements MouseListener {
 				map.setMapAuthor(authorname);
 				map.setMapType(mapType);
 				map.setMapName(mapname);
-				map.saveFieldGridToXML();
+				if (isMapValid(map)) {
+					// Save
+					map.saveFieldGridToXML();
+					// Exit
+					quitEditor();
+					MainMenu m = new MainMenu(frame);
+
+				}
+
 			}
 		});
 		buttonChangeFieldType.setPreferredSize(new Dimension(60, 32));
 		buttonResetSelection.setPreferredSize(new Dimension(60, 32));
 		buttonSaveAndExit.setPreferredSize(new Dimension(60, 32));
 		frame.getContentPane().add(BorderLayout.SOUTH, panelEdit);
+	}
+
+	public void quitEditor() {
+		panelEdit.setVisible(false);
+		this.setVisible(false);
+		this.setFocusable(false);
 	}
 
 	/**
@@ -180,10 +169,47 @@ public class Editor extends JPanel implements MouseListener {
 		return itemType;
 	}
 
+	public void changeFieldTypes() {
+		String fieldType = getFieldTypeDecision();
+		for (int y = 0; y < map.getGridHeight(); y++) {
+			for (int x = 0; x < map.getGridWidth(); x++) {
+				Field f = map.getField(x, y);
+				if (f.isSelected()) {
+					if (fieldType == "") {
+						map.setFloorField(x, y);
+						repaint();
+					}
+					if (fieldType == "wall") {
+						map.setWallField(x, y);
+						repaint();
+					}
+					if (fieldType == "destroyable") {
+						String itemType = getItemTypeDecision();
+						map.setDestroyableField(x, y);
+						f = map.getField(x, y);
+						if (itemType == "exit") {
+							Exit exit = new Exit(false);
+							f.setItem(exit);
+						}
+					}
+					repaint();
+				}
+			}
+		}
+	}
+
 	public boolean isMapValid(Map map) {
-		// TODO write method that checks if map is valid
-		// TODO singleplayer -> check if exit item is set
+		String type = map.getMapType();
+		if (type.equals("singleplayer")) {
+			if (!map.hasExit()) {
+				// TODO Remove Debug (add JDialog)
+				System.out.println("Map has no Exit!");
+				return false;
+			}
+		}
 		// TODO singleplayer -> check if exit is reachable
+		// idea: check if
+
 		// TODO multiplayer -> check if 2 startpoints are set
 		// TODO multiplayer -> check if startpoints are reachable
 		return true;

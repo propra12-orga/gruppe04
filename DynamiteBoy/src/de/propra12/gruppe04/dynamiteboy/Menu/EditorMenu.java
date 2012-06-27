@@ -156,6 +156,7 @@ public class EditorMenu extends JPanel {
 	 * @return true/false
 	 */
 	public boolean inputIsValid() {
+		// TODO create constant for regexes
 		if (!textFieldMapname
 				.getText()
 				.matches(
