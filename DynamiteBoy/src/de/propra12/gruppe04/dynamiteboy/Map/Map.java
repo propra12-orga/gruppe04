@@ -199,11 +199,11 @@ public class Map {
 	}
 
 	public boolean hasExit() {
-		for (int i = 0; i < getGridHeight(); i++) {
-			for (int j = 0; j < getGridWidth(); j++) {
-				if (getField(i, j).getItem() instanceof Exit) {
+		for (int y = 0; y < getGridHeight(); y++) {
+			for (int x = 0; x < getGridWidth(); x++) {
+				if (getField(x, y).getItem() instanceof Exit) {
 					// TODO Remove Debug
-					System.out.println("Exit at " + i + "/" + j);
+					System.out.println("Exit at " + y + "/" + x);
 					return true;
 				}
 			}
