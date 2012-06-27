@@ -15,6 +15,7 @@ import de.propra12.gruppe04.dynamiteboy.Item.Exit;
 import de.propra12.gruppe04.dynamiteboy.Item.FunnyPill;
 import de.propra12.gruppe04.dynamiteboy.Item.Teleporter;
 import de.propra12.gruppe04.dynamiteboy.Map.Field;
+import de.propra12.gruppe04.dynamiteboy.Map.FloorField;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
 import de.propra12.gruppe04.dynamiteboy.Menu.ScoreMenu;
 
@@ -45,6 +46,9 @@ public class Game extends JPanel {
 	double currentGameTime;
 	ImageIcon hudbg;
 
+	private boolean tutorial = false;
+	private int tutorialStep = 2;
+
 	/**
 	 * Creates a Game instance with passed number of players. The map is created
 	 * from specified mapname
@@ -66,6 +70,9 @@ public class Game extends JPanel {
 		this.frame = frame;
 		createPlayers(numberOfPlayers);
 		setFocusable(true);
+		if (mapName.equals("Tutorial.xml")) {
+			this.tutorial = true;
+		}
 		this.input = new InputHandler();
 		this.addKeyListener(input);
 		if (running) {
@@ -130,6 +137,9 @@ public class Game extends JPanel {
 	 * makes changes to the game objects (gets called within each gameLoop-step)
 	 */
 	private void updateGame() {
+		if (tutorial) {
+			updateTutorial();
+		}
 		if (numberOfPlayers == 1) {
 			movePlayer1();
 			itemHandling(player[C.PLAYER1]);
@@ -139,6 +149,35 @@ public class Game extends JPanel {
 			movePlayer2();
 			itemHandling(player[C.PLAYER2]);
 		}
+	}
+
+	/**
+	 * Tutorialsteps go in here! Note that painting operations go into
+	 * paintTut()
+	 */
+	private void updateTutorial() {
+		switch (tutorialStep) {
+		case 0:
+			map.getField(12, 12)
+					.setImage("../images/dbedit_field_selected.png");
+
+			if (player[C.PLAYER1].getGridfieldXByMiddle() == 12
+					&& player[C.PLAYER1].getGridfieldYByMiddle() == 12) {
+				((FloorField) map.getField(12, 12)).setRandImage();
+				tutorialStep = 1;
+			}
+			break;
+		case 1:
+			if (input.isKeyDown(KeyEvent.VK_ENTER)) {
+				tutorialStep = 2;
+			}
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		}
+
 	}
 
 	/**
@@ -249,6 +288,36 @@ public class Game extends JPanel {
 
 	}
 
+	private void paintTut(Graphics g2d, int tutstep) {
+		switch (tutstep) {
+		case 0:
+			g2d.drawImage(
+					new ImageIcon(this.getClass().getResource(
+							"../images/db_tutorial_0.png")).getImage(), 192, 0,
+					this);
+			break;
+		case 1:
+			g2d.drawImage(
+					new ImageIcon(this.getClass().getResource(
+							"../images/db_tutorial_1.png")).getImage(), 192, 0,
+					this);
+			break;
+		case 2:
+			g2d.drawImage(
+					new ImageIcon(this.getClass().getResource(
+							"../images/db_tutorial_2.png")).getImage(), 192, 0,
+					this);
+			break;
+		case 3:
+			g2d.drawImage(
+					new ImageIcon(this.getClass().getResource(
+							"../images/db_tutorial_3.png")).getImage(), 192, 0,
+					this);
+			break;
+		}
+
+	}
+
 	/**
 	 * Draws the map
 	 * 
@@ -304,6 +373,9 @@ public class Game extends JPanel {
 		super.paint(g);
 		Graphics g2d = (Graphics2D) g;
 		paintField(g2d);
+		if (tutorial) {
+			paintTut(g2d, tutorialStep);
+		}
 		for (int i = 0; i < numberOfPlayers; i++) {
 			paintPlayer(g2d, i);
 		}

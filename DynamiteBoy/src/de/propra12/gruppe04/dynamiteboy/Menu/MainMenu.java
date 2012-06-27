@@ -52,7 +52,7 @@ public class MainMenu extends JPanel {
 		 */
 		ButtonStart1p.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent g) {
 				String map = askForMap();
 				if (map != null) {
 					ButtonStart1p.setText("Spiel wird gestartet...");
@@ -67,7 +67,7 @@ public class MainMenu extends JPanel {
 		 */
 		ButtonStart2p.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent h) {
 				ButtonStart2p.setText("Spiel wird gestartet...");
 				loadGame(2, "Maze.xml");
 			}
@@ -79,7 +79,7 @@ public class MainMenu extends JPanel {
 		 */
 		ButtonNetworkPlay.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent x) {
 				title.setVisible(false);
 				panelButton.setVisible(false);
 				NetworkMenu nMenu = new NetworkMenu(frame);
@@ -92,7 +92,7 @@ public class MainMenu extends JPanel {
 		 */
 		ButtonMapEditor.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent f) {
 				title.setVisible(false);
 				panelButton.setVisible(false);
 				EditorMenu eMenu = new EditorMenu(frame);
@@ -103,12 +103,12 @@ public class MainMenu extends JPanel {
 		/**
 		 * Start the Tutorial
 		 */
-		ButtonMapEditor.addActionListener(new ActionListener() {
+		ButtonTutorial.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				title.setVisible(false);
 				panelButton.setVisible(false);
-				loadGame(2, "Tutorial.xml");
+				loadGame(1, "Tutorial.xml");
 			}
 
 		});
@@ -126,7 +126,8 @@ public class MainMenu extends JPanel {
 	 */
 	public String askForMap() {
 		String map = "";
-		Object[] maps = { "Standardmap", "Spaßmap", "Multiplayermap" };
+		Object[] maps = { "Standardmap", "Spaßmap", "Multiplayermap",
+				"TutorialMap" };
 		map = (String) JOptionPane.showInputDialog(frame,
 				"Bitte Map wählen: \n", "Map", JOptionPane.PLAIN_MESSAGE, null,
 				maps, "");
@@ -141,6 +142,10 @@ public class MainMenu extends JPanel {
 			}
 			if (map.equals(maps[2])) {
 				map = "Maze.xml";
+				return map;
+			}
+			if (map.equals(maps[3])) {
+				map = "Tutorial.xml";
 				return map;
 			}
 		}
