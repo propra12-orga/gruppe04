@@ -63,6 +63,9 @@ public class FunnyPill extends Item {
 						if (map.getFieldByPixel(x, y).getItem() instanceof Teleporter) {
 							map.getFieldByPixel(x, y).setImage(
 									C.TELEPORTFIELD_DEFAULT_PIC);
+						} else if (map.getFieldByPixel(x, y).getItem() instanceof Exit) {
+							map.getFieldByPixel(x, y).setImage(
+									C.EXITFIELD_DEFAULT_PIC);
 						} else {
 							((FloorField) map.getFieldByPixel(x, y))
 									.setRandImage();
@@ -73,6 +76,10 @@ public class FunnyPill extends Item {
 					if (map.getFieldByPixel(x, y) instanceof WallField) {
 						map.getFieldByPixel(x, y).setImage(
 								C.WALLFIELD_DEFAULT_PIC);
+						if (map.getFieldByPixel(x, y).getItem() instanceof Exit) {
+							map.getFieldByPixel(x, y).setImage(
+									C.EXITFIELD_DEFAULT_PIC);
+						}
 					}
 					if (map.getFieldByPixel(x, y) instanceof DestroyableField) {
 						map.getFieldByPixel(x, y).setImage(
@@ -89,7 +96,7 @@ public class FunnyPill extends Item {
 			C.funny = true;
 			int i = 0;
 			while (trippin) {
-				if (i == 30) {
+				if (i == 10) {
 					trippin = false;
 				}
 				try {

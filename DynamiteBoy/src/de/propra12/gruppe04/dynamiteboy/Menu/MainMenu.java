@@ -125,6 +125,8 @@ public class MainMenu extends JPanel {
 				map = "Maze.xml";
 				return map;
 			}
+		} else if (map == null) {
+			map = "Map1.xml";
 		}
 		return map;
 	}
