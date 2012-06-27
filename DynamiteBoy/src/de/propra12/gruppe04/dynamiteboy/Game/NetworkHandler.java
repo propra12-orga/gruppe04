@@ -33,6 +33,7 @@ public class NetworkHandler {
 	protected int playerYPos;
 	protected boolean playerBomb;
 	protected int playerBombcount;
+	protected int type;
 
 	/**
 	 * Creates a client/server for a network game
@@ -44,6 +45,7 @@ public class NetworkHandler {
 	 */
 	public NetworkHandler(String ip, int type) {
 		this.ip = ip;
+		this.type = type;
 		switch (type) {
 		case C.SERVER:
 			setUpServer();
@@ -70,8 +72,8 @@ public class NetworkHandler {
 			Thread readerThread = new Thread(new IncomingReader());
 			readerThread.start();
 		} catch (IOException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Server nicht gefunden!");
+			// ex.printStackTrace();
+			JOptionPane.showMessageDialog(C.frame, "Server nicht gefunden!");
 		}
 
 	} // close setUpClient
@@ -190,14 +192,15 @@ public class NetworkHandler {
 		@Override
 		public void run() {
 			Object obj = null;
-
-			while (isRunning) {
+			while (isRunning && in != null && socket != null) {
 				try {
-					obj = in.readObject();
+					if (in != null) {
+						obj = in.readObject();
+					}
 				} catch (IOException e) {
-					e.printStackTrace();
+					netStop();
 				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
+					netStop();
 				}
 				if (obj instanceof PlayerData) {
 					PlayerData data = (PlayerData) obj;
@@ -212,7 +215,12 @@ public class NetworkHandler {
 				try {
 					Thread.sleep(1);
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					netStop();
+					if (type == C.SERVER) {
+						System.out.print("Client disconnected");
+					} else {
+						System.out.print("Server disconnected");
+					}
 				}
 			}
 
@@ -264,11 +272,15 @@ public class NetworkHandler {
 		PlayerData pd = new PlayerData(player.getxPos(), player.getyPos(),
 				player.getBombCount());
 		try {
-			out.writeObject(pd);
-			out.flush();
+			if (socket == null) {
+				System.out.println("No server found");
+				netStop();
+			} else {
+				out.writeObject(pd);
+				out.flush();
+			}
 		} catch (IOException e) {
 			System.out.println("Failed to send playerdata");
-			e.printStackTrace();
 		}
 
 	}
@@ -296,7 +308,24 @@ public class NetworkHandler {
 			out.flush();
 		} catch (IOException e) {
 			System.out.println("Failed to send bombdata");
-			e.printStackTrace();
+		}
+	}
+
+	protected void netStop() {
+		isRunning = false;
+		try {
+			if (socket != null) {
+				socket.close();
+			}
+			if (in != null) {
+				in.close();
+			}
+			if (out != null) {
+				out.close();
+			}
+			System.out.println("Network closed");
+		} catch (IOException e) {
+
 		}
 	}
 

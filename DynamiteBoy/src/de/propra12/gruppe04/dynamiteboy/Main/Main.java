@@ -2,6 +2,7 @@ package de.propra12.gruppe04.dynamiteboy.Main;
 
 import javax.swing.JFrame;
 
+import de.propra12.gruppe04.dynamiteboy.Game.C;
 import de.propra12.gruppe04.dynamiteboy.Menu.MainMenu;
 
 /**
@@ -13,6 +14,7 @@ import de.propra12.gruppe04.dynamiteboy.Menu.MainMenu;
 public class Main {
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
+		C.frame = frame;
 		frame.setSize(643, 540);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MainMenu m = new MainMenu(frame);

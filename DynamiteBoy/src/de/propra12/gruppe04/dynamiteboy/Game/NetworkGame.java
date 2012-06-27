@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import de.propra12.gruppe04.dynamiteboy.Item.Exit;
 import de.propra12.gruppe04.dynamiteboy.Map.Field;
 import de.propra12.gruppe04.dynamiteboy.Map.Map;
+import de.propra12.gruppe04.dynamiteboy.Menu.MainMenu;
 import de.propra12.gruppe04.dynamiteboy.Menu.ScoreMenu;
 
 /**
@@ -146,6 +147,7 @@ public class NetworkGame extends JPanel {
 	/**
 	 * makes changes to the game objects (gets called within each gameLoop-step)
 	 * 
+	 * 
 	 */
 	private void updateGame() {
 		movePlayer();
@@ -153,6 +155,14 @@ public class NetworkGame extends JPanel {
 		updateNetworkPlayer();
 		itemHandling(C.SERVER);
 		itemHandling(C.CLIENT);
+		if (net.isRunning == false) {
+			System.out.println("Game stopped");
+			MainMenu m = new MainMenu(frame);
+			frame.add(m);
+			this.setVisible(false);
+			m.setVisible(true);
+			running = false;
+		}
 	}
 
 	/**

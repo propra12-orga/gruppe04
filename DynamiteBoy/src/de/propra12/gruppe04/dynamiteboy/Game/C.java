@@ -1,5 +1,7 @@
 package de.propra12.gruppe04.dynamiteboy.Game;
 
+import javax.swing.JFrame;
+
 import de.propra12.gruppe04.dynamiteboy.Item.Exit;
 import de.propra12.gruppe04.dynamiteboy.Item.Item;
 import de.propra12.gruppe04.dynamiteboy.Item.Teleporter;
@@ -18,6 +20,7 @@ public class C {
 			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
 			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
 	// Game
+	public static JFrame frame;
 	public static final double GAME_FREQUENCY = 30.0;
 	public static final double MAX_FPS = 60;
 	public static final double TIME_BETWEEN_UPDATES = 1000000000 / GAME_FREQUENCY;

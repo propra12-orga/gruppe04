@@ -22,8 +22,8 @@ public class MainMenu extends JPanel {
 	private JButton ButtonMapEditor;
 	private JFrame frame;
 	private TitlePanel title = new TitlePanel();
-
 	private JPanel panelButton = new JPanel(new GridLayout(1, 3));
+	private JButton ButtonTutorial;
 
 	/**
 	 * Constructor sets up MainMenu with buttons for: <br>
@@ -40,10 +40,12 @@ public class MainMenu extends JPanel {
 		ButtonStart2p = new JButton("2 Spieler");
 		ButtonNetworkPlay = new JButton("Netzwerkspiel");
 		ButtonMapEditor = new JButton("Karten Editor");
+		ButtonTutorial = new JButton("Tutorial");
 		panelButton.add(ButtonStart1p);
 		panelButton.add(ButtonStart2p);
 		panelButton.add(ButtonNetworkPlay);
 		panelButton.add(ButtonMapEditor);
+		panelButton.add(ButtonTutorial);
 
 		/**
 		 * Sets up a single player game
@@ -51,12 +53,15 @@ public class MainMenu extends JPanel {
 		ButtonStart1p.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ButtonStart1p.setText("Spiel wird gestartet...");
 				String map = askForMap();
-				loadGame(1, map);
+				if (map != null) {
+					ButtonStart1p.setText("Spiel wird gestartet...");
+					loadGame(1, map);
+				}
 			}
 
 		});
+
 		/**
 		 * Sets up a two player game
 		 */
@@ -95,6 +100,19 @@ public class MainMenu extends JPanel {
 
 		});
 
+		/**
+		 * Start the Tutorial
+		 */
+		ButtonMapEditor.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				title.setVisible(false);
+				panelButton.setVisible(false);
+				loadGame(2, "Tutorial.xml");
+			}
+
+		});
+
 		frame.getContentPane().add(BorderLayout.CENTER, this.title);
 		ButtonStart1p.setPreferredSize(new Dimension(100, 80));
 		ButtonStart2p.setPreferredSize(new Dimension(100, 80));
@@ -125,8 +143,6 @@ public class MainMenu extends JPanel {
 				map = "Maze.xml";
 				return map;
 			}
-		} else if (map == null) {
-			map = "Map1.xml";
 		}
 		return map;
 	}
