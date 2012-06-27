@@ -23,6 +23,8 @@ public abstract class Field {
 									// false=this field does not kill players
 	private Item item; // item that this field holds
 	protected ImageIcon image; // image of this field
+	private boolean selected = false; // is this field currently selected in the
+										// editor?
 	String fieldpic; // path to the image of this field
 
 	/**
@@ -140,6 +142,14 @@ public abstract class Field {
 
 	public void setExplodable(boolean explodable) {
 		this.explodable = explodable;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 
 }
