@@ -44,8 +44,9 @@ public class C {
 	public static final String FUNNYPILL_PLAYER = "../images/funnypill_player1.png";
 	public static final String FUNNYPILL_HUD = "../images/db_funnypill_hud_bg.png";
 	public static final String FUNNYPILL_EXPLODED = "../images/db_field_funnypill_exploded.png";
-	public static final String FUNNYPILL_EXIT = "../images/db_field_funnypill_wall.png";
+	public static final String FUNNYPILL_EXIT = "../images/db_field_funnypill_exitfield.png";
 	public static final String FUNNYPILL_TELEPORTER = "../images/db_field_funnypill_teleporter.png";
+	public static final String FUNNPILL_DEFAULT_ITEM = "../images/db_item_funnypill.png";
 	// Destroyable Field
 	public static final String DESTROYABLEFIELD_DEFAULT_PIC = "../images/db_field_destroyable.png";
 	public static final boolean DESTROYABLEFIELD_DEFAULT_BLOCKED = true;

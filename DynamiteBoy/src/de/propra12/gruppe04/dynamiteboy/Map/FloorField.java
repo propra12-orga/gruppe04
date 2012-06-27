@@ -2,6 +2,7 @@ package de.propra12.gruppe04.dynamiteboy.Map;
 
 import de.propra12.gruppe04.dynamiteboy.Game.C;
 import de.propra12.gruppe04.dynamiteboy.Item.Bomb;
+import de.propra12.gruppe04.dynamiteboy.Item.Exit;
 import de.propra12.gruppe04.dynamiteboy.Item.FunnyPill;
 import de.propra12.gruppe04.dynamiteboy.Item.Item;
 import de.propra12.gruppe04.dynamiteboy.Item.Teleporter;
@@ -47,10 +48,13 @@ public class FloorField extends Field {
 			}
 		}
 		if (item instanceof FunnyPill) {
-			super.setImage("../images/db_item_funnypill.png");
+			super.setImage(C.FUNNPILL_DEFAULT_ITEM);
 		}
 		if (item instanceof Teleporter) {
 			super.setImage("../images/db_field_teleporter.png");
+		}
+		if (item instanceof Exit) {
+			super.setImage(C.EXITFIELD_DEFAULT_PIC);
 		}
 
 	}

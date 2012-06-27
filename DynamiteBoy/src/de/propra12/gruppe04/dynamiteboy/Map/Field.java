@@ -5,7 +5,10 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 
 import de.propra12.gruppe04.dynamiteboy.Game.C;
+import de.propra12.gruppe04.dynamiteboy.Item.Exit;
+import de.propra12.gruppe04.dynamiteboy.Item.FunnyPill;
 import de.propra12.gruppe04.dynamiteboy.Item.Item;
+import de.propra12.gruppe04.dynamiteboy.Item.Teleporter;
 
 /**
  * 
@@ -62,12 +65,27 @@ public abstract class Field {
 		} else if (!deadly) {
 			this.deadly = false;
 			if (C.funny == true) {
-				this.setImage(C.FUNNYPILL_EXPLODED);
+				if (this.getItem() == null) {
+					this.setImage(C.FUNNYPILL_EXPLODED);
+				} else if (this.getItem() instanceof Teleporter) {
+					this.setImage(C.FUNNYPILL_TELEPORTER);
+				} else if (this.getItem() instanceof Exit) {
+					this.setImage(C.FUNNYPILL_EXIT);
+				}
+				// if not funnypill
 			} else {
-				this.setImage(fieldpic);
+
+				if (this.getItem() instanceof Exit) {
+					this.setImage(C.EXITFIELD_DEFAULT_PIC);
+				} else if (this.getItem() instanceof FunnyPill) {
+					this.setImage(C.FUNNPILL_DEFAULT_ITEM);
+				} else if (this.getItem() instanceof Teleporter) {
+					this.setImage(C.TELEPORTFIELD_DEFAULT_PIC);
+				} else {
+					this.setImage(fieldpic);
+				}
 			}
 		}
-
 	}
 
 	/**
