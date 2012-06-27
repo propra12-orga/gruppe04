@@ -41,6 +41,7 @@ public class NetworkMenu {
 	private JButton buttonConfirm;
 	private JPanel confirmPanel = new JPanel();
 	private JButton buttonConnect;
+	private JButton buttonBackToMain;
 	private JLabel confirmLabel;
 	private String ipAdressToConnect;
 
@@ -120,6 +121,17 @@ public class NetworkMenu {
 
 		// Stuff referring to the connectPanel @ SOUTH
 		buttonConnect = new JButton("Verbinden");
+		buttonBackToMain = new JButton("Zurück zum Hauptmenü");
+		confirmPanel.add(buttonBackToMain);
+		buttonBackToMain.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				choosePanel.setVisible(false);
+				ipPanel.setVisible(false);
+				confirmPanel.setVisible(false);
+				MainMenu m = new MainMenu(frame);
+			}
+		});
 		confirmPanel.add(buttonConnect);
 
 		// Add everything to the frame and set it visible
@@ -138,9 +150,7 @@ public class NetworkMenu {
 		buttonConnect.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
 				buttonConnect.setText("Spiel wird gestartet...");
-
 				loadGame(ipAdressToConnect);
 			}
 

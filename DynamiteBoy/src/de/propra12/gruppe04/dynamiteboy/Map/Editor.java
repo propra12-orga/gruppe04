@@ -36,11 +36,6 @@ public class Editor extends JPanel implements MouseListener {
 	private JButton buttonResetSelection;
 	private JButton buttonSaveAndExit;
 	private JPanel panelEdit = new JPanel(new GridLayout(1, 3));
-	private Boolean fieldIsSelected = false;
-	private Field f = null;
-	private int fieldXPos;
-	private int fieldYPos;
-	private String oldpicture;
 
 	/**
 	 * Starts a new Editor with the given parameters
@@ -81,34 +76,38 @@ public class Editor extends JPanel implements MouseListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String fieldType = getFieldTypeDecision();
-				if (fieldType == "") {
-					map.setFloorField(fieldXPos, fieldYPos);
-					repaint();
-					fieldIsSelected = false;
-				}
-				if (fieldType == "wall") {
-					map.setWallField(fieldXPos, fieldYPos);
-					repaint();
-					fieldIsSelected = false;
-				}
-				if (fieldType == "destroyable") {
-					String itemType = getItemTypeDecision();
-					map.setDestroyableField(fieldXPos, fieldYPos);
-					f = map.getField(fieldXPos, fieldYPos);
-					if (itemType == "exit") {
-						Exit exit = new Exit(false);
-						f.setItem(exit);
+				for (int y = 0; y < map.getGridHeight(); y++) {
+					for (int x = 0; x < map.getGridWidth(); x++) {
+						Field f = map.getField(x, y);
+						if (f.isSelected()) {
+							if (fieldType == "") {
+								map.setFloorField(x, y);
+								repaint();
+							}
+							if (fieldType == "wall") {
+								map.setWallField(x, y);
+								repaint();
+							}
+							if (fieldType == "destroyable") {
+								String itemType = getItemTypeDecision();
+								map.setDestroyableField(x, y);
+								f = map.getField(x, y);
+								if (itemType == "exit") {
+									Exit exit = new Exit(false);
+									f.setItem(exit);
+								}
+							}
+							repaint();
+						}
 					}
-					repaint();
-					fieldIsSelected = false;
-
 				}
+
 			}
 		});
 		buttonResetSelection.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				resetSelectedField();
+				resetSelection();
 			}
 		});
 		buttonSaveAndExit.addActionListener(new ActionListener() {
@@ -190,25 +189,25 @@ public class Editor extends JPanel implements MouseListener {
 		return true;
 	}
 
-	public void resetSelectedField() {
-		if (f != null) {
-			f.setImage(oldpicture);
-			repaint();
-			fieldIsSelected = false;
+	public void resetSelection() {
+		for (int y = 0; y < map.getGridHeight(); y++) {
+			for (int x = 0; x < map.getGridWidth(); x++) {
+				Field f = map.getField(x, y);
+				if (f.isSelected()) {
+					f.setSelected(false);
+					f.setImage(f.fieldpic);
+					repaint();
+				}
+			}
 		}
 	}
 
 	public void selectField(int x, int y) {
-		if (x <= 640 && y <= 480 && !fieldIsSelected) {
-			f = map.getFieldByPixel(x, y);
-			fieldXPos = (x / 32);
-			fieldYPos = (y / 32);
-			System.out.println(fieldXPos);
-			System.out.println(fieldYPos);
-			oldpicture = f.fieldpic;
+		if (x <= 640 && y <= 480) {
+			Field f = map.getFieldByPixel(x, y);
 			f.setImage("../images/dbedit_field_selected.png");
 			repaint();
-			fieldIsSelected = true;
+			f.setSelected(true);
 		}
 	}
 
