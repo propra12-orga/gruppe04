@@ -60,8 +60,16 @@ public class FunnyPill extends Item {
 			for (int y = 0; y < 480; y += 32) {
 				for (int x = 0; x < 640; x += 32) {
 					if (map.getFieldByPixel(x, y) instanceof FloorField) {
-						((FloorField) map.getFieldByPixel(x, y)).setRandImage();
+						if (map.getFieldByPixel(x, y).getItem() instanceof Teleporter) {
+							map.getFieldByPixel(x, y).setImage(
+									C.TELEPORTFIELD_DEFAULT_PIC);
+						} else {
+							((FloorField) map.getFieldByPixel(x, y))
+									.setRandImage();
+						}
+
 					}
+
 					if (map.getFieldByPixel(x, y) instanceof WallField) {
 						map.getFieldByPixel(x, y).setImage(
 								C.WALLFIELD_DEFAULT_PIC);
