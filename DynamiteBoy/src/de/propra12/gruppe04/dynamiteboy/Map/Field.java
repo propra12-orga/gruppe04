@@ -8,6 +8,8 @@ import de.propra12.gruppe04.dynamiteboy.Game.C;
 import de.propra12.gruppe04.dynamiteboy.Item.Exit;
 import de.propra12.gruppe04.dynamiteboy.Item.FunnyPill;
 import de.propra12.gruppe04.dynamiteboy.Item.Item;
+import de.propra12.gruppe04.dynamiteboy.Item.P1Starter;
+import de.propra12.gruppe04.dynamiteboy.Item.P2Starter;
 import de.propra12.gruppe04.dynamiteboy.Item.Teleporter;
 
 /**
@@ -136,6 +138,33 @@ public abstract class Field {
 
 	public Item getItem() {
 		return item;
+	}
+
+	/**
+	 * returns type of fields item, ready to be saved into xml-file
+	 * 
+	 * @return
+	 */
+	public String getItemType() {
+		String itemName = "";
+		if (this.item != null) {
+			if (this.item instanceof Exit) {
+				itemName = "exit=\"1\"";
+			}
+			if (this.item instanceof FunnyPill) {
+				itemName = "funnypill=\"1\"";
+			}
+			if (this.item instanceof Teleporter) {
+				itemName = "teleporter=\"1\"";
+			}
+			if (this.item instanceof P1Starter) {
+				itemName = "p1starter=\"1\"";
+			}
+			if (this.item instanceof P2Starter) {
+				itemName = "p2starter=\"1\"";
+			}
+		}
+		return itemName;
 	}
 
 	public void setItem(Item item) {

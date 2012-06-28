@@ -184,6 +184,7 @@ public class Game extends JPanel {
 	 *            to create
 	 */
 	public void createPlayers(int numberOfPlayers) {
+		// Get player-startpositions here
 		playerStartPos[0][0] = 32;
 		playerStartPos[0][1] = 32;
 		playerStartPos[1][0] = 581;

@@ -18,6 +18,10 @@ import javax.swing.JPanel;
 
 import de.propra12.gruppe04.dynamiteboy.Game.InputHandler;
 import de.propra12.gruppe04.dynamiteboy.Item.Exit;
+import de.propra12.gruppe04.dynamiteboy.Item.FunnyPill;
+import de.propra12.gruppe04.dynamiteboy.Item.P1Starter;
+import de.propra12.gruppe04.dynamiteboy.Item.P2Starter;
+import de.propra12.gruppe04.dynamiteboy.Item.Teleporter;
 import de.propra12.gruppe04.dynamiteboy.Menu.MainMenu;
 
 /**
@@ -67,7 +71,7 @@ public class Editor extends JPanel implements MouseListener {
 	}
 
 	public void initGUI() {
-		buttonChangeFieldType = new JButton("Feld Ändern");
+		buttonChangeFieldType = new JButton("Felder Ändern");
 		buttonResetSelection = new JButton("Auswahl aufheben");
 		buttonSaveAndExit = new JButton("Speichern und verlassen");
 		panelEdit.add(buttonChangeFieldType);
@@ -152,7 +156,7 @@ public class Editor extends JPanel implements MouseListener {
 		// DEFAULT ITEM TYPE GETS SET HERE
 		// TODO create constant
 		String itemType = "No Item";
-		Object[] itemTypes = { "No Item", "Exit" };
+		Object[] itemTypes = { "No Item", "Exit", "FunnyPill", "Teleporter" };
 		itemType = (String) JOptionPane.showInputDialog(frame,
 				"Bitte Feldtyp wählen: \n", "Feldtyp",
 				JOptionPane.PLAIN_MESSAGE, null, itemTypes, "");
@@ -165,8 +169,39 @@ public class Editor extends JPanel implements MouseListener {
 				itemType = "exit";
 				return itemType;
 			}
+			if (itemType.equals(itemTypes[1])) {
+				itemType = "funnypill";
+				return itemType;
+			}
+			if (itemType.equals(itemTypes[1])) {
+				itemType = "teleporter";
+				return itemType;
+			}
 		}
 		return itemType;
+	}
+
+	public String getStartPointDecision() {
+		String startPoint = "No Item";
+		Object[] startPoints = { "No Startpoint", "Start P1", "Start P2" };
+		startPoint = (String) JOptionPane.showInputDialog(frame,
+				"Soll hier ein Spieler starten? \n", "Startpunkt",
+				JOptionPane.PLAIN_MESSAGE, null, startPoints, "");
+		if ((startPoint != null) && (startPoint.length() > 0)) {
+			if (startPoint.equals(startPoints[0])) {
+				startPoint = "";
+				return startPoint;
+			}
+			if (startPoint.equals(startPoints[1])) {
+				startPoint = "p1starter";
+				return startPoint;
+			}
+			if (startPoint.equals(startPoints[2])) {
+				startPoint = "p2starter";
+				return startPoint;
+			}
+		}
+		return startPoint;
 	}
 
 	public void changeFieldTypes() {
@@ -176,7 +211,17 @@ public class Editor extends JPanel implements MouseListener {
 				Field f = map.getField(x, y);
 				if (f.isSelected()) {
 					if (fieldType == "") {
+						String startpoint = getStartPointDecision();
 						map.setFloorField(x, y);
+						f = map.getField(x, y);
+						if (startpoint == "p1starter") {
+							P1Starter p1 = new P1Starter(false);
+							f.setItem(p1);
+						}
+						if (startpoint == "p2starter") {
+							P2Starter p2 = new P2Starter(false);
+							f.setItem(p2);
+						}
 						repaint();
 					}
 					if (fieldType == "wall") {
@@ -190,6 +235,14 @@ public class Editor extends JPanel implements MouseListener {
 						if (itemType == "exit") {
 							Exit exit = new Exit(false);
 							f.setItem(exit);
+						}
+						if (itemType == "funnypill") {
+							FunnyPill pill = new FunnyPill();
+							f.setItem(pill);
+						}
+						if (itemType == "teleporter") {
+							Teleporter tele = new Teleporter();
+							f.setItem(tele);
 						}
 					}
 					repaint();
@@ -207,6 +260,7 @@ public class Editor extends JPanel implements MouseListener {
 				return false;
 			}
 		}
+		// TODO singleplayer -> check if 1 startpoint is set
 		// TODO singleplayer -> check if exit is reachable
 		// TODO multiplayer -> check if 2 startpoints are set
 		// TODO multiplayer -> check if startpoints are reachable
@@ -227,7 +281,8 @@ public class Editor extends JPanel implements MouseListener {
 	}
 
 	public void selectField(int x, int y) {
-		if (x <= 640 && y <= 480) {
+		// check if field to select is within borders
+		if (x >= 35 && x <= 605 && y >= 35 && y <= 445) {
 			Field f = map.getFieldByPixel(x, y);
 			f.setImage("../images/dbedit_field_selected.png");
 			repaint();

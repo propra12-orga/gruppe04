@@ -28,6 +28,11 @@ public class Map {
 	private String mapName;
 	private String mapType;
 	private String mapAuthor;
+	// The starting positions for the players (in pixel)
+	private int p1startx;
+	private int p2startx;
+	private int p1starty;
+	private int p2starty;
 	String path = "src/de/propra12/gruppe04/dynamiteboy/Map/";
 
 	/**
@@ -94,17 +99,17 @@ public class Map {
 			map.setAttribute("name", mapName);
 			map.setAttribute("author", mapAuthor);
 			// create rows, and then in each row the fields
-			for (int i = 0; i < gridHeight; i++) {
-				String yString = "" + i;
+			for (int y = 0; y < gridHeight; y++) {
+				String yString = "" + y;
 				Element row = doc.createElement("row");
 				map.appendChild(row);
-				for (int j = 0; j < gridWidth; j++) {
+				for (int x = 0; x < gridWidth; x++) {
 					Element field = doc.createElement("Field");
 					row.appendChild(field);
-					String xString = "" + j;
+					String xString = "" + x;
 					field.setAttribute("xPos", xString);
 					field.setAttribute("yPos", yString);
-					String fieldType = FieldGrid[j][i].getFieldType();
+					String fieldType = FieldGrid[x][y].getFieldType();
 					field.appendChild(doc.createTextNode(fieldType));
 				}
 			}
@@ -168,6 +173,12 @@ public class Map {
 				f.setItem(new Teleporter());
 			} else if (element.hasAttribute("funnypill")) {
 				f.setItem(new FunnyPill());
+			} else if (element.hasAttribute("p1starter")) {
+				this.p1startx = xmlFieldxPos(element);
+				this.p1starty = xmlFieldyPos(element);
+			} else if (element.hasAttribute("p2starter")) {
+				this.p2startx = xmlFieldxPos(element);
+				this.p2starty = xmlFieldyPos(element);
 			}
 		} else if (type.equals("wall")) {
 			f = new WallField();
