@@ -208,8 +208,6 @@ public class Editor extends JPanel implements MouseListener {
 			}
 		}
 		// TODO singleplayer -> check if exit is reachable
-		// idea: check if
-
 		// TODO multiplayer -> check if 2 startpoints are set
 		// TODO multiplayer -> check if startpoints are reachable
 		return true;

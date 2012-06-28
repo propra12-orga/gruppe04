@@ -119,8 +119,13 @@ public class ScoreMenu extends JPanel {
 			g.drawImage(img.getImage(), 0, 0, this);
 			g.drawString("Time played: " + gameMinutes + ":" + gameSeconds, 50,
 					120);
-			g.drawString("Winner:" + winnerName, 50, 140);
-			g.drawString("Loser:" + loserName, 50, 160);
+			if (playerCount == 1) {
+				g.drawString("You won!", 50, 140);
+			}
+			if (playerCount > 1) {
+				g.drawString("Winner:" + winnerName, 50, 140);
+				g.drawString("Loser:" + loserName, 50, 160);
+			}
 			g.drawString("Player 1 used " + player1BombCount + " bombs", 50,
 					180);
 			if (playerCount > 1) {

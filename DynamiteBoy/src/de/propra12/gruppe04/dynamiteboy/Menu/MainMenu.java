@@ -23,7 +23,6 @@ public class MainMenu extends JPanel {
 	private JFrame frame;
 	private TitlePanel title = new TitlePanel();
 	private JPanel panelButton = new JPanel(new GridLayout(1, 3));
-	private JButton ButtonTutorial;
 
 	/**
 	 * Constructor sets up MainMenu with buttons for: <br>
@@ -40,12 +39,10 @@ public class MainMenu extends JPanel {
 		ButtonStart2p = new JButton("2 Spieler");
 		ButtonNetworkPlay = new JButton("Netzwerkspiel");
 		ButtonMapEditor = new JButton("Karten Editor");
-		ButtonTutorial = new JButton("Tutorial");
 		panelButton.add(ButtonStart1p);
 		panelButton.add(ButtonStart2p);
 		panelButton.add(ButtonNetworkPlay);
 		panelButton.add(ButtonMapEditor);
-		panelButton.add(ButtonTutorial);
 
 		/**
 		 * Sets up a single player game
@@ -100,19 +97,6 @@ public class MainMenu extends JPanel {
 
 		});
 
-		/**
-		 * Start the Tutorial
-		 */
-		ButtonTutorial.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				title.setVisible(false);
-				panelButton.setVisible(false);
-				loadGame(1, "Tutorial.xml");
-			}
-
-		});
-
 		frame.getContentPane().add(BorderLayout.CENTER, this.title);
 		ButtonStart1p.setPreferredSize(new Dimension(100, 80));
 		ButtonStart2p.setPreferredSize(new Dimension(100, 80));
@@ -126,14 +110,13 @@ public class MainMenu extends JPanel {
 	 */
 	public String askForMap() {
 		String map = "";
-		Object[] maps = { "Standardmap", "Spaßmap", "Multiplayermap",
-				"TutorialMap" };
+		Object[] maps = { "Tutorial", "Spaßmap", "Multiplayermap", "Map1" };
 		map = (String) JOptionPane.showInputDialog(frame,
 				"Bitte Map wählen: \n", "Map", JOptionPane.PLAIN_MESSAGE, null,
 				maps, "");
 		if ((map != null) && (map.length() > 0)) {
 			if (map.equals(maps[0])) {
-				map = "Map1.xml";
+				map = "Tutorial.xml";
 				return map;
 			}
 			if (map.equals(maps[1])) {
@@ -145,7 +128,7 @@ public class MainMenu extends JPanel {
 				return map;
 			}
 			if (map.equals(maps[3])) {
-				map = "Tutorial.xml";
+				map = "Map1.xml";
 				return map;
 			}
 		}

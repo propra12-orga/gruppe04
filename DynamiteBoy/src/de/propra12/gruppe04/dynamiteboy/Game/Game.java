@@ -47,7 +47,7 @@ public class Game extends JPanel {
 	ImageIcon hudbg;
 
 	private boolean tutorial = false;
-	private int tutorialStep = 2;
+	private int tutorialStep = 0;
 
 	/**
 	 * Creates a Game instance with passed number of players. The map is created
@@ -160,24 +160,21 @@ public class Game extends JPanel {
 		case 0:
 			map.getField(12, 12)
 					.setImage("../images/dbedit_field_selected.png");
-
 			if (player[C.PLAYER1].getGridfieldXByMiddle() == 12
 					&& player[C.PLAYER1].getGridfieldYByMiddle() == 12) {
 				((FloorField) map.getField(12, 12)).setRandImage();
+				map.setDestroyableField(13, 13);
+				Exit exit = new Exit(false);
+				map.getField(13, 13).setItem(exit);
 				tutorialStep = 1;
 			}
 			break;
 		case 1:
-			if (input.isKeyDown(KeyEvent.VK_ENTER)) {
+			if (map.getField(13, 13) instanceof FloorField) {
 				tutorialStep = 2;
 			}
 			break;
-		case 2:
-			break;
-		case 3:
-			break;
 		}
-
 	}
 
 	/**
