@@ -5,6 +5,7 @@ import java.io.File;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -18,6 +19,8 @@ import org.w3c.dom.NodeList;
 
 import de.propra12.gruppe04.dynamiteboy.Item.Exit;
 import de.propra12.gruppe04.dynamiteboy.Item.FunnyPill;
+import de.propra12.gruppe04.dynamiteboy.Item.P1Starter;
+import de.propra12.gruppe04.dynamiteboy.Item.P2Starter;
 import de.propra12.gruppe04.dynamiteboy.Item.Teleporter;
 
 public class Map {
@@ -28,12 +31,14 @@ public class Map {
 	private String mapName;
 	private String mapType;
 	private String mapAuthor;
-	// The starting positions for the players (in pixel)
+	// The starting positions for the players and the exit (fieldgrid-positions)
 	private int p1startx;
 	private int p2startx;
 	private int p1starty;
 	private int p2starty;
-	String path = "src/de/propra12/gruppe04/dynamiteboy/Map/";
+	private int exitx;
+	private int exity;
+	private String path = "src/de/propra12/gruppe04/dynamiteboy/Map/";
 
 	/**
 	 * Creates a Map from an XML file
@@ -48,7 +53,7 @@ public class Map {
 	public Map(int width, int height, String filename) {
 		this.gridWidth = width / 32;
 		this.gridHeight = height / 32;
-		generateFieldGrid(filename);
+		loadFieldGridFromXML(filename);
 	}
 
 	/**
@@ -59,7 +64,7 @@ public class Map {
 	 *            name of the XML-file containing the map data
 	 */
 
-	private void generateFieldGrid(String fileName) {
+	private void loadFieldGridFromXML(String fileName) {
 		FieldGrid = new Field[gridWidth][gridHeight];
 		try {
 			File mapData = new File(path + fileName);
@@ -67,8 +72,13 @@ public class Map {
 					.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(mapData);
-			NodeList mapRows = doc.getElementsByTagName("row");
+			// set map attributes
+			Element mapNode = (Element) doc.getFirstChild();
+			this.mapAuthor = mapNode.getAttribute("author");
+			this.mapType = mapNode.getAttribute("mode");
+			this.mapName = mapNode.getAttribute("name");
 			// FieldGrid gets created here
+			NodeList mapRows = doc.getElementsByTagName("row");
 			for (int i = 0; i < mapRows.getLength(); i++) {
 				Node node = mapRows.item(i);
 				Element element = (Element) node;
@@ -76,7 +86,7 @@ public class Map {
 				for (int j = 0; j < mapFields.getLength(); j++) {
 					Node fnode = mapFields.item(j);
 					Element felement = (Element) fnode;
-					FieldGrid[xmlFieldxPos(felement)][xmlFieldyPos(felement)] = xmlCreateField(felement);
+					FieldGrid[getFieldXPosFromXML(felement)][getFieldYPosFromXML(felement)] = createFieldFromXML(felement);
 				}
 			}
 		} catch (Exception e) {
@@ -95,7 +105,7 @@ public class Map {
 			Element map = doc.createElement("map");
 			doc.appendChild(map);
 			// set maps attributes
-			map.setAttribute("type", mapType);
+			map.setAttribute("mode", mapType);
 			map.setAttribute("name", mapName);
 			map.setAttribute("author", mapAuthor);
 			// create rows, and then in each row the fields
@@ -109,7 +119,15 @@ public class Map {
 					String xString = "" + x;
 					field.setAttribute("xPos", xString);
 					field.setAttribute("yPos", yString);
-					String fieldType = FieldGrid[x][y].getFieldType();
+					// Set the fields attributes and the fieldtype
+					Field f = this.getField(x, y);
+					if (f.hasItem()) {
+						String item = f.getItemType();
+						// TODO REMOVE DEBUG
+						System.out.println("Saving item: " + item);
+						field.setAttribute(item, "1");
+					}
+					String fieldType = f.getFieldType();
 					field.appendChild(doc.createTextNode(fieldType));
 				}
 			}
@@ -117,7 +135,9 @@ public class Map {
 			// write the contents of DOM-Object into xml file
 			TransformerFactory transformerFactory = TransformerFactory
 					.newInstance();
+			transformerFactory.setAttribute("indent-number", new Integer(2));
 			Transformer transformer = transformerFactory.newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			DOMSource source = new DOMSource(doc);
 			StreamResult result = new StreamResult(new File(path + mapName
 					+ ".xml"));
@@ -137,7 +157,7 @@ public class Map {
 	 *            XML-representation of the Field object
 	 * @return x-coordinate of current field
 	 */
-	private int xmlFieldxPos(Element element) {
+	private int getFieldXPosFromXML(Element element) {
 		String stringPos = element.getAttribute("xPos");
 		int xPos = Integer.parseInt(stringPos);
 		return xPos;
@@ -149,7 +169,7 @@ public class Map {
 	 *            XML-representation of the Field object
 	 * @return y-coordinate of current field
 	 */
-	private int xmlFieldyPos(Element element) {
+	private int getFieldYPosFromXML(Element element) {
 		String stringPos = element.getAttribute("yPos");
 		int yPos = Integer.parseInt(stringPos);
 		return yPos;
@@ -161,7 +181,7 @@ public class Map {
 	 *            XML-representation of the Field object
 	 * @return field object
 	 */
-	private Field xmlCreateField(Element element) {
+	private Field createFieldFromXML(Element element) {
 		Field f = null;
 		Exit exit = new Exit(false);
 		String type = element.getTextContent();
@@ -174,18 +194,28 @@ public class Map {
 			} else if (element.hasAttribute("funnypill")) {
 				f.setItem(new FunnyPill());
 			} else if (element.hasAttribute("p1starter")) {
-				this.p1startx = xmlFieldxPos(element);
-				this.p1starty = xmlFieldyPos(element);
+				this.setP1startx(getFieldXPosFromXML(element));
+				this.setP1starty(getFieldYPosFromXML(element));
 			} else if (element.hasAttribute("p2starter")) {
-				this.p2startx = xmlFieldxPos(element);
-				this.p2starty = xmlFieldyPos(element);
+				this.setP2startx(getFieldXPosFromXML(element));
+				this.setP2starty(getFieldYPosFromXML(element));
 			}
 		} else if (type.equals("wall")) {
 			f = new WallField();
 		} else if (type.equals("destroyable")) {
 			f = new DestroyableField();
 			if (element.hasAttribute("exit")) {
-				f.setItem(exit);
+				f.setItem(new Exit(false));
+			} else if (element.hasAttribute("teleporter")) {
+				f.setItem(new Teleporter());
+			} else if (element.hasAttribute("funnypill")) {
+				f.setItem(new FunnyPill());
+			} else if (element.hasAttribute("p1starter")) {
+				this.setP1startx(getFieldXPosFromXML(element));
+				this.setP1starty(getFieldYPosFromXML(element));
+			} else if (element.hasAttribute("p2starter")) {
+				this.setP2startx(getFieldXPosFromXML(element));
+				this.setP2starty(getFieldYPosFromXML(element));
 			}
 		}
 		return f;
@@ -222,6 +252,28 @@ public class Map {
 		return false;
 	}
 
+	public boolean hasStartPoints() {
+		boolean p1 = false;
+		boolean p2 = false;
+		for (int y = 0; y < getGridHeight(); y++) {
+			for (int x = 0; x < getGridWidth(); x++) {
+				if (getField(x, y).getItem() instanceof P1Starter) {
+					p1 = true;
+				}
+				if (getField(x, y).getItem() instanceof P2Starter) {
+					p2 = true;
+				}
+			}
+		}
+		if (this.mapType == "singleplayer" && p1) {
+			return true;
+		} else if (this.mapType == "multiplayer" && p1 && p2) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public Field getFieldByPixel(int x, int y) {
 		Field f = FieldGrid[(x / 32)][(y / 32)];
 		return f;
@@ -234,6 +286,16 @@ public class Map {
 	public void setExitField(int x, int y) {
 		FieldGrid[x][y] = new FloorField();
 		FieldGrid[x][y].setItem(new Exit(false));
+	}
+
+	public void setFunnyPillField(int x, int y) {
+		FieldGrid[x][y] = new FloorField();
+		FieldGrid[x][y].setItem(new FunnyPill());
+	}
+
+	public void setTeleportField(int x, int y) {
+		FieldGrid[x][y] = new FloorField();
+		FieldGrid[x][y].setItem(new Teleporter());
 	}
 
 	public void setDestroyableField(int x, int y) {
@@ -282,6 +344,96 @@ public class Map {
 
 	public void setMapAuthor(String mapAuthor) {
 		this.mapAuthor = mapAuthor;
+	}
+
+	public Field getP1StartField() {
+		if (this.hasStartPoints()) {
+			for (int y = 0; y < getGridHeight(); y++) {
+				for (int x = 0; x < getGridWidth(); x++) {
+					if (getField(x, y).getItem() instanceof P1Starter) {
+						Field f = getField(x, y);
+						return f;
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	public Field getP2StartField() {
+		if (this.hasStartPoints()) {
+			for (int y = 0; y < getGridHeight(); y++) {
+				for (int x = 0; x < getGridWidth(); x++) {
+					if (getField(x, y).getItem() instanceof P2Starter) {
+						Field f = getField(x, y);
+						return f;
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	public Field getExitField() {
+		if (this.hasExit()) {
+			for (int y = 0; y < getGridHeight(); y++) {
+				for (int x = 0; x < getGridWidth(); x++) {
+					if (getField(x, y).getItem() instanceof Exit) {
+						Field f = getField(x, y);
+						return f;
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	public int getP1startx() {
+		return p1startx;
+	}
+
+	public void setP1startx(int p1startx) {
+		this.p1startx = p1startx;
+	}
+
+	public int getP2startx() {
+		return p2startx;
+	}
+
+	public void setP2startx(int p2startx) {
+		this.p2startx = p2startx;
+	}
+
+	public int getP1starty() {
+		return p1starty;
+	}
+
+	public void setP1starty(int p1starty) {
+		this.p1starty = p1starty;
+	}
+
+	public int getP2starty() {
+		return p2starty;
+	}
+
+	public void setP2starty(int p2starty) {
+		this.p2starty = p2starty;
+	}
+
+	public int getExitx() {
+		return exitx;
+	}
+
+	public void setExitx(int exitx) {
+		this.exitx = exitx;
+	}
+
+	public int getExity() {
+		return exity;
+	}
+
+	public void setExity(int exity) {
+		this.exity = exity;
 	}
 
 }

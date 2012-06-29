@@ -1,4 +1,4 @@
-<map type="singleplayer" name="mapname" author="default">
+<map mode="singleplayer" name="mapname" author="default">
 	<row>
 		<Field xPos="0" yPos="0">wall</Field>
 		<Field xPos="1" yPos="0">wall</Field>

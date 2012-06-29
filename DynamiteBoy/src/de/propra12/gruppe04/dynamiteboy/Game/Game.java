@@ -185,10 +185,14 @@ public class Game extends JPanel {
 	 */
 	public void createPlayers(int numberOfPlayers) {
 		// Get player-startpositions here
-		playerStartPos[0][0] = 32;
-		playerStartPos[0][1] = 32;
-		playerStartPos[1][0] = 581;
-		playerStartPos[1][1] = 416;
+		// TODO do calculation earlier (in map class)
+		playerStartPos[0][0] = map.getP1startx() * 32;
+		playerStartPos[0][1] = map.getP1starty() * 32;
+		if (map.getMapType() == "multiplayer") {
+			playerStartPos[1][0] = map.getP2startx() * 32;
+			playerStartPos[1][1] = map.getP2starty() * 32;
+		}
+
 		for (int i = 0; i < numberOfPlayers; i++) {
 			player[i] = new Player(i, playerStartPos[i][0],
 					playerStartPos[i][1], map);

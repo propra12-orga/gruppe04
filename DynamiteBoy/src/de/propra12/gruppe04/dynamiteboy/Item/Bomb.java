@@ -68,7 +68,9 @@ public class Bomb extends Item implements Runnable {
 			System.out.println("BOOM!");
 			TimeUnit.MILLISECONDS.sleep(C.EXPLOSION_DURATION);
 			stopDetonating(xPos, yPos);
-			map.getField(xPos, yPos).setItem(null);
+			// map.getField(xPos, yPos).setItem(null);
+			// TODO check if the above line is really neccessary (commenting it
+			// out didnt change anything)
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -229,15 +231,22 @@ public class Bomb extends Item implements Runnable {
 	 * @param y
 	 */
 	private void destroy(int x, int y) {
-		if (map.getField(x, y).getItem() instanceof Exit) {
-			if (C.funny == true) {
+		if (map.getField(x, y).hasItem()) {
+			Item item = map.getField(x, y).getItem();
+			if (item instanceof Exit) {
 				map.setExitField(x, y);
-				map.getField(x, y).setImage(C.FUNNYPILL_EXIT);
-			} else {
-				map.setExitField(x, y);
+				// TODO Remove Debug
+				System.out.println("setting exit");
+			} else if (item instanceof FunnyPill) {
+				map.setFunnyPillField(x, y);
+				// TODO Remove Debug
+				System.out.println("setting funnypill");
+			} else if (item instanceof Teleporter) {
+				map.setTeleportField(x, y);
+				// TODO Remove Debug
+				System.out.println("setting teleporter");
 			}
-		}
-		if (map.getField(x, y).getItem() == null) {
+		} else {
 			map.setFloorField(x, y);
 		}
 	}

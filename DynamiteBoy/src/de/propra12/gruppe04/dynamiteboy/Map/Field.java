@@ -77,8 +77,8 @@ public abstract class Field {
 					this.setImage(C.FUNNYPILL_EXIT);
 				}
 				// if not funnypill
+				// TODO clear up where item changing happens
 			} else {
-
 				if (this.getItem() instanceof Exit) {
 					this.setImage(C.EXITFIELD_DEFAULT_PIC);
 				} else if (this.getItem() instanceof FunnyPill) {
@@ -140,28 +140,36 @@ public abstract class Field {
 		return item;
 	}
 
+	public boolean hasItem() {
+		if (this.item != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	/**
-	 * returns type of fields item, ready to be saved into xml-file
+	 * returns type of this fields item
 	 * 
 	 * @return
 	 */
 	public String getItemType() {
 		String itemName = "";
-		if (this.item != null) {
+		if (hasItem()) {
 			if (this.item instanceof Exit) {
-				itemName = "exit=\"1\"";
+				itemName = "exit";
 			}
 			if (this.item instanceof FunnyPill) {
-				itemName = "funnypill=\"1\"";
+				itemName = "funnypill";
 			}
 			if (this.item instanceof Teleporter) {
-				itemName = "teleporter=\"1\"";
+				itemName = "teleporter";
 			}
 			if (this.item instanceof P1Starter) {
-				itemName = "p1starter=\"1\"";
+				itemName = "p1starter";
 			}
 			if (this.item instanceof P2Starter) {
-				itemName = "p2starter=\"1\"";
+				itemName = "p2starter";
 			}
 		}
 		return itemName;

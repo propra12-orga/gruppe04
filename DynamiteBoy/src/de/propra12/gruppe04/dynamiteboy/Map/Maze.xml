@@ -1,4 +1,4 @@
-<map mode="multiplayer" name="Maze">
+<map mode="multiplayer" name="Maze" author="ekki">
 	<row>
 		<Field xPos="0" yPos="0">wall</Field>
 		<Field xPos="1" yPos="0">wall</Field>
@@ -23,7 +23,7 @@
 	</row>
 	<row>
 		<Field xPos="0" yPos="1">wall</Field>
-		<Field xPos="1" yPos="1"></Field>
+		<Field xPos="1" yPos="1" p1starter="1"></Field>
 		<Field xPos="2" yPos="1"></Field>
 		<Field xPos="3" yPos="1"></Field>
 		<Field xPos="4" yPos="1"></Field>
@@ -304,7 +304,7 @@
 		<Field xPos="15" yPos="13"></Field>
 		<Field xPos="16" yPos="13"></Field>
 		<Field xPos="17" yPos="13"></Field>
-		<Field xPos="18" yPos="13"></Field>
+		<Field xPos="18" yPos="13" p2starter="1"></Field>
 		<Field xPos="19" yPos="13">wall</Field>
 	</row>
 	<row>

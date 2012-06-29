@@ -1,4 +1,4 @@
-<map mode="singleplayer" name="DefaultMap">
+<map mode="singleplayer" name="DefaultMap" author="ekki">
 	<row>
 		<Field xPos="0" yPos="0">wall</Field>
 		<Field xPos="1" yPos="0">wall</Field>
@@ -23,7 +23,7 @@
 	</row>
 	<row>
 		<Field xPos="0" yPos="1">wall</Field>
-		<Field xPos="1" yPos="1"></Field>
+		<Field xPos="1" yPos="1" p1starter="1"></Field>
 		<Field xPos="2" yPos="1"></Field>
 		<Field xPos="3" yPos="1">wall</Field>
 		<Field xPos="4" yPos="1"></Field>

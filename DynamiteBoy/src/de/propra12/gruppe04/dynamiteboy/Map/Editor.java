@@ -113,6 +113,9 @@ public class Editor extends JPanel implements MouseListener {
 		frame.getContentPane().add(BorderLayout.SOUTH, panelEdit);
 	}
 
+	/**
+	 * goes back to main menu
+	 */
 	public void quitEditor() {
 		panelEdit.setVisible(false);
 		this.setVisible(false);
@@ -152,6 +155,12 @@ public class Editor extends JPanel implements MouseListener {
 		return fieldType;
 	}
 
+	/**
+	 * shows a dialogue that asks the user if he wants the selected destroyable
+	 * field to have an item
+	 * 
+	 * @return
+	 */
 	public String getItemTypeDecision() {
 		// DEFAULT ITEM TYPE GETS SET HERE
 		// TODO create constant
@@ -169,11 +178,11 @@ public class Editor extends JPanel implements MouseListener {
 				itemType = "exit";
 				return itemType;
 			}
-			if (itemType.equals(itemTypes[1])) {
+			if (itemType.equals(itemTypes[2])) {
 				itemType = "funnypill";
 				return itemType;
 			}
-			if (itemType.equals(itemTypes[1])) {
+			if (itemType.equals(itemTypes[3])) {
 				itemType = "teleporter";
 				return itemType;
 			}
@@ -181,6 +190,12 @@ public class Editor extends JPanel implements MouseListener {
 		return itemType;
 	}
 
+	/**
+	 * shows a dialogue that asks the user if he wants the selected floorfield
+	 * to be a startpoint
+	 * 
+	 * @return
+	 */
 	public String getStartPointDecision() {
 		String startPoint = "No Item";
 		Object[] startPoints = { "No Startpoint", "Start P1", "Start P2" };
@@ -204,6 +219,12 @@ public class Editor extends JPanel implements MouseListener {
 		return startPoint;
 	}
 
+	/**
+	 * This method changes the selected fields of the map based on the users
+	 * choice in the called method FieldTypeDecsion() and sets items and
+	 * starting points based on the decisions from getItemTypeDecision() and
+	 * getStartPointDecision()
+	 */
 	public void changeFieldTypes() {
 		String fieldType = getFieldTypeDecision();
 		for (int y = 0; y < map.getGridHeight(); y++) {
@@ -211,16 +232,21 @@ public class Editor extends JPanel implements MouseListener {
 				Field f = map.getField(x, y);
 				if (f.isSelected()) {
 					if (fieldType == "") {
+						// Floor Field
 						String startpoint = getStartPointDecision();
 						map.setFloorField(x, y);
 						f = map.getField(x, y);
 						if (startpoint == "p1starter") {
 							P1Starter p1 = new P1Starter(false);
 							f.setItem(p1);
+							map.setP1startx(x);
+							map.setP1starty(y);
 						}
 						if (startpoint == "p2starter") {
 							P2Starter p2 = new P2Starter(false);
 							f.setItem(p2);
+							map.setP2startx(x);
+							map.setP2starty(y);
 						}
 						repaint();
 					}
@@ -235,6 +261,8 @@ public class Editor extends JPanel implements MouseListener {
 						if (itemType == "exit") {
 							Exit exit = new Exit(false);
 							f.setItem(exit);
+							map.setExitx(x);
+							map.setExity(y);
 						}
 						if (itemType == "funnypill") {
 							FunnyPill pill = new FunnyPill();
@@ -251,22 +279,38 @@ public class Editor extends JPanel implements MouseListener {
 		}
 	}
 
+	/**
+	 * Checks if the given map is valid (WIP)
+	 * 
+	 * @param map
+	 * @return true=valid, false=not valid
+	 */
 	public boolean isMapValid(Map map) {
 		String type = map.getMapType();
 		if (type.equals("singleplayer")) {
 			if (!map.hasExit()) {
-				// TODO Remove Debug (add JDialog)
+				// TODO Remove Debug (add JDialog, or something)
 				System.out.println("Map has no Exit!");
 				return false;
 			}
 		}
-		// TODO singleplayer -> check if 1 startpoint is set
-		// TODO singleplayer -> check if exit is reachable
+		if (!map.hasStartPoints()) {
+			System.out.println("A Startpoint is missing!");
+			return false;
+		}
+
+		if (!isExitReachable()) {
+			System.out.println("Exit is not reachable!");
+			return false;
+		}
+		// TODO singleplayer -> check if exit is reachable (not fully working)
 		// TODO multiplayer -> check if 2 startpoints are set
-		// TODO multiplayer -> check if startpoints are reachable
 		return true;
 	}
 
+	/**
+	 * removes the selection from the currently selected fields
+	 */
 	public void resetSelection() {
 		for (int y = 0; y < map.getGridHeight(); y++) {
 			for (int x = 0; x < map.getGridWidth(); x++) {
@@ -280,6 +324,68 @@ public class Editor extends JPanel implements MouseListener {
 		}
 	}
 
+	/**
+	 * This method checks if the player can reach the exit from his starting
+	 * point
+	 * 
+	 * @return
+	 */
+	public boolean isExitReachable() {
+		// Player starting point coordinates are set
+		int p1x = map.getP1startx();
+		int p1y = map.getP1starty();
+		// Exit coordinates are set
+		int ex = map.getExitx();
+		int ey = map.getExity();
+		checkReachableFields(p1x, p1y);
+		return false;
+	}
+
+	/**
+	 * This method checks if the player is able to move from the current field
+	 * and returns all reachable fields in an array (WIP)
+	 * 
+	 * @return
+	 */
+	public boolean checkReachableFields(int startx, int starty) {
+		// check if field to check is within map range
+		if (startx - 1 > 0 && startx + 1 < map.getGridWidth() && starty - 1 > 0
+				&& starty + 1 < map.getGridHeight()) {
+			if (map.getField(startx + 1, starty) instanceof FloorField
+					|| map.getField(startx + 1, starty) instanceof DestroyableField) {
+				if (map.getField(startx + 1, starty).getItem() instanceof Exit) {
+					return true;
+				}
+				checkReachableFields(startx + 1, starty);
+			} else if (map.getField(startx - 1, starty) instanceof FloorField
+					|| map.getField(startx - 1, starty) instanceof DestroyableField) {
+				if (map.getField(startx - 1, starty).getItem() instanceof Exit) {
+					return true;
+				}
+				checkReachableFields(startx - 1, starty);
+			} else if (map.getField(startx, starty + 1) instanceof FloorField
+					|| map.getField(startx, starty + 1) instanceof DestroyableField) {
+				if (map.getField(startx, starty + 1).getItem() instanceof Exit) {
+					return true;
+				}
+				checkReachableFields(startx, starty + 1);
+			} else if (map.getField(startx, starty - 1) instanceof FloorField
+					|| map.getField(startx, starty - 1) instanceof DestroyableField) {
+				if (map.getField(startx, starty - 1).getItem() instanceof Exit) {
+					return true;
+				}
+				checkReachableFields(startx, starty - 1);
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * selects a field at (x,y), coordinates in pixels
+	 * 
+	 * @param x
+	 * @param y
+	 */
 	public void selectField(int x, int y) {
 		// check if field to select is within borders
 		if (x >= 35 && x <= 605 && y >= 35 && y <= 445) {
