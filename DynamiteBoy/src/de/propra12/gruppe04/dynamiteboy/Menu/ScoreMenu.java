@@ -6,11 +6,20 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import de.propra12.gruppe04.dynamiteboy.Game.C;
 import de.propra12.gruppe04.dynamiteboy.Game.Game;
@@ -32,6 +41,8 @@ public class ScoreMenu extends JPanel {
 	private static int gameMinutes;
 	private static int gameSeconds;
 	private static int playerCount;
+	private static String[] score = new String[5];
+	private static String[] names = new String[5];
 
 	/**
 	 * Constructor Sets up ScoreMenu with a Button to go back to the main Menu
@@ -112,6 +123,7 @@ public class ScoreMenu extends JPanel {
 		private String titleScreenImage = "../images/db_menu_titlescreen.png";
 		ImageIcon img = new ImageIcon(this.getClass().getResource(
 				titleScreenImage));
+		private String highscoreName;
 
 		public void paintComponent(Graphics g) {
 			Font font = new Font("Ubuntu", Font.BOLD, 12);
@@ -120,7 +132,33 @@ public class ScoreMenu extends JPanel {
 			g.drawString("Time played: " + gameMinutes + ":" + gameSeconds, 50,
 					120);
 			if (playerCount == 1) {
-				g.drawString("You won!", 50, 140);
+				loadScoreFromXML();
+				if (winnerName == "Player 1") {
+					g.drawString("You won!", 50, 140);
+					int playerScore = this.calculateScore(gameMinutes,
+							gameSeconds, player1BombCount);
+					g.drawString("Your Score:" + playerScore, 350, 100);
+					int playerPosition = newHighscorePosition(playerScore);
+					if (playerPosition < 5) {
+						String highscoreName = JOptionPane
+								.showInputDialog("Enter your Name");
+						if (highscoreName != null) {
+							names[playerPosition] = highscoreName;
+						} else {
+							highscoreName = "default";
+							names[playerPosition] = highscoreName;
+						}
+					}
+					// Output Highscore
+					g.drawString("Highscores:", 350, 120);
+					g.drawString(score[0] + ": " + names[0], 350, 140);
+					g.drawString(score[1] + ": " + names[1], 350, 160);
+					g.drawString(score[2] + ": " + names[2], 350, 180);
+					g.drawString(score[3] + ": " + names[3], 350, 200);
+					g.drawString(score[4] + ": " + names[4], 350, 220);
+				} else {
+					g.drawString("You lost!", 50, 140);
+				}
 			}
 			if (playerCount > 1) {
 				g.drawString("Winner:" + winnerName, 50, 140);
@@ -134,6 +172,73 @@ public class ScoreMenu extends JPanel {
 			}
 		}
 
+		private int calculateScore(int gameMinutes, int gameSeconds,
+				int player1BombCount) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+	}
+
+	/**
+	 * This method calculates the score based on game Duration and number of
+	 * used bombs
+	 * 
+	 * @param gameMinutes
+	 * @param gameSeconds
+	 * @param bombs
+	 * @return
+	 */
+	public int calculateScore(int gameMinutes, int gameSeconds, int bombs) {
+		int score = 1000 - ((gameMinutes * 60 + gameSeconds) * 2 + (bombs * 20));
+		return score;
+	}
+
+	/**
+	 * returns the new high-score position, if there is one (from 0-4) if method
+	 * returns 5 -> no new high score
+	 * 
+	 * @param playerScore
+	 * @return
+	 */
+	public static int newHighscorePosition(int playerScore) {
+		for (int i = 0; i < 5; i++) {
+			int compareScore = Integer.parseInt(score[i]);
+			if (compareScore < playerScore) {
+				return i;
+			}
+		}
+		return 5;
+
+	}
+
+	/**
+	 * saves new score data
+	 */
+	public void saveScoreToXML() {
+
+	}
+
+	/**
+	 * loads score data
+	 */
+	public static void loadScoreFromXML() {
+		try {
+			File mapData = new File(
+					"src/de/propra12/gruppe04/dynamiteboy/Menu/scores.xml");
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+					.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(mapData);
+			NodeList scores = doc.getElementsByTagName("score");
+			for (int i = 0; i < scores.getLength(); i++) {
+				Node node = scores.item(i);
+				Element element = (Element) node;
+				names[i] = element.getAttribute("name");
+				score[i] = element.getTextContent();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

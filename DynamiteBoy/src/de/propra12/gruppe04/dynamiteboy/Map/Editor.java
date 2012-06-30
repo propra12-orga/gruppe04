@@ -41,6 +41,8 @@ public class Editor extends JPanel implements MouseListener {
 	private JButton buttonResetSelection;
 	private JButton buttonSaveAndExit;
 	private JPanel panelEdit = new JPanel(new GridLayout(1, 3));
+	private int p1startx;
+	private int p1starty;
 
 	/**
 	 * Starts a new Editor with the given parameters
@@ -290,19 +292,26 @@ public class Editor extends JPanel implements MouseListener {
 		if (type.equals("singleplayer")) {
 			if (!map.hasExit()) {
 				// TODO Remove Debug (add JDialog, or something)
-				System.out.println("Map has no Exit!");
+				System.out.println("Map is Singleplayer and has no Exit!");
+				return false;
+			}
+		}
+		if (type.equals("multiplayer")) {
+			if (map.hasExit()) {
+				// TODO Remove Debug (add JDialog, or something)
+				System.out.println("Map is multiplayer and has an Exit!");
 				return false;
 			}
 		}
 		if (!map.hasStartPoints()) {
+			// TODO Remove Debug (add JDialog, or something)
 			System.out.println("A Startpoint is missing!");
 			return false;
 		}
-
-		if (!isExitReachable()) {
-			System.out.println("Exit is not reachable!");
-			return false;
-		}
+		// if (!isExitReachable()) {
+		// System.out.println("Exit is not reachable!");
+		// return false;
+		// }
 		// TODO singleplayer -> check if exit is reachable (not fully working)
 		// TODO multiplayer -> check if 2 startpoints are set
 		return true;
@@ -332,12 +341,12 @@ public class Editor extends JPanel implements MouseListener {
 	 */
 	public boolean isExitReachable() {
 		// Player starting point coordinates are set
-		int p1x = map.getP1startx();
-		int p1y = map.getP1starty();
+		p1startx = map.getP1startx();
+		p1starty = map.getP1starty();
 		// Exit coordinates are set
 		int ex = map.getExitx();
 		int ey = map.getExity();
-		checkReachableFields(p1x, p1y);
+		checkReachableFields(p1startx, p1starty);
 		return false;
 	}
 
@@ -349,32 +358,50 @@ public class Editor extends JPanel implements MouseListener {
 	 */
 	public boolean checkReachableFields(int startx, int starty) {
 		// check if field to check is within map range
-		if (startx - 1 > 0 && startx + 1 < map.getGridWidth() && starty - 1 > 0
-				&& starty + 1 < map.getGridHeight()) {
+		if (startx > 0 && startx < map.getGridWidth() && starty > 0
+				&& starty < map.getGridHeight()) {
 			if (map.getField(startx + 1, starty) instanceof FloorField
 					|| map.getField(startx + 1, starty) instanceof DestroyableField) {
 				if (map.getField(startx + 1, starty).getItem() instanceof Exit) {
 					return true;
 				}
+				// next check
 				checkReachableFields(startx + 1, starty);
+				// if we get here-> x+1 is through so we need to set back the
+				// position to
+				// the initial starting point
+				startx = p1startx;
+				starty = p1starty;
 			} else if (map.getField(startx - 1, starty) instanceof FloorField
 					|| map.getField(startx - 1, starty) instanceof DestroyableField) {
 				if (map.getField(startx - 1, starty).getItem() instanceof Exit) {
 					return true;
 				}
+				// next check
 				checkReachableFields(startx - 1, starty);
+				// x-1 is through: setback!
+				startx = p1startx;
+				starty = p1starty;
 			} else if (map.getField(startx, starty + 1) instanceof FloorField
 					|| map.getField(startx, starty + 1) instanceof DestroyableField) {
 				if (map.getField(startx, starty + 1).getItem() instanceof Exit) {
 					return true;
 				}
+				// next check
 				checkReachableFields(startx, starty + 1);
+				// y+1 is through: setback!
+				startx = p1startx;
+				starty = p1starty;
 			} else if (map.getField(startx, starty - 1) instanceof FloorField
 					|| map.getField(startx, starty - 1) instanceof DestroyableField) {
 				if (map.getField(startx, starty - 1).getItem() instanceof Exit) {
 					return true;
 				}
+				// next check
 				checkReachableFields(startx, starty - 1);
+				// y-1 is through: setback!
+				startx = p1startx;
+				starty = p1starty;
 			}
 		}
 		return false;
