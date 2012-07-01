@@ -100,7 +100,7 @@ public class Editor extends JPanel implements MouseListener {
 				map.setMapName(mapname);
 				if (isMapValid(map)) {
 					// Save
-					map.saveFieldGridToXML();
+					map.saveMapToXML();
 					// Exit
 					quitEditor();
 					MainMenu m = new MainMenu(frame);
@@ -352,7 +352,8 @@ public class Editor extends JPanel implements MouseListener {
 
 	/**
 	 * This method checks if the player is able to move from the current field
-	 * and returns all reachable fields in an array (WIP)
+	 * and returns all reachable fields in an array (not yet working, is not
+	 * used)
 	 * 
 	 * @return
 	 */

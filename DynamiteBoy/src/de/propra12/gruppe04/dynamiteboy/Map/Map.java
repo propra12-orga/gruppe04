@@ -38,7 +38,10 @@ public class Map {
 	private int p2starty;
 	private int exitx;
 	private int exity;
+	private String[] score = new String[5];
+	private String[] names = new String[5];
 	private String path = "src/de/propra12/gruppe04/dynamiteboy/Map/";
+	private String filename;
 
 	/**
 	 * Creates a Map from an XML file
@@ -53,7 +56,13 @@ public class Map {
 	public Map(int width, int height, String filename) {
 		this.gridWidth = width / 32;
 		this.gridHeight = height / 32;
-		loadFieldGridFromXML(filename);
+		loadMapFromXML(filename);
+		int singleScore = 900;
+		for (int i = 0; i < 5; i++) {
+			score[i] = "" + singleScore;
+			names[i] = "DynamiteBoy";
+			singleScore -= 100;
+		}
 	}
 
 	/**
@@ -63,8 +72,7 @@ public class Map {
 	 * @param fileLocation
 	 *            name of the XML-file containing the map data
 	 */
-
-	private void loadFieldGridFromXML(String fileName) {
+	public void loadMapFromXML(String fileName) {
 		FieldGrid = new Field[gridWidth][gridHeight];
 		try {
 			File mapData = new File(path + fileName);
@@ -72,10 +80,18 @@ public class Map {
 					.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(mapData);
+			// load scores
+			NodeList scores = doc.getElementsByTagName("score");
+			for (int i = 0; i < scores.getLength(); i++) {
+				Element currentScore = (Element) scores.item(i);
+				this.names[i] = currentScore.getAttribute("name");
+				this.score[i] = currentScore.getTextContent();
+			}
 			// set map attributes
 			Element mapNode = (Element) doc.getFirstChild();
 			this.mapAuthor = mapNode.getAttribute("author");
 			this.mapType = mapNode.getAttribute("mode");
+			// TODO Remove Debug
 			this.mapName = mapNode.getAttribute("name");
 			// FieldGrid gets created here
 			NodeList mapRows = doc.getElementsByTagName("row");
@@ -94,7 +110,11 @@ public class Map {
 		}
 	}
 
-	public void saveFieldGridToXML() {
+	/**
+	 * saves the current state of the field grid to an xml file also generates
+	 * scores and everything else
+	 */
+	public void saveMapToXML() {
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory
 					.newInstance();
@@ -108,11 +128,22 @@ public class Map {
 			map.setAttribute("mode", mapType);
 			map.setAttribute("name", mapName);
 			map.setAttribute("author", mapAuthor);
+			// create scores
+			int singleScore = 900;
+			for (int i = 0; i < 5; i++) {
+				Element xmlscore = doc.createElement("score");
+				map.appendChild(xmlscore);
+				xmlscore.setAttribute("id", "" + (i + 1));
+				xmlscore.setAttribute("name", names[i]);
+				xmlscore.appendChild(doc.createTextNode(score[i]));
+				singleScore -= 100;
+			}
 			// create rows, and then in each row the fields
 			for (int y = 0; y < gridHeight; y++) {
 				String yString = "" + y;
 				Element row = doc.createElement("row");
 				map.appendChild(row);
+				// create field
 				for (int x = 0; x < gridWidth; x++) {
 					Element field = doc.createElement("Field");
 					row.appendChild(field);
@@ -123,8 +154,6 @@ public class Map {
 					Field f = this.getField(x, y);
 					if (f.hasItem()) {
 						String item = f.getItemType();
-						// TODO REMOVE DEBUG
-						System.out.println("Saving item: " + item);
 						field.setAttribute(item, "1");
 					}
 					String fieldType = f.getFieldType();
@@ -196,9 +225,11 @@ public class Map {
 			} else if (element.hasAttribute("p1starter")) {
 				this.setP1startx(getFieldXPosFromXML(element));
 				this.setP1starty(getFieldYPosFromXML(element));
+				f.setItem(new P1Starter(false));
 			} else if (element.hasAttribute("p2starter")) {
 				this.setP2startx(getFieldXPosFromXML(element));
 				this.setP2starty(getFieldYPosFromXML(element));
+				f.setItem(new P2Starter(false));
 			}
 		} else if (type.equals("wall")) {
 			f = new WallField();
@@ -434,6 +465,22 @@ public class Map {
 
 	public void setExity(int exity) {
 		this.exity = exity;
+	}
+
+	public String[] getScore() {
+		return score;
+	}
+
+	public void setScore(String[] score) {
+		this.score = score;
+	}
+
+	public String[] getNames() {
+		return names;
+	}
+
+	public void setNames(String[] names) {
+		this.names = names;
 	}
 
 }

@@ -1,4 +1,9 @@
-<map mode="singleplayer" name="DefaultMap" author="ekki">
+<map mode="singleplayer" name="Map1" author="ekki">
+<score id="1" name="DynamiteBoy">900</score>
+<score id="2" name="DynamiteBoy">800</score>
+<score id="3" name="DynamiteBoy">700</score>
+<score id="4" name="DynamiteBoy">600</score>
+<score id="5" name="DynamiteBoy">500</score>
 	<row>
 		<Field xPos="0" yPos="0">wall</Field>
 		<Field xPos="1" yPos="0">wall</Field>

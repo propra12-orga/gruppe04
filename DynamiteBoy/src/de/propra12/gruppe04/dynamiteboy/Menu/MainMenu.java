@@ -110,7 +110,7 @@ public class MainMenu extends JPanel {
 	 */
 	public String askForMap() {
 		String map = "";
-		Object[] maps = { "Tutorial", "Map 1", "Map 2" };
+		Object[] maps = { "Tutorial", "Map 1", "Map 2", "Map 3" };
 		map = (String) JOptionPane.showInputDialog(frame,
 				"Bitte Map wählen: \n", "Map", JOptionPane.PLAIN_MESSAGE, null,
 				maps, "");
@@ -125,6 +125,10 @@ public class MainMenu extends JPanel {
 			}
 			if (map.equals(maps[2])) {
 				map = "Map2.xml";
+				return map;
+			}
+			if (map.equals(maps[3])) {
+				map = "Map3.xml";
 				return map;
 			}
 		}

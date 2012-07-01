@@ -188,15 +188,18 @@ public class Game extends JPanel {
 		// TODO do calculation earlier (in map class)
 		playerStartPos[0][0] = map.getP1startx() * 32;
 		playerStartPos[0][1] = map.getP1starty() * 32;
-		if (map.getMapType() == "multiplayer") {
+		System.out.println(map.getMapType());
+		if (map.getMapType().equalsIgnoreCase("multiplayer")) {
+			System.out.println(map.getMapType());
 			playerStartPos[1][0] = map.getP2startx() * 32;
 			playerStartPos[1][1] = map.getP2starty() * 32;
 		}
-
 		for (int i = 0; i < numberOfPlayers; i++) {
 			player[i] = new Player(i, playerStartPos[i][0],
 					playerStartPos[i][1], map);
-
+			// TODO Remove debug
+			System.out.println("created player " + i + " at position: "
+					+ playerStartPos[i][0] + "/" + playerStartPos[i][1]);
 		}
 	}
 
@@ -524,6 +527,11 @@ public class Game extends JPanel {
 	 */
 	public int getNumberOfPlayers() {
 		return this.numberOfPlayers;
+	}
+
+	public String getMapname() {
+		String mapname = this.map.getMapName();
+		return mapname;
 	}
 
 }
